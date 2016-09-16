@@ -15,6 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Login" />
+        <activity android:name=".Username" />
+        <activity android:name=".Meetings" />
+        <activity android:name=".Schedule" />
+        <activity
+            android:name=".Connection"
+            android:label="@string/title_activity_connection"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
