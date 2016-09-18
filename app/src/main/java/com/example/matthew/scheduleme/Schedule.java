@@ -14,7 +14,7 @@ CalendarView cV;
         cV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
-                
+
             }
         });
     }

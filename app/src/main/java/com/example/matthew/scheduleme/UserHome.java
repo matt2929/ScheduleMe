@@ -6,18 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class Login extends AppCompatActivity {
-Button button;
+public class UserHome extends AppCompatActivity {
+Button goToCalender;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        button = (Button) (findViewById(R.id.signin));
-        button.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_userhome);
+        goToCalender =(Button) findViewById(R.id.userhomeviewschedule);
+        goToCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserHome.class);
+                Intent intent = new Intent(getApplicationContext(), Schedule.class);
                 startActivity(intent);
+
+
             }
         });
     }
