@@ -9,4 +9,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.matthew.scheduleme.Schedule">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
+
+        <CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="216dp"
+            android:id="@+id/calendarView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+    </LinearLayout>
 </RelativeLayout>

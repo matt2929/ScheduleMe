@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login" />
-        <activity android:name=".Username" />
+        <activity android:name=".UserHome" />
         <activity android:name=".Meetings" />
         <activity android:name=".Schedule" />
         <activity

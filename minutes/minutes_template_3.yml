@@ -1,0 +1,22 @@
+date: September 14, 2016
+meeting_type: ta # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny]
+absent: [eewalker, dakotale]
+excused_absences: [ # Any legitamite excuses for absent team members
+  {ubit: dakotale, reason: Sick, was unable to come in},
+  {ubit: eewalker, reason: Had class, unable to go}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Discuss with the Ta the layout of our project},
+  {ubit: dakotale, progress: },
+  {ubit: eewalker, progress: },
+  {ubit: mcstaffo, progress: Discuss with the Ta the layout of our project},
+  {ubit: prjones4, progress: Discuss with the Ta the layout of our project},
+  {ubit: zhuoliny, progress: Discuss with the Ta the layout of our project},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+Discussion with the TA on how the project would be laid out.
