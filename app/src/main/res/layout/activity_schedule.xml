@@ -9,20 +9,42 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.matthew.scheduleme.Schedule">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <CalendarView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:weightSum="1">
+        android:id="@+id/calendarView"
+        android:layout_alignParentEnd="true" />
 
-        <CalendarView
-            android:layout_width="match_parent"
-            android:layout_height="216dp"
-            android:id="@+id/calendarView"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
-    </LinearLayout>
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/calendarView"
+        android:id="@+id/CalendarBack" />
+
+    <Button
+        android:text="Help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/CalendarViewHelp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/CalenderChangeViewButton"
+        android:text="Change View"
+        android:layout_above="@+id/RefreshCalendarButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/RefreshCalendarButton"
+        android:layout_below="@+id/calendarView"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
