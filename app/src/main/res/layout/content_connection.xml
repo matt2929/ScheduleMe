@@ -12,4 +12,47 @@
     tools:context="com.example.matthew.scheduleme.Connection"
     tools:showIn="@layout/activity_connection">
 
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/connectionsBackButton" />
+
+    <Button
+        android:text="Help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/connectionsHelp"
+        android:elevation="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/connectionsInputTextName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/connectionsPlusButtons" />
+
+    <Button
+        android:text="+"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/connectionsInputTextName"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/connectionsPlusButtons" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/connectionsInputTextName"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/connectionsBackButton"
+        android:id="@+id/connectionsListView" />
 </RelativeLayout>
