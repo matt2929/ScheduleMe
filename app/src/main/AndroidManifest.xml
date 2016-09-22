@@ -23,7 +23,8 @@
             android:name=".Connection"
             android:label="@string/title_activity_connection"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".meetingsalteration"></activity>
+        <activity android:name=".meetingsalteration" />
+        <activity android:name=".NewInvites"></activity>
     </application>
 
 </manifest>
