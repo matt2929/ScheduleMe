@@ -1,0 +1,24 @@
+date: September 7, 2016
+meeting_type: group # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, dakotale, asrathor, zhuoliny, eewalker]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Discuss group project ideas},
+  {ubit: dakotale, progress: Discuss group project ideas},
+  {ubit: eewalker, progress: Discuss group project ideas},
+  {ubit: mcstaffo, progress: Discuss group project ideas},
+  {ubit: prjones4, progress: Discuss group project ideas},
+  {ubit: zhuoliny, progress: Discuss group project ideas},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+We agreed on a project idea that we would create a scheduling app.  Within
+this meeting we did the layout for how the app will look and how we will
+expand this in the coming sprints.
