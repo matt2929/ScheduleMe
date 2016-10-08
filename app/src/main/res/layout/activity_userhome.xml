@@ -7,54 +7,118 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#4F9C4A"
     tools:context=".UserHome">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <GridLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/upcommingdata"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:text="You have an appointment tommorow" />
+        android:id="@+id/info_Area"
+        android:columnCount="1"
+        android:layout_centerInParent="true">
+        <TextView
+            android:text="Welcome !"
+            android:id="@+id/welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="cursive"
+            android:textSize="70sp"
+            android:textColor="#00723D" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Manage Events"
-        android:id="@+id/userhomemonoageevent"
-        android:layout_below="@+id/upcommingdata"
-        android:layout_centerHorizontal="true" />
+        <TextView
+            android:text="Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/Username"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="50dp"
+            android:fontFamily="serif-monospace"
+            android:layout_below="@+id/welcome"
+            android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View Schedule"
-        android:id="@+id/userhomeviewschedule"
-        android:layout_below="@+id/userhomemonoageevent"
-        android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <GridLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Friends"
-        android:id="@+id/userhomeconnections"
-        android:layout_below="@+id/userhomeviewschedule"
-        android:layout_centerHorizontal="true" />
+        android:columnCount="1"
+        android:id="@+id/button_Area"
+        android:layout_below="@+id/Username">
+        <Button
+            android:text="Make A Meeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Meeting_Button"
+            android:background="#458940"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_below="@+id/Username"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="monospace"
+            android:layout_weight="4"
+            android:scaleType="matrix"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:id="@+id/userhomeback"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        <Button
+            android:text="Manage Meetings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Manage_Button"
+            android:background="#458940"
+            style="@style/Widget.AppCompat.Button"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="monospace" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Help"
-        android:id="@+id/userhomehelp"
-        android:layout_alignBottom="@+id/userhomeback"
-        android:layout_alignParentEnd="true" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Schedule_Button"
+            android:text="Your Schedule"
+            android:background="#458940"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Widget.AppCompat.Button"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="monospace"
+            android:layout_weight="4" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LogOut_Button"
+            android:text="Log Out"
+            android:background="#00723D"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Widget.AppCompat.Button"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="monospace"
+            android:layout_weight="4" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="30dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:id="@+id/Help"
+            android:text="Help?"
+            android:fontFamily="monospace"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF" />
+    </GridLayout>
+    </GridLayout>
+
 </RelativeLayout>
