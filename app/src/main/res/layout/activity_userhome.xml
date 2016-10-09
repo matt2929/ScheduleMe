@@ -16,6 +16,7 @@
         android:id="@+id/info_Area"
         android:columnCount="1"
         android:layout_centerInParent="true">
+
         <TextView
             android:text="Welcome !"
             android:id="@+id/welcome"
