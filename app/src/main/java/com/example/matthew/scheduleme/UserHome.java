@@ -38,6 +38,7 @@ public class UserHome extends AppCompatActivity {
 
             }
         });
+        testRest= (Button) findViewById(R.id.testrest);
         testRest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,8 +50,7 @@ public class UserHome extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new HttpRequestTask().execute();
-    }
+         }
 
 
     /**
