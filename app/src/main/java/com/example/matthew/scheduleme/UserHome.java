@@ -12,22 +12,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
 public class UserHome extends AppCompatActivity {
     Button goToCalender;
     Button testRest;
     String result = "";
-
+    EditText textView;
+    ArrayList<user> users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userhome);
+        textView = (EditText) findViewById(R.id.upcommingdata);
         goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         goToCalender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,25 +80,42 @@ public class UserHome extends AppCompatActivity {
 //                return greeting;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
+                Log.e("nope","");
+
             }
-            String url = "http://warmachine.cse.buffalo.edu:8082/listUsers";
+            String url = "http://warmachine.cse.buffalo.edu:8081/listUsers";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-            result = restTemplate.getForObject(url, String.class, "Android");
+            String getTheData = restTemplate.getForObject(url,String.class,"Android");
+            Collection<user> ob;
+            try {
+                ob = new ObjectMapper().readValue(getTheData, new TypeReference<Collection<user>>() { });
+                Log.e("Value",""+ob.size());
+                users=new ArrayList<user>();
+                Iterator allPeople = ob.iterator();
+                while(allPeople.hasNext()){
+                    users.add((user)allPeople.next());
+                }
+                Log.e("Value",""+users.get(0).getName());
 
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("print","well that didnt work");
+            }
+            Log.e("something",getTheData);
 
-            Log.e("Value", "{" + result + "}");
+            // user[] result = restTemplate.getForObject(url, user[].class, "Android");
             return null;
         }
 
         @Override
         protected void onPostExecute(Greeting greeting) {
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-
-            //greetingContentText.setText(result);
+            String string = "";
+            for(user u:users){
+                string+="name: "+u.getName()+" password: "+u.getPassword()+" proff: "+u.getProfession()+" id: "+u.getId();
+                string+="\n";
+            }
+            textView.setText(string);
         }
-
     }
-
-
 }
