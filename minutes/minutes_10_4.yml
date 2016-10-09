@@ -1,0 +1,27 @@
+date: October 4, 2016
+meeting_type: ta # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny, eewalker, dakotale]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Research/Explain use of Google API and use of code in the GUI},
+  {ubit: dakotale, progress: Research/Explain use of Google API, Research into uses of other API such as Outlook Calendar API},
+  {ubit: eewalker, progress: Discuss server backend in regards to server space/usage},
+  {ubit: mcstaffo, progress: Showing of the GUI without working buttons},
+  {ubit: prjones4, progress: Research/Explain use of node.js and mongodb},
+  {ubit: zhuoliny, progress: Explain the layout of the GUI w/ mcstaffo},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {Google API end time string is displayed at one standard time},
+  {Server and how the database will be accessed}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+Meeting with our TA (ruhan) to discuss our layout for when we submit for
+sprint 2 and the requirements for sprint 3.  One minor issue that we ran
+into for the Google API is the end time and the ability for it to be displaying
+only one standard time.  As of that meeting this issue has been fixed.  The 
+second issue has been resolved as well where Jesse and Dave gave us the proper information
+to connect to warmachine.cse.buffalo.edu.  
