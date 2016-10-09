@@ -37,6 +37,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -407,6 +408,22 @@ public class Schedule extends Activity
                     .setSingleEvents(true)
                     .execute();
             List<Event> items = events.getItems();
+            ArrayList<String> eve = new ArrayList<String>();
+            ArrayList<Integer> yearT = new ArrayList<Integer>();
+            ArrayList<Integer> monthT = new ArrayList<Integer>();
+            ArrayList<Integer> dayT = new ArrayList<Integer>();
+            ArrayList<Integer> hourT = new ArrayList<Integer>();
+            ArrayList<Integer> minT = new ArrayList<Integer>();
+            ArrayList<Integer> totalT = new ArrayList<Integer>();
+            ArrayList<Integer> endTime = new ArrayList<Integer>();
+            ArrayList<Integer> freeT = new ArrayList<Integer>();
+            for(int j=0; j<24; j++){
+                totalT.add(j);
+            }
+
+            String s="";
+            String s1="";
+            int i=0;
 
             for (Event event : items) {
                 DateTime start = event.getStart().getDateTime();
@@ -416,9 +433,92 @@ public class Schedule extends Activity
                     // the start date.
                     start = event.getStart().getDate();
                 }
+                //eventStrings.add(
+                //        String.format("%s (%s) (%s)", event.getSummary(), start, end));
+                eve.add(event.getSummary());
+                s = start.toString();
+                String[] parts = s.split("T");
+                String x = parts[0];
+                String y = parts[1];
+                parts = x.split("-");
+                String yearr = parts[0];
+                //String uu = parts[2];
+                int yea = Integer.parseInt(yearr);
+                yearT.add(yea);
+                String monthS= parts[1];
+                int mon = Integer.parseInt(monthS);
+                monthT.add(mon);
+
+                String dayS = parts[2];
+                int daY = Integer.parseInt(dayS);
+                dayT.add(daY);
+                String DayT = monthS+"/"+dayS+"/"+yearr;
+                parts = y.split(":");
+                String hourS = parts[0];
+                int hou = Integer.parseInt(hourS);
+                hourT.add(hou);
+                String miN = parts[1];
+                int minu = Integer.parseInt(miN);
+                minT.add(minu);
+                String startT = hourS+":"+miN;
+                s1=end.toString();
+                parts = s1.split("T");
+                String sh = parts[1];
+                parts = sh.split(":");
+                String endH = parts[0];
+                String endM = parts[1];
+                String endT = endH + ":" + endM;
+                int endt = Integer.parseInt(endH);
+                endTime.add(endt);
+
                 eventStrings.add(
-                        String.format("%s (%s) (%s)", event.getSummary(), start, end));
+                        String.format("Event: %s Day: %s StartTime: %s EndTime: %s",eve.get(i), DayT, startT, endT));
+                i++;
             }
+            int p=0;
+            int q=0;
+            int r=0;
+
+           ArrayList<Integer> timeT = new ArrayList<Integer>();
+           for (int k=0;k<10;k++){
+               timeT.add(hourT.get(k));
+               timeT.add(endTime.get(k));
+           }
+      //      for(int j=0;j<24;j++){
+      //          if(r<timeT.size()) {
+      //              if (totalT.get(j) == timeT.get(r)) {
+      //                  r++;
+      //                  while(timeT.get(r)!=totalT.get(j)){
+      //                      j++;
+      //                  }
+      //                  r++;
+      //                  j--;
+
+      //              }else{
+      //                  freeT.add(totalT.get(j));
+      //              }
+      //          }
+
+                // freeT.add(totalT.get(j));
+      //      }
+            r=0;
+            int j=0;
+            ArrayList<Boolean> freeB = new ArrayList<Boolean>();
+           // while(r<=endTime.size()) {
+                for (j = 0; j < totalT.size(); j++) {
+                    //       for(int k=0;k<endTime.size();k++){
+                    if (totalT.get(j) != hourT.get(r)) {
+                        freeB.add(true);
+                    } else {
+                        freeB.add(false);
+                        r++;
+                    }
+                    //       }
+                }
+            //}
+            eventStrings.add(
+                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
+                        " represent one hour (calculated from above calendar): %s", freeB));
             return eventStrings;
         }
 
