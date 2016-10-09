@@ -1,0 +1,24 @@
+date: September 28, 2016
+meeting_type: instructor # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny, eewalker, dakotale]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Research/Explain use of Google API and use of code in the GUI},
+  {ubit: dakotale, progress: Research/Explain use of Google API, Research into uses of other API such as Outlook Calendar API},
+  {ubit: eewalker, progress: Discuss server backend in regards to server space/usage},
+  {ubit: mcstaffo, progress: Showing of the GUI without working buttons},
+  {ubit: prjones4, progress: Research/Explain use of node.js and mongodb},
+  {ubit: zhuoliny, progress: Explain the layout of the GUI w/ mcstaffo},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+Meeting with Jesse to discuss how our project is coming together and what
+we plan to do with our project for the duration of the sprint and future
+sprints.  Eliminated the concern of Baasbox for Rest API for the time being.
