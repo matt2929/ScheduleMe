@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:id="@+id/connectionsBackButton" />
 
     <Button
@@ -27,6 +28,7 @@
         android:id="@+id/connectionsHelp"
         android:elevation="0dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <EditText
@@ -38,6 +40,8 @@
         android:id="@+id/connectionsInputTextName"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/connectionsPlusButtons"
         android:layout_toStartOf="@+id/connectionsPlusButtons" />
 
     <Button
@@ -46,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/connectionsInputTextName"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:id="@+id/connectionsPlusButtons" />
 
     <ListView
@@ -53,6 +58,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/connectionsInputTextName"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_above="@+id/connectionsBackButton"
         android:id="@+id/connectionsListView" />
 </RelativeLayout>
