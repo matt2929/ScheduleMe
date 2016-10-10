@@ -11,7 +11,7 @@ either cancel that time or offer a reasonable spot to meet in the middle. Anothe
 meet, like restaurants, bars, libraries etc. This app will benefit all the students and aid companies in creating work schedules.
 
 * Update (October 9, 2016)
-For a client who wishes to run this code in the early stages of our app, an android simulator is required of API 21 or higher as running on older versions will cause our app to not work properly and crash.  Also in order for a client to retrieve information from our server please use the following information; 
+For a client who wishes to run this code in the early stages of our app, an android simulator is required of API 21 or higher and an event is present, as running on older versions will cause our app to not work properly and crash.  Also in order for a client to retrieve information from our server please use the following information; 
   - We are running a node.js server that is running on port 8081 
 Through this server we make restful calls with spring on an android device (or simulator).
 * Future Updates Incoming
