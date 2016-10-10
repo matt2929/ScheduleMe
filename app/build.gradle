@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.matthew.scheduleme"
-        minSdkVersion 19
+        minSdkVersion 11
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -29,7 +29,6 @@ android {
             exclude 'META-INF/LGPL2.1'
         }
     }
-
 }
 
 dependencies {
@@ -49,5 +48,6 @@ dependencies {
         exclude module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-
+    compile 'com.google.android.gms:play-services:9.6.1'
+    testCompile 'junit:junit:4.12'
 }
