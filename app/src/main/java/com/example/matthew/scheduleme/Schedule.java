@@ -106,7 +106,7 @@ public class Schedule extends Activity
 
     private static final String BUTTON_TEXT = "Call Google Calendar API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR, CalendarScopes.CALENDAR_READONLY,"https://www.googleapis.com/auth/plus.login" };
 
     /**
      * Create the main activity.
@@ -475,16 +475,16 @@ public class Schedule extends Activity
                         String.format("Event: %s Day: %s StartTime: %s EndTime: %s",eve.get(i), DayT, startT, endT));
                 i++;
             }
-            int p=0;
-            int q=0;
-            int r=0;
-
-           ArrayList<Integer> timeT = new ArrayList<Integer>();
-           for (int k=0;k<10;k++){
-               timeT.add(hourT.get(k));
-               timeT.add(endTime.get(k));
-           }
-      //      for(int j=0;j<24;j++){
+//            int p=0;
+//            int q=0;
+//            int r=0;
+//
+//           ArrayList<Integer> timeT = new ArrayList<Integer>();
+//           for (int k=0;k<10;k++){
+//               timeT.add(hourT.get(k));
+//               timeT.add(endTime.get(k));
+//           }
+//      //      for(int j=0;j<24;j++){
       //          if(r<timeT.size()) {
       //              if (totalT.get(j) == timeT.get(r)) {
       //                  r++;
@@ -501,24 +501,24 @@ public class Schedule extends Activity
 
                 // freeT.add(totalT.get(j));
       //      }
-            r=0;
-            int j=0;
-            ArrayList<Boolean> freeB = new ArrayList<Boolean>();
-           // while(r<=endTime.size()) {
-                for (j = 0; j < totalT.size(); j++) {
-                    //       for(int k=0;k<endTime.size();k++){
-                    if (totalT.get(j) != hourT.get(r)) {
-                        freeB.add(true);
-                    } else {
-                        freeB.add(false);
-                        r++;
-                    }
-                    //       }
-                }
-            //}
-            eventStrings.add(
-                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
-                        " represent one hour (calculated from above calendar): %s", freeB));
+//            r=0;
+//            int j=0;
+//            ArrayList<Boolean> freeB = new ArrayList<Boolean>();
+//           // while(r<=endTime.size()) {
+//                for (j = 0; j < totalT.size(); j++) {
+//                    //       for(int k=0;k<endTime.size();k++){
+//                    if (totalT.get(j) != hourT.get(r)) {
+//                        freeB.add(true);
+//                    } else {
+//                        freeB.add(false);
+//                        r++;
+//                    }
+//                    //       }
+//                }
+//            //}
+//            eventStrings.add(
+//                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
+//                        " represent one hour (calculated from above calendar): %s", freeB));
             return eventStrings;
         }
 
