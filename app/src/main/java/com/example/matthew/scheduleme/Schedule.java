@@ -1,6 +1,5 @@
 package com.example.matthew.scheduleme;
 
-import android.*;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,14 +14,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -37,7 +41,6 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,52 +48,6 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.client.util.DateTime;
-
-import com.google.api.services.calendar.model.*;
-
-import android.Manifest;
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
@@ -98,6 +55,9 @@ public class Schedule extends Activity
     private TextView mOutputText;
     private Button mCallApiButton;
     ProgressDialog mProgress;
+
+    // Required for Signout
+    private GoogleApiClient signout;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -132,6 +92,14 @@ public class Schedule extends Activity
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Sign Out Button begin
+                switch (v.getId())
+                {
+                    case R.id.button_sign_out:
+                        signOut();
+                        break;
+                }
+                // End
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
@@ -159,8 +127,44 @@ public class Schedule extends Activity
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
     }
-
-
+    /*
+     * Written by Dakota Lester
+     * Google Method Interpretation
+     * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
+     * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
+     * Used to sign a person out of their google account
+     */
+    // Leads to app crashing when pressed
+    private void signOut()
+    {
+        Auth.GoogleSignInApi.signOut(signout).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        // Signed Out
+                    }
+                }
+        );
+    }
+    /*
+    * Written by Dakota Lester
+    * Google Method Interpretation
+    * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
+    * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
+    * Completed - need to figure where to place this in the code
+    * Delete users credentials
+     */
+    private void revokeAccess()
+    {
+        Auth.GoogleSignInApi.revokeAccess(signout).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        // Removed
+                    }
+                }
+        );
+    }
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -170,12 +174,13 @@ public class Schedule extends Activity
      * appropriate.
      */
     private void getResultsFromApi() {
+        String noneterr = "No Network Connection Available!";
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            mOutputText.setText("No network connection available.");
+            mOutputText.setText(noneterr);
         } else {
             new MakeRequestTask(mCredential).execute();
         }
@@ -233,9 +238,9 @@ public class Schedule extends Activity
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mOutputText.setText(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                    String gperr = "This app requires Google Play Services.  Please install " +
+                            "Google Play Services on your device and relaunch this app!";
+                    mOutputText.setText(gperr);
                 } else {
                     getResultsFromApi();
                 }
@@ -400,7 +405,7 @@ public class Schedule extends Activity
         private List<String> getDataFromApi() throws IOException {
             // List the next 10 events from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
-            List<String> eventStrings = new ArrayList<String>();
+            List<String> eventStrings = new ArrayList<>();
             Events events = mService.events().list("primary")
                     .setMaxResults(10)
                     .setTimeMin(now)
@@ -408,6 +413,25 @@ public class Schedule extends Activity
                     .setSingleEvents(true)
                     .execute();
             List<Event> items = events.getItems();
+<<<<<<< HEAD
+            // Implemented try-catch for if there are no events
+            try {
+                for (Event event : items) {
+                    DateTime start = event.getStart().getDateTime();
+                    if (start == null) {
+                        // All-day events don't have start times, so just use
+                        // the start date.
+                        start = event.getStart().getDate();
+                    }
+                    eventStrings.add(
+                            String.format("%s (%s)", event.getSummary(), start));
+                }
+            } catch (NullPointerException e)
+            {
+                String nullerr = "No Events Found!";
+                mOutputText.setText(nullerr);
+            }
+=======
             ArrayList<String> eve = new ArrayList<String>();
             ArrayList<Integer> yearT = new ArrayList<Integer>();
             ArrayList<Integer> monthT = new ArrayList<Integer>();
@@ -519,9 +543,27 @@ public class Schedule extends Activity
 //            eventStrings.add(
 //                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
 //                        " represent one hour (calculated from above calendar): %s", freeB));
+>>>>>>> develop
             return eventStrings;
         }
-
+        /*
+        * Written by Dakota Lester
+        * Used to determine whether a person is free or not (non-hardcoded)
+        * Through the use of a boolean function that will be called in the
+        * getDataFromApi() method
+        * Will be used for JUnit Testing to verify a two or more peoples
+        * schedules match up
+         */
+        // As of now used to test whether the method will return a result
+        // that is correct
+        private boolean FreeOrNot() throws IOException  {
+            boolean flag = false;
+            if(flag == false)
+            {
+                flag = true;
+            }
+            return flag;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -531,9 +573,10 @@ public class Schedule extends Activity
 
         @Override
         protected void onPostExecute(List<String> output) {
+            String PostExeNoRes = "No results returned";
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+                mOutputText.setText(PostExeNoRes);
             } else {
                 output.add(0, "Data retrieved using the Google Calendar API:");
                 mOutputText.setText(TextUtils.join("\n", output));
@@ -543,6 +586,8 @@ public class Schedule extends Activity
         @Override
         protected void onCancelled() {
             mProgress.hide();
+            String cancelerr = "The following error occured:\n " + mLastError.getMessage();
+            String cancelled = "Request Cancelled";
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                     showGooglePlayServicesAvailabilityErrorDialog(
@@ -553,11 +598,10 @@ public class Schedule extends Activity
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             Schedule.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    mOutputText.setText(cancelerr);
                 }
             } else {
-                mOutputText.setText("Request cancelled.");
+                mOutputText.setText(cancelled);
             }
         }
     }
