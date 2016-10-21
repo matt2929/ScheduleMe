@@ -29,7 +29,7 @@
         android:text="Change Meeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/meetingschangemeeting"
+        android:id="@+id/changeMeeting"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -37,8 +37,8 @@
         android:text="Add Meeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/meetingschangeaddmeeting"
-        android:layout_above="@+id/meetingschangemeeting"
+        android:id="@+id/addMeeting"
+        android:layout_above="@+id/changeMeeting"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
