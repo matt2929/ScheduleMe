@@ -526,6 +526,8 @@ public class Schedule extends Activity
         @Override
         protected void onPreExecute() {
             mOutputText.setText("");
+            //mProgress.hide();
+            if(mProgress.isIndeterminate())
             mProgress.show();
         }
 
