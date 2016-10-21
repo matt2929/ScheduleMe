@@ -3,6 +3,7 @@ package com.example.matthew.scheduleme;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.EditText;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -24,22 +29,36 @@ import java.util.Iterator;
 public class UserHome extends AppCompatActivity {
     Button goToCalender;
     Button testRest;
+    // Sign out button
+    Button buttonsignout;
     String result = "";
     EditText textView;
     ArrayList<user> users;
+
+    // Required for Signout
+    private GoogleApiClient signout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userhome);
         textView = (EditText) findViewById(R.id.upcommingdata);
+        // Sign-Out Button listener
+        buttonsignout = (Button) findViewById(R.id.button_sign_out);
+        buttonsignout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                signOut();
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+            }
+        });
+        // End
         goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         goToCalender.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Schedule.class);
                 startActivity(intent);
-
-
             }
         });
         testRest= (Button) findViewById(R.id.testrest);
@@ -49,6 +68,44 @@ public class UserHome extends AppCompatActivity {
                 new HttpRequestTask().execute();
             }
         });
+    }
+    /*
+     * Written by Dakota Lester
+     * Google Method Interpretation
+     * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
+     * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
+     * Used to sign a person out of their google account
+     */
+    // Leads to app crashing when pressed
+    private void signOut()
+    {
+        if (signout != null && signout.isConnected()) {
+            signout.clearDefaultAccountAndReconnect().setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    signout.disconnect();
+                }
+            });
+        }
+    }
+    /*
+    * Written by Dakota Lester
+    * Google Method Interpretation
+    * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
+    * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
+    * Completed - need to figure where to place this in the code
+    * Delete users credentials
+     */
+    private void revokeAccess()
+    {
+        Auth.GoogleSignInApi.revokeAccess(signout).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        // Removed
+                    }
+                }
+        );
     }
 
     @Override
