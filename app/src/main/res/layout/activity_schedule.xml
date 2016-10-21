@@ -49,4 +49,5 @@
         android:id="@+id/RefreshCalendarButton"
         android:layout_below="@+id/calendarView"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

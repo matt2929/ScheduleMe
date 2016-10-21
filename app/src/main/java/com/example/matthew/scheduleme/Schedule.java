@@ -56,9 +56,6 @@ public class Schedule extends Activity
     private Button mCallApiButton;
     ProgressDialog mProgress;
 
-    // Required for Signout
-    private GoogleApiClient signout;
-
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -92,14 +89,6 @@ public class Schedule extends Activity
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Sign Out Button begin
-                switch (v.getId())
-                {
-                    case R.id.button_sign_out:
-                        signOut();
-                        break;
-                }
-                // End
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
@@ -127,45 +116,6 @@ public class Schedule extends Activity
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
     }
-    /*
-     * Written by Dakota Lester
-     * Google Method Interpretation
-     * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
-     * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
-     * Used to sign a person out of their google account
-     */
-    // Leads to app crashing when pressed
-    private void signOut()
-    {
-        Auth.GoogleSignInApi.signOut(signout).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        // Signed Out
-                    }
-                }
-        );
-    }
-    /*
-    * Written by Dakota Lester
-    * Google Method Interpretation
-    * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
-    * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
-    * Completed - need to figure where to place this in the code
-    * Delete users credentials
-     */
-    private void revokeAccess()
-    {
-        Auth.GoogleSignInApi.revokeAccess(signout).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        // Removed
-                    }
-                }
-        );
-    }
-
     /**
      * Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an

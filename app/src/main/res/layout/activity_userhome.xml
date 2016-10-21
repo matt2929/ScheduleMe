@@ -71,10 +71,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/userhomeback"
-        android:layout_alignRight="@+id/userhomeconnections"
-        android:layout_alignEnd="@+id/userhomeconnections"
+        android:layout_marginBottom="68dp"
         android:id="@+id/button_sign_out"
         android:onClick="signOut"
-        android:background="@color/cast_intro_overlay_button_background_color" />
+        android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
