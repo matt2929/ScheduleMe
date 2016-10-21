@@ -19,4 +19,19 @@ public class user implements Serializable{
         return this.id;
     }
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
 }

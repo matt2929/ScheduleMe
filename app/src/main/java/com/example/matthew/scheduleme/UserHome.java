@@ -159,7 +159,7 @@ public class UserHome extends Activity {
                         Log.e("nope", "");
                     }
                     _user.setId(4);
-                    _user.setName(put.getText().toString());
+                    _user.setName(valueString);
                     _user.setPassword("thepasswordthatipicked");
                     _user.setProfession("sexy dancer");
                     String jsonInString = "";
