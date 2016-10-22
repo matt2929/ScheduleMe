@@ -49,6 +49,15 @@ dependencies {
         exclude module: 'httpclient'
         //exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    compile 'com.google.android.gms:play-services:9.6.1'
+    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.google.android.gms:play-services-plus:9.6.1'
+    compile 'com.google.android.gms:play-services-base:9.6.1'
+    compile 'com.google.android.gms:play-services-identity:9.6.1'
+    compile 'com.google.android.gms:play-services-appindexing:9.6.1'
+    compile 'com.google.android.gms:play-services-appinvite:9.6.1'
+    compile 'com.google.android.gms:play-services-analytics:9.6.1'
+    compile 'com.google.android.gms:play-services-drive:9.6.1'
     testCompile 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

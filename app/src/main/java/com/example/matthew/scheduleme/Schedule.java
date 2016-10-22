@@ -1,5 +1,6 @@
 package com.example.matthew.scheduleme;
 
+import android.*;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -21,12 +22,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -41,6 +40,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +48,52 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.client.util.DateTime;
+
+import com.google.api.services.calendar.model.*;
+
+import android.Manifest;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
@@ -62,7 +108,7 @@ public class Schedule extends Activity
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String BUTTON_TEXT = "Call Google Calendar API";
-    private static final String PREF_ACCOUNT_NAME = "accountName";
+    static String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR, CalendarScopes.CALENDAR_READONLY,"https://www.googleapis.com/auth/plus.login" };
 
     /**
@@ -71,6 +117,7 @@ public class Schedule extends Activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+     //   System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
         super.onCreate(savedInstanceState);
         LinearLayout activityLayout = new LinearLayout(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -92,6 +139,7 @@ public class Schedule extends Activity
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
+
                 mCallApiButton.setEnabled(true);
             }
         });
@@ -112,10 +160,15 @@ public class Schedule extends Activity
         setContentView(activityLayout);
 
         // Initialize credentials and service object.
+
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+     //   System.out.println("MCREDENTIALS ------ " + mCredential.getSelectedAccountName());
     }
+
+
+
     /**
      * Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
@@ -124,14 +177,15 @@ public class Schedule extends Activity
      * appropriate.
      */
     private void getResultsFromApi() {
-        String noneterr = "No Network Connection Available!";
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
+
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            mOutputText.setText(noneterr);
+            mOutputText.setText("No network connection available.");
         } else {
+          //  System.out.println("Hereeeeeeeeeeeeeeeeeeeeeee"+mCredential.getSelectedAccountName());
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -148,12 +202,18 @@ public class Schedule extends Activity
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
+
         if (EasyPermissions.hasPermissions(
                 this, android.Manifest.permission.GET_ACCOUNTS)) {
+//            System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
+
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
+               // System.out.println("Account Name"+accountName);
                 mCredential.setSelectedAccountName(accountName);
+
+                mCredential.setSelectedAccountName(Login.getGoogleAccount());
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
@@ -188,9 +248,9 @@ public class Schedule extends Activity
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    String gperr = "This app requires Google Play Services.  Please install " +
-                            "Google Play Services on your device and relaunch this app!";
-                    mOutputText.setText(gperr);
+                    mOutputText.setText(
+                            "This app requires Google Play Services. Please install " +
+                                    "Google Play Services on your device and relaunch this app.");
                 } else {
                     getResultsFromApi();
                 }
@@ -355,7 +415,7 @@ public class Schedule extends Activity
         private List<String> getDataFromApi() throws IOException {
             // List the next 10 events from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
-            List<String> eventStrings = new ArrayList<>();
+            List<String> eventStrings = new ArrayList<String>();
             Events events = mService.events().list("primary")
                     .setMaxResults(10)
                     .setTimeMin(now)
@@ -363,23 +423,6 @@ public class Schedule extends Activity
                     .setSingleEvents(true)
                     .execute();
             List<Event> items = events.getItems();
-            // Implemented try-catch for if there are no events
-            try {
-                for (Event event : items) {
-                    DateTime start = event.getStart().getDateTime();
-                    if (start == null) {
-                        // All-day events don't have start times, so just use
-                        // the start date.
-                        start = event.getStart().getDate();
-                    }
-                    eventStrings.add(
-                            String.format("%s (%s)", event.getSummary(), start));
-                }
-            } catch (NullPointerException e)
-            {
-                String nullerr = "No Events Found!";
-                mOutputText.setText(nullerr);
-            }
             ArrayList<String> eve = new ArrayList<String>();
             ArrayList<Integer> yearT = new ArrayList<Integer>();
             ArrayList<Integer> monthT = new ArrayList<Integer>();
@@ -493,24 +536,7 @@ public class Schedule extends Activity
 //                        " represent one hour (calculated from above calendar): %s", freeB));
             return eventStrings;
         }
-        /*
-        * Written by Dakota Lester
-        * Used to determine whether a person is free or not (non-hardcoded)
-        * Through the use of a boolean function that will be called in the
-        * getDataFromApi() method
-        * Will be used for JUnit Testing to verify a two or more peoples
-        * schedules match up
-         */
-        // As of now used to test whether the method will return a result
-        // that is correct
-        private boolean FreeOrNot() throws IOException  {
-            boolean flag = false;
-            if(flag == false)
-            {
-                flag = true;
-            }
-            return flag;
-        }
+
 
         @Override
         protected void onPreExecute() {
@@ -520,10 +546,9 @@ public class Schedule extends Activity
 
         @Override
         protected void onPostExecute(List<String> output) {
-            String PostExeNoRes = "No results returned";
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText(PostExeNoRes);
+                mOutputText.setText("No results returned.");
             } else {
                 output.add(0, "Data retrieved using the Google Calendar API:");
                 mOutputText.setText(TextUtils.join("\n", output));
@@ -533,8 +558,6 @@ public class Schedule extends Activity
         @Override
         protected void onCancelled() {
             mProgress.hide();
-            String cancelerr = "The following error occured:\n " + mLastError.getMessage();
-            String cancelled = "Request Cancelled";
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                     showGooglePlayServicesAvailabilityErrorDialog(
@@ -545,10 +568,11 @@ public class Schedule extends Activity
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             Schedule.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText(cancelerr);
+                    mOutputText.setText("The following error occurred:\n"
+                            + mLastError.getMessage());
                 }
             } else {
-                mOutputText.setText(cancelled);
+                mOutputText.setText("Request cancelled.");
             }
         }
     }

@@ -66,4 +66,13 @@
         android:layout_below="@+id/userhomeconnections"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/signout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        android:layout_below="@+id/testrest"
+        android:layout_centerHorizontal="true"
+        />
+
 </RelativeLayout>
