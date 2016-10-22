@@ -1,4 +1,4 @@
-var express = require('express');
+dar express = require('express');
 var app = express();
 var fs = require("fs");
 var mongoose = require('mongoose');
@@ -7,16 +7,21 @@ var db=mongoose.connection;
 
 db.on('error', console.error);
 db.once('open', function() {
+var Schema=mongoose.Schema;
+
 var friendsListSchema= mongoose.Schema({
   User: String,
-  rating: [String]
+  Friends: [String]
 });
 
-var EventListSchema= mongoose.Schema({
+var Friends=mongoose.model("Friends", friendsListSchema); 
+
+var eventListSchema= mongoose.Schema({
   User: String,
   Events: [Date]
 });
- 
+
+var Events=mongoose.model("Events", eventListSchema) 
  
 });
 
