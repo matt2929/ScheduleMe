@@ -15,14 +15,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -105,8 +108,8 @@ public class Schedule extends Activity
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String BUTTON_TEXT = "Call Google Calendar API";
-    private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+    static String PREF_ACCOUNT_NAME = "accountName";
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR, CalendarScopes.CALENDAR_READONLY,"https://www.googleapis.com/auth/plus.login" };
 
     /**
      * Create the main activity.
@@ -114,6 +117,7 @@ public class Schedule extends Activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+     //   System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
         super.onCreate(savedInstanceState);
         LinearLayout activityLayout = new LinearLayout(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -135,6 +139,7 @@ public class Schedule extends Activity
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
+
                 mCallApiButton.setEnabled(true);
             }
         });
@@ -155,9 +160,11 @@ public class Schedule extends Activity
         setContentView(activityLayout);
 
         // Initialize credentials and service object.
+
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+     //   System.out.println("MCREDENTIALS ------ " + mCredential.getSelectedAccountName());
     }
 
 
@@ -173,10 +180,12 @@ public class Schedule extends Activity
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
+
             chooseAccount();
         } else if (! isDeviceOnline()) {
             mOutputText.setText("No network connection available.");
         } else {
+          //  System.out.println("Hereeeeeeeeeeeeeeeeeeeeeee"+mCredential.getSelectedAccountName());
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -193,12 +202,18 @@ public class Schedule extends Activity
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
+
         if (EasyPermissions.hasPermissions(
                 this, android.Manifest.permission.GET_ACCOUNTS)) {
+//            System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
+
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
+               // System.out.println("Account Name"+accountName);
                 mCredential.setSelectedAccountName(accountName);
+
+                mCredential.setSelectedAccountName(Login.getGoogleAccount());
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
@@ -475,16 +490,16 @@ public class Schedule extends Activity
                         String.format("Event: %s Day: %s StartTime: %s EndTime: %s",eve.get(i), DayT, startT, endT));
                 i++;
             }
-            int p=0;
-            int q=0;
-            int r=0;
-
-           ArrayList<Integer> timeT = new ArrayList<Integer>();
-           for (int k=0;k<10;k++){
-               timeT.add(hourT.get(k));
-               timeT.add(endTime.get(k));
-           }
-      //      for(int j=0;j<24;j++){
+//            int p=0;
+//            int q=0;
+//            int r=0;
+//
+//           ArrayList<Integer> timeT = new ArrayList<Integer>();
+//           for (int k=0;k<10;k++){
+//               timeT.add(hourT.get(k));
+//               timeT.add(endTime.get(k));
+//           }
+//      //      for(int j=0;j<24;j++){
       //          if(r<timeT.size()) {
       //              if (totalT.get(j) == timeT.get(r)) {
       //                  r++;
@@ -501,24 +516,24 @@ public class Schedule extends Activity
 
                 // freeT.add(totalT.get(j));
       //      }
-            r=0;
-            int j=0;
-            ArrayList<Boolean> freeB = new ArrayList<Boolean>();
-           // while(r<=endTime.size()) {
-                for (j = 0; j < totalT.size(); j++) {
-                    //       for(int k=0;k<endTime.size();k++){
-                    if (totalT.get(j) != hourT.get(r)) {
-                        freeB.add(true);
-                    } else {
-                        freeB.add(false);
-                        r++;
-                    }
-                    //       }
-                }
-            //}
-            eventStrings.add(
-                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
-                        " represent one hour (calculated from above calendar): %s", freeB));
+//            r=0;
+//            int j=0;
+//            ArrayList<Boolean> freeB = new ArrayList<Boolean>();
+//           // while(r<=endTime.size()) {
+//                for (j = 0; j < totalT.size(); j++) {
+//                    //       for(int k=0;k<endTime.size();k++){
+//                    if (totalT.get(j) != hourT.get(r)) {
+//                        freeB.add(true);
+//                    } else {
+//                        freeB.add(false);
+//                        r++;
+//                    }
+//                    //       }
+//                }
+//            //}
+//            eventStrings.add(
+//                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
+//                        " represent one hour (calculated from above calendar): %s", freeB));
             return eventStrings;
         }
 
