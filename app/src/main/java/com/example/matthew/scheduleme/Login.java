@@ -41,7 +41,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         setContentView(R.layout.activity_login);
         emailAddress = (EditText) (findViewById(R.id.Email_Box));
         passwordBox = (EditText) (findViewById(R.id.Email_Password));
-
         button = (Button) (findViewById(R.id.Log_Button));
         button.setOnClickListener(new View.OnClickListener() {
             @Override

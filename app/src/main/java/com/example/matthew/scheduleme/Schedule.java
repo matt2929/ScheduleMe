@@ -139,7 +139,7 @@ public class Schedule extends Activity
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
-
+                
                 mCallApiButton.setEnabled(true);
             }
         });
