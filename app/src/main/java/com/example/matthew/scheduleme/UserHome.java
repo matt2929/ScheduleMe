@@ -1,14 +1,8 @@
 package com.example.matthew.scheduleme;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerFuture;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,9 +13,7 @@ import android.widget.EditText;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -43,9 +35,11 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
     EditText textView;
     ArrayList<user> users;
     Button signOut;
+    Button viewFriends;
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
 
+    user thisUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +79,34 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        thisUser = new user();
+        thisUser.setAllFriends(new ArrayList<user>());
+        ArrayList<user> testFriends = new ArrayList<user>();
+        user one = new user();
+        one.setName("Jimmy Johns");
+        user two = new user();
+        two.setName("Bill Gate");
+        user three = new user();
+        three.setName("Qiu Kong");
+        user four = new user();
+        four.setName("Billy Bob");
+        user five = new user();
+        five.setName("Fried Chicken");
+        testFriends.add(one);
+        testFriends.add(two);
+        testFriends.add(three);
+        testFriends.add(four);
+        testFriends.add(five);
+        thisUser.setAllFriends(testFriends);
+        viewFriends = (Button) findViewById(R.id.userhomeconnections);
+        viewFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Intent intentJump = new Intent(getApplicationContext(), Connection.class);
+                    intentJump.putExtra("testUser", thisUser);
+                    startActivity(intentJump);
+            }
+        });
     }
 
     private void signOut(){

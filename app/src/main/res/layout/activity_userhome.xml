@@ -16,7 +16,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:text="You have an appointment tommorow" />
+        android:text="You have an appointment tommorow"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:layout_width="wrap_content"
