@@ -1,79 +1,46 @@
 package com.example.matthew.scheduleme;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.SignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.Status;
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
-    Button button;
-    EditText emailAddress;
-    EditText passwordBox;
-    static AllInfos allInfos;
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
+    TextView s1;
+    TextView s2;
+    String sche;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        emailAddress = (EditText) (findViewById(R.id.Email_Box));
-        passwordBox = (EditText) (findViewById(R.id.Email_Password));
-
-        button = (Button) (findViewById(R.id.Log_Button));
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!emailAddress.getText().toString().matches("") && !passwordBox.getText().toString().matches("")) {
-                    Intent intentJump = new Intent(getApplicationContext(), UserHome.class);
-                    Intent intentSentT = new Intent(Login.this, UserHome.class);
-                    intentSentT.putExtra("text", emailAddress.getText().toString());
-                    startActivity(intentJump);
-                    startActivity(intentSentT);
-                    allInfos = AllInfos.getInstance(emailAddress.getContext());
-                    allInfos.saveData("Username", emailAddress.getText().toString());
-                } else {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Please Enter Your Google Email Address / Password!";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-            }
-        });
-
-       findViewById(R.id.signin_button).setOnClickListener(this);
-
+        s1 = (TextView) findViewById(R.id.textView);
+        s2 = (TextView) findViewById(R.id.textView2);
+        sche = "Schedule";
+        s1.setText(sche);
+        s2.setText(sche);
+        findViewById(R.id.signin_button).setOnClickListener(this);
         GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
-
         SignInButton signInButton=(SignInButton) findViewById(R.id.signin_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setScopes(gso.getScopeArray());
-
     }
 
     public void onClick(View v){
