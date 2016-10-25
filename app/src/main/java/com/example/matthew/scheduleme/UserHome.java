@@ -79,6 +79,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        // for connection class
         thisUser = new user();
         thisUser.setAllFriends(new ArrayList<user>());
         ArrayList<user> testFriends = new ArrayList<user>();
