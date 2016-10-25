@@ -29,7 +29,11 @@ public class Connection extends AppCompatActivity {
         friends = new ArrayList<String>();
         if (friendsCount > 0) {
             for (int i=0;i<friendsCount;i++) {
-                text = text + thisU.getAllFriends().get(i).getName() + "\n";
+                if (i == friendsCount-1) {
+                    text = text + thisU.getAllFriends().get(i).getName();
+                }else{
+                    text = text + thisU.getAllFriends().get(i).getName() + "\n";
+                }
             }
             friendsList.setText(text);
         }else{

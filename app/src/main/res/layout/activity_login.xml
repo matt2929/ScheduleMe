@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#4F9C4A"
+    tools:context="com.example.matthew.scheduleme.Login"
+    android:id="@+id/sign_in_button"
+    >
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/Text_field"
+        android:layout_centerInParent="true"
+        android:columnCount="1">
+
+        <TextView
+            android:text="Schedule"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/textView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:fontFamily="serif-monospace"
+            android:textSize="50sp"
+            android:textColor="#458940"
+            android:textAllCaps="false"
+            android:layout_marginTop="80dp"/>
+
+        <TextView
+            android:text="Schedule"
+            android:layout_gravity="center"
+            android:id="@+id/textView2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:fontFamily="cursive"
+            android:textSize="50sp"
+            android:textStyle="normal|bold"
+            android:layout_marginBottom="70dp"
+            android:textColor="#FFFFFF" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/signin_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <Button
+            android:text="About Us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/About_button"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textColor="#ffffff"
+            android:fontFamily="sans-serif-smallcaps"
+            android:typeface="normal" />
+
+    </GridLayout>
+
+</RelativeLayout>

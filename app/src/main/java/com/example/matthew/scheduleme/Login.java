@@ -22,19 +22,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
-    TextView s1;
-    TextView s2;
-    String sche;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        s1 = (TextView) findViewById(R.id.textView);
-        s2 = (TextView) findViewById(R.id.textView2);
-        sche = "Schedule";
-        s1.setText(sche);
-        s2.setText(sche);
         findViewById(R.id.signin_button).setOnClickListener(this);
         GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
