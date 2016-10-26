@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -87,6 +90,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,7 +107,8 @@ public class Schedule extends Activity
     private TextView mOutputText;
     private Button mCallApiButton;
     ProgressDialog mProgress;
-
+    List<String> eventStrings;
+    Button sendData;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -133,17 +140,20 @@ public class Schedule extends Activity
 
         mCallApiButton = new Button(this);
         mCallApiButton.setText(BUTTON_TEXT);
+        sendData=new Button(this);
+        sendData.setClickable(false);
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
-                
+                sendData.setClickable(true);
                 mCallApiButton.setEnabled(true);
             }
         });
         activityLayout.addView(mCallApiButton);
+        activityLayout.addView(sendData);
 
         mOutputText = new TextView(this);
         mOutputText.setLayoutParams(tlp);
@@ -156,7 +166,12 @@ public class Schedule extends Activity
 
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Calling Google Calendar API ...");
-
+        sendData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HttpTaskPost().execute();
+            }
+        });
         setContentView(activityLayout);
 
         // Initialize credentials and service object.
@@ -415,7 +430,7 @@ public class Schedule extends Activity
         private List<String> getDataFromApi() throws IOException {
             // List the next 10 events from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
-            List<String> eventStrings = new ArrayList<String>();
+             eventStrings = new ArrayList<String>();
             Events events = mService.events().list("primary")
                     .setMaxResults(10)
                     .setTimeMin(now)
@@ -578,4 +593,43 @@ public class Schedule extends Activity
             }
         }
     }
+    private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
+        @Override
+        protected Greeting doInBackground(Void... params) {
+            ObjectMapper mapper = new ObjectMapper();
+            user _user = new user();
+            String url = "http://warmachine.cse.buffalo.edu:8082/process_post";
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("nope", "");
+            }
+            _user.setId(4);
+            _user.setName(mCredential.getSelectedAccountName());
+            _user.setPassword("pass");
+            _user.setEvents(eventStrings);
+            _user.setProfession("sexy dancer");
+            String jsonInString = "";
+            try {
+                jsonInString = mapper.writeValueAsString(_user);
+                Log.e("json, ",jsonInString);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.postForObject(url, _user,user.class);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Greeting greeting) {
+            Log.e("what","what");
+        }
+    }
+
 }
