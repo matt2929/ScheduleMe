@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +20,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.api.client.json.Json;
 
@@ -39,6 +46,13 @@ public class UserHome extends Activity {
     String result = "";
     EditText textView;
     ArrayList<user> users;
+    Button signOut;
+    Button viewFriends;
+    private static final String TAG = "SignOutActivity";
+    private GoogleApiClient mGoogleApiClient;
+
+    user thisUser;
+
     Button testPost;
     EditText put;
     @Override
@@ -72,6 +86,53 @@ public class UserHome extends Activity {
             public void onClick(View v) {
                 valueString=put.getText().toString();
 
+        // for connection class
+        thisUser = new user();
+        thisUser.setAllFriends(new ArrayList<user>());
+        ArrayList<user> testFriends = new ArrayList<user>();
+        user one = new user();
+        one.setName("Jimmy Johns");
+        user two = new user();
+        two.setName("Bill Gate");
+        user three = new user();
+        three.setName("Qiu Kong");
+        user four = new user();
+        four.setName("Billy Bob");
+        user five = new user();
+        five.setName("Fried Chicken");
+        testFriends.add(one);
+        testFriends.add(two);
+        testFriends.add(three);
+        testFriends.add(four);
+        testFriends.add(five);
+        thisUser.setAllFriends(testFriends);
+        viewFriends = (Button) findViewById(R.id.userhomeconnections);
+        viewFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Intent intentJump = new Intent(getApplicationContext(), Connection.class);
+                    intentJump.putExtra("testUser", thisUser);
+                    startActivity(intentJump);
+            }
+        });
+    }
+
+    private void signOut(){
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        //revokeAccess();
+//                        SharedPreferences prefs = getSharedPreferences(getApplicationContext().toString(),Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = prefs.edit();
+               //         System.out.println("HERERERERERERERERERERERERERERER"+getPreferences(getApplicationContext().MODE_PRIVATE).getAll().toString());
+//                        editor.remove(AccountManager.KEY_ACCOUNT_NAME);
+//                        editor.commit();
+                        String accPref = getPreferences(getApplicationContext().MODE_PRIVATE).getString(Schedule.PREF_ACCOUNT_NAME, null);
+               //         System.out.println("ACCPREF:::" + accPref);
+                        accPref = "";
+                        Intent intenT = new Intent(getApplicationContext(), Login.class);
+                        startActivity(intenT);
                 Log.e("butt2","press");
                 new HttpTaskPost().execute();}});
         put=(EditText) findViewById(R.id.postname);

@@ -1,6 +1,7 @@
 package com.example.matthew.scheduleme;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +13,8 @@ public class user implements Serializable{
     public String password;
     public String profession;
     public int id;
+    public ArrayList<user> friends;
+    public List<String> events;
     public List<String> events;
 
     public String getName(){return this.name;}
@@ -44,4 +47,8 @@ public class user implements Serializable{
         this.events = events;
     }
 
+    public void addAFriend(user u) {friends.add(u);}
+    public void setAllFriends(ArrayList<user> f) {friends = f;}
+    public ArrayList<user> getAllFriends() {return this.friends;}
+    public void setName(String s) {name = s;}
 }
