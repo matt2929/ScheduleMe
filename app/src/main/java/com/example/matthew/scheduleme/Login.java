@@ -76,6 +76,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         if(signedIn){
             findViewById(R.id.signin_button).setVisibility(View.GONE);
             Intent myintent = new Intent (this, UserHome.class);
+            user thisU = new user();
+            thisU.setName(getGoogleAccount());
+            myintent.putExtra("testUser", thisU);
             startActivityForResult(myintent,0);
         }else{
             findViewById(R.id.signin_button).setVisibility(View.VISIBLE);

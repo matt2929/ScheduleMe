@@ -4,11 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,23 +13,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.api.client.json.Json;
 
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,102 +51,104 @@ public class UserHome extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userhome);
         textView = (EditText) findViewById(R.id.upcommingdata);
-        goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
-        goToCalender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Schedule.class);
-                startActivity(intent);
-
-
-            }
-        });
-        testRest = (Button) findViewById(R.id.testrest);
-
-        testRest.setOnClickListener(
-                new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("butt1","press");
-                new HttpRequestTask().execute();
-            }
-        });
-        testPost = (Button) findViewById(R.id.takethenamebelowandpost);
-        testPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                valueString=put.getText().toString();
 
         // for connection class
-        thisUser = new user();
-        thisUser.setAllFriends(new ArrayList<user>());
-        ArrayList<user> testFriends = new ArrayList<user>();
-        user one = new user();
-        one.setName("Jimmy Johns");
-        user two = new user();
-        two.setName("Bill Gate");
-        user three = new user();
-        three.setName("Qiu Kong");
-        user four = new user();
-        four.setName("Billy Bob");
-        user five = new user();
-        five.setName("Fried Chicken");
+        Intent intent = getIntent();
+        thisUser = (user) intent.getSerializableExtra("testUser");
+        thisUser.setAllFriends(new ArrayList<String>());
+        ArrayList<String> testFriends = new ArrayList<String>();
+        String one = "Jimmy Johns";
+        String two = "OMG MEH";
+        String three = "Monkey D Luffy";
+        String four = "Steve Jobs";
+        String five = "Bill Gate";
         testFriends.add(one);
         testFriends.add(two);
         testFriends.add(three);
         testFriends.add(four);
         testFriends.add(five);
         thisUser.setAllFriends(testFriends);
+
+        goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
+        goToCalender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Schedule.class);
+                intent.putExtra("testUser", thisUser);
+                startActivity(intent);
+            }
+        });
+
         viewFriends = (Button) findViewById(R.id.userhomeconnections);
         viewFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intentJump = new Intent(getApplicationContext(), Connection.class);
-                    intentJump.putExtra("testUser", thisUser);
-                    startActivity(intentJump);
+                Intent intentJump = new Intent(getApplicationContext(), Connection.class);
+                intentJump.putExtra("testUser", thisUser);
+                startActivity(intentJump);
             }
         });
-    }
 
-    private void signOut(){
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
+        testRest = (Button) findViewById(R.id.testrest);
+        testRest.setOnClickListener(
+                new View.OnClickListener() {
                     @Override
-                    public void onResult(@NonNull Status status) {
-                        //revokeAccess();
+                    public void onClick(View view) {
+                        Log.e("butt1", "press");
+                        new HttpRequestTask().execute();
+                    }
+                });
+
+        put = (EditText) findViewById(R.id.postname);
+        put.setText(thisUser.getName());
+        testPost = (Button) findViewById(R.id.takethenamebelowandpost);
+        testPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HttpTaskPost().execute();
+             //   valueString = put.getText().toString();
+            }
+
+            private void signOut() {
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(@NonNull Status status) {
+                                //revokeAccess();
 //                        SharedPreferences prefs = getSharedPreferences(getApplicationContext().toString(),Context.MODE_PRIVATE);
 //                        SharedPreferences.Editor editor = prefs.edit();
-               //         System.out.println("HERERERERERERERERERERERERERERER"+getPreferences(getApplicationContext().MODE_PRIVATE).getAll().toString());
+                                //         System.out.println("HERERERERERERERERERERERERERERER"+getPreferences(getApplicationContext().MODE_PRIVATE).getAll().toString());
 //                        editor.remove(AccountManager.KEY_ACCOUNT_NAME);
 //                        editor.commit();
-                        String accPref = getPreferences(getApplicationContext().MODE_PRIVATE).getString(Schedule.PREF_ACCOUNT_NAME, null);
-               //         System.out.println("ACCPREF:::" + accPref);
-                        accPref = "";
-                        Intent intenT = new Intent(getApplicationContext(), Login.class);
-                        startActivity(intenT);
-                Log.e("butt2","press");
-                new HttpTaskPost().execute();}});
-        put=(EditText) findViewById(R.id.postname);
-        put.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Log.e("butt1","press");
+                                String accPref = getPreferences(getApplicationContext().MODE_PRIVATE).getString(Schedule.PREF_ACCOUNT_NAME, null);
+                                //         System.out.println("ACCPREF:::" + accPref);
+                                accPref = "";
+                                Intent intenT = new Intent(getApplicationContext(), Login.class);
+                                startActivity(intenT);
+                                Log.e("butt2", "press");
+                                new HttpTaskPost().execute();
+                            }
+                        });
+                put = (EditText) findViewById(R.id.postname);
+                put.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        Log.e("butt1", "press");
 
-                return true;
+                        return true;
+                    }
+                });
+            }
+
+            protected void onStart() {
+                UserHome.super.onStart();
             }
         });
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
 
     /**
      * A placeholder fragment containing a simple view.
      */
-
     private class HttpRequestTask extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
@@ -209,38 +202,37 @@ public class UserHome extends Activity {
     private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
-                ObjectMapper mapper = new ObjectMapper();
-                user _user = new user();
-                    String url = "http://warmachine.cse.buffalo.edu:8081/process_post";
-                    try {
-                        RestTemplate restTemplate = new RestTemplate();
-                        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    } catch (Exception e) {
-                        Log.e("MainActivity", e.getMessage(), e);
-                        Log.e("nope", "");
-                    }
-                    _user.setId(4);
-                    _user.setName(valueString);
-                    _user.setPassword("thepasswordthatipicked");
-                    _user.setProfession("sexy dancer");
-                    String jsonInString = "";
-                    try {
-                        jsonInString = mapper.writeValueAsString(_user);
-                        Log.e("json, ",jsonInString);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    RestTemplate restTemplate = new RestTemplate();
+            ObjectMapper mapper = new ObjectMapper();
+        //    user _user = new user();
+            String url = "http://warmachine.cse.buffalo.edu:8081/process_post";
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("nope", "");
+            }
+            thisUser.setId(4);
+            thisUser.setPassword("thePasswordThatPicked");
+            thisUser.setProfession("sexy dancer");
+            String jsonInString = "";
+            try {
+                jsonInString = mapper.writeValueAsString(thisUser);
+                Log.e("json, ", jsonInString);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            restTemplate.postForObject(url, _user,user.class);
+            restTemplate.postForObject(url, thisUser, user.class);
             return null;
         }
 
         @Override
         protected void onPostExecute(Greeting greeting) {
-        Log.e("what","what");
+            Log.e("what", "what");
         }
     }
 }

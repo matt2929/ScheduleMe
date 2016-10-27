@@ -13,8 +13,7 @@ public class user implements Serializable{
     public String password;
     public String profession;
     public int id;
-    public ArrayList<user> friends;
-    public List<String> events;
+    public ArrayList<String> friends;
     public List<String> events;
 
     public String getName(){return this.name;}
@@ -27,28 +26,22 @@ public class user implements Serializable{
     public List<String> getEvents() {
         return events;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public void setId(int id) {
         this.id = id;
     }
     public void setPassword(String password) {
         this.password = password;
     }
-
     public void setProfession(String profession) {
         this.profession = profession;
     }
-
     public void setEvents(List<String> events) {
         this.events = events;
     }
-
-    public void addAFriend(user u) {friends.add(u);}
-    public void setAllFriends(ArrayList<user> f) {friends = f;}
-    public ArrayList<user> getAllFriends() {return this.friends;}
-    public void setName(String s) {name = s;}
+    public void addAFriend(String fName) {friends.add(fName);}
+    public void setAllFriends(ArrayList<String> f) {friends = f;}
+    public ArrayList<String> getAllFriends() {return this.friends;}
 }
