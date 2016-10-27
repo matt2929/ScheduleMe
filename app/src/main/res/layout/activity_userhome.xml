@@ -16,7 +16,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:text="You have an appointment tommorow" />
+        android:text="You have an appointment tommorow"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -65,5 +67,24 @@
         android:id="@+id/testrest"
         android:layout_below="@+id/userhomeconnections"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_below="@+id/takethenamebelowandpost"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/postname" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/takethenamebelowandpost"
+        android:layout_below="@+id/testrest"
+        android:layout_alignLeft="@+id/userhomeconnections"
+        android:layout_alignStart="@+id/userhomeconnections" />
 
 </RelativeLayout>
