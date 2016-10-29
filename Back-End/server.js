@@ -60,6 +60,12 @@ app.get('/listUsers', function (req, res) {
    });
 })
 
+app.get("/listUser/:name", function (req, res) {
+   fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
+   console.log("The param"+req.params.name);
+   res.end(map[req.params.name]);
+   });
+})
 
 app.get('/addUser/:newuser', function (req, res) {
    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
