@@ -2,21 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#4F9C4A"
-    tools:context="com.example.matthew.scheduleme.Login"
-    android:id="@+id/sign_in_button"
-    >
+    tools:context="com.example.matthew.scheduleme.Login">
+
+
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/Text_field"
         android:layout_centerInParent="true"
         android:columnCount="1">
@@ -29,8 +30,7 @@
             android:fontFamily="serif-monospace"
             android:textSize="50sp"
             android:textColor="#458940"
-            android:textAllCaps="false"
-            android:layout_marginTop="80dp"/>
+            android:textAllCaps="false" />
 
         <TextView
             android:text="Schedule"
@@ -43,16 +43,74 @@
             android:layout_marginBottom="70dp"
             android:textColor="#FFFFFF" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/signin_button"
-            android:layout_width="wrap_content"
+        <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:width="700px"
+        android:height="30px"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+            android:id="@+id/Email_Box"
+        android:hint="Google Email"
+        android:background="#008949"
+        android:typeface="normal"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-smallcaps"
+            android:maxLines="1" />
+
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:ems="10"
+            android:width="700px"
+            android:height="30px"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:layout_marginTop="5dp"
+            android:background="#008949"
+            android:typeface="normal"
+            android:id="@+id/Email_Password"
+            android:textColorHint="#FFFFFF"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-smallcaps"
+            android:maxLines="1"
+             />
+
+        <Button
+            android:text="Log In "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="700px"
+            android:height="20px"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/Log_Button"
+            android:elevation="1dp"
+            android:background="#00723D"
+            android:layout_below="@+id/Password_field"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-smallcaps" />
 
         <Button
             android:text="About Us"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="bottom"
             android:layout_gravity="center"
             android:id="@+id/About_button"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -61,5 +119,7 @@
             android:typeface="normal" />
 
     </GridLayout>
+
+
 
 </RelativeLayout>

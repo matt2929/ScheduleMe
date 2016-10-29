@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">ScheduleMe</string>
     <string name="title_activity_connection">Connection</string>
-    <string name="sign_in_fmt">Signed in as: %s</string>
 </resources>
