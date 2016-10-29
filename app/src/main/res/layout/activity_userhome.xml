@@ -16,7 +16,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:text="You have an appointment tommorow" />
+        android:text="You have an appointment tommorow"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -47,16 +53,14 @@
         android:layout_height="wrap_content"
         android:text="Back"
         android:id="@+id/userhomeback"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="true"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Help"
         android:id="@+id/userhomehelp"
-        android:layout_alignBottom="@+id/userhomeback"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignBottom="@+id/userhomeback"/>
 
     <Button
         android:text="Pull Data From Server"
@@ -65,5 +69,27 @@
         android:id="@+id/testrest"
         android:layout_below="@+id/userhomeconnections"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_below="@+id/takethenamebelowandpost"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/postname"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <Button
+        android:text="Send Data to Server"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/takethenamebelowandpost"
+        android:layout_below="@+id/testrest" />
 
 </RelativeLayout>
