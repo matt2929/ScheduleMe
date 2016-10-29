@@ -2,67 +2,137 @@ package com.example.matthew.scheduleme;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TimePicker;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.DatePicker;
-import java.util.Calendar;
+import android.widget.Toast;
 
-public class MakeAMeeting extends AppCompatActivity implements
-        View.OnClickListener{
+public class MakeAMeeting extends AppCompatActivity {
 
-    Button datePicker, timePicker;
-    EditText dateInTxt, timeIntTxt;
-    private int meetingYear, meetingMonth, meetingDay, meetingHour, meetingMinutes;
+    Button mainButt;
+    EditText mainTextEdit;
+    TextView mainTextView;
+    ListView mainListView;
+    DatePicker startDatePicker,endDatePicker;
+    int monthStart =-1;
+    int dateStart =-1;
+    int yearStart =-1;
 
+    int monthEnd =-1;
+    int dateEnd =-1;
+    int yearEnd =-1;
+    String eventName="";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_a_meeting);
-
-        datePicker = (Button)findViewById(R.id.btn_date);
-        timePicker = (Button)findViewById(R.id.btn_time);
-        dateInTxt = (EditText)findViewById(R.id.in_date);
-        timeIntTxt = (EditText)findViewById(R.id.in_time);
-
-        datePicker.setOnClickListener(this);
-        timePicker.setOnClickListener(this);
+        mainButt = (Button) findViewById(R.id.makemeetingbutt);
+        mainTextEdit = (EditText) findViewById(R.id.makemeetingtext);
+        mainListView = (ListView) findViewById(R.id.makemeetinglist);
+        startDatePicker = (DatePicker) findViewById(R.id.makeameetingcalstart);
+        endDatePicker = (DatePicker) findViewById(R.id.makeameetingcalend);
+        mainTextView = (TextView) findViewById(R.id.makeameetingtextview);
+        firstView();
     }
 
-    @Override
-    public void onClick(View v) {
+    public void firstView() {
+        mainButt.setVisibility(View.VISIBLE);
+        mainTextEdit.setVisibility(View.INVISIBLE);
+        mainListView.setVisibility(View.INVISIBLE);
+        startDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setVisibility(View.VISIBLE);
+        endDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setText("Click Button To Make An Invite");
+        mainButt.setText("Set Up A Meeting");
+        mainButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                secondView();
+            }
+        });
+    }
 
-        if (v == datePicker) {
-            final Calendar c = Calendar.getInstance();
-            meetingYear = c.get(Calendar.YEAR);
-            meetingMonth = c.get(Calendar.MONTH);
-            meetingDay = c.get(Calendar.DAY_OF_MONTH);
+    public void secondView() {
+        mainButt.setVisibility(View.VISIBLE);
+        mainTextEdit.setVisibility(View.VISIBLE);
+        mainListView.setVisibility(View.INVISIBLE);
+        startDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setVisibility(View.VISIBLE);
+        endDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setText("Make a name for this activity");
+        mainButt.setText("set name");
+        mainButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventName=mainTextEdit.getText().toString();
+                thirdView();
+            }
+        });
+    }
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-                            dateInTxt.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        }
-                    }, meetingYear, meetingMonth, meetingDay);
-            datePickerDialog.show();
-        }
-        if (v == timePicker) {
-            final Calendar c = Calendar.getInstance();
-            meetingHour = c.get(Calendar.HOUR_OF_DAY);
-            meetingMinutes = c.get(Calendar.MINUTE);
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                    new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay,
-                                              int minute) {
-                            timeIntTxt.setText(hourOfDay + ":" + minute);
-                        }
-                    }, meetingHour, meetingMinutes, false);
-            timePickerDialog.show();
-        }
+    public void thirdView() {
+        mainButt.setVisibility(View.VISIBLE);
+        mainTextEdit.setVisibility(View.INVISIBLE);
+        mainListView.setVisibility(View.GONE);
+        startDatePicker.setVisibility(View.VISIBLE);
+        mainTextView.setVisibility(View.VISIBLE);
+        endDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setText("Pick first point you would like to meet");
+        mainButt.setText("Choose these times");
+        mainButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                monthStart = startDatePicker.getMonth();
+                dateStart = startDatePicker.getDayOfMonth();
+                yearStart = startDatePicker.getYear();
+                fourthView();
+            }
+        });
+    }
+
+    public void fourthView() {
+        mainButt.setVisibility(View.VISIBLE);
+        mainTextEdit.setVisibility(View.INVISIBLE);
+        mainListView.setVisibility(View.GONE);
+        startDatePicker.setVisibility(View.GONE);
+        mainTextView.setVisibility(View.VISIBLE);
+        endDatePicker.setVisibility(View.VISIBLE);
+        mainTextView.setText("Pick last point you would like to meet");
+        mainButt.setText("Set Up A Meeting");
+        mainButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                monthEnd = endDatePicker.getMonth();
+                dateEnd = endDatePicker.getDayOfMonth();
+                yearEnd = endDatePicker.getYear();
+                fifthView();
+            }
+        });
+    }
+
+    public void fifthView() {
+        mainButt.setVisibility(View.VISIBLE);
+        mainTextEdit.setVisibility(View.INVISIBLE);
+        mainListView.setVisibility(View.VISIBLE);
+        startDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setVisibility(View.VISIBLE);
+        endDatePicker.setVisibility(View.INVISIBLE);
+        mainTextView.setText("Pick last point you would like to meet");
+        mainButt.setText("Set Up A Meeting");
+        mainButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Event Name: "+eventName+"\n Start: "+monthStart+"/"+dateStart+"/"+yearStart+"End: "+monthEnd+"/"+dateEnd+"/"+yearEnd,Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
+
+
+
+
+
+
