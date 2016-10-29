@@ -1,11 +1,12 @@
 var express = require('express');
 var app = express();
+parser = require('body-parser');
+app.use(parser.json());
 var fs = require("fs");
 var mongoose = require('mongoose');
-
 var db=mongoose.connection;
-
 db.on('error', console.error);
+
 db.once('open', function() {
 var Schema=mongoose.Schema;
 
@@ -43,14 +44,13 @@ app.get('/listUsers', function (req, res) {
    });
 })
 
-fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-       var allUsers = JSON.parse(data);
-   // First read existing users.
-	for (var i =0; i < allUsers.length;i++){
-  		console.log("\n"+allUsers[i].name+"...Loaded");
- 		map[""+(allUsers[i].name)]=allUsers[i];
- 	}
-})
+//fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
+//       var allUsers = JSON.parse(data);
+//	for (var i =0; i < allUsers.length;i++){
+ // 		console.log("\n"+allUsers[i].name+"...Loaded");
+// 		map[""+(allUsers[i].name)]=allUsers[i];
+// 	}
+//})
 
 app.get('/listUsers', function (req, res) {
    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
@@ -59,12 +59,6 @@ app.get('/listUsers', function (req, res) {
    });
 })
 
-app.get("/listUser/:name", function (req, res) {
-   fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-   console.log("The param"+req.params.name);
-   res.end(map[req.params.name]);
-   });
-})
 
 app.get('/addUser/:newuser', function (req, res) {
    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
@@ -97,7 +91,7 @@ if(err) throw err;
    res.end("");
 })
 
-var server = app.listen(8888, function () {
+var server = app.listen(8082, function () {
    var host = server.address().address
    var port = server.address().port
 
