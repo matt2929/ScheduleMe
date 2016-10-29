@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "904330615405",
+    "project_id": "scheduleapp-147301"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904330615405:android:310efa5951c37df8",
+        "android_client_info": {
+          "package_name": "com.example.matthew.scheduleme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904330615405-hma87k1cohsbqt4b0i3427rbtp9aejl3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.matthew.scheduleme",
+            "certificate_hash": "38E8B6C30594412940AF0B373CF341EC5D57FCCE"
+          }
+        },
+        {
+          "client_id": "904330615405-e80qnmgscm9d4a3sh5v06upuqftt46v9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPtII25aYEZxzPP71GqjGq8Wixk9pbOzM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

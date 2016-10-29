@@ -9,4 +9,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.matthew.scheduleme.Meetings">
 
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/meetingBack" />
+
+    <Button
+        android:text="Help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/meetingHelp" />
+
+    <Button
+        android:text="Change Meeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeMeeting"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Add Meeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addMeeting"
+        android:layout_above="@+id/changeMeeting"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

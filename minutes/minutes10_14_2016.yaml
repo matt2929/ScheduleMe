@@ -1,0 +1,24 @@
+date: October 14, 2016
+meeting_type: group # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny, eewalker, dakotale]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Google API progress},
+  {ubit: dakotale, progress: Google API progress},
+  {ubit: eewalker, progress: Google calendar json},
+  {ubit: mcstaffo, progress: Database progress for sprint 3},
+  {ubit: prjones4, progress: json schemes for sprint 3},
+  {ubit: zhuoliny, progress: Database progress for sprint 3},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+Collective group meeting between all of us to sit down and discuss the
+overall tasks and layout for sprint 3 along with Google API issues resulting
+in our code being slower.

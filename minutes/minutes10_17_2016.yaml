@@ -1,0 +1,21 @@
+date: October 17, 2016
+meeting_type: group # meeting_type can "group", "ta", or "instructor"
+attendance: [pasrathor, eewalker, dakotale]
+absent: [mcstaffo, zhuoliny, prjones4]
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Google API attempted bug fixes},
+  {ubit: dakotale, progress: Google API attempted bug fixes},
+  {ubit: eewalker, progress: Google JSON},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+Group discussion with people handling google API and one handling json in which
+we attempt to fix the bug issues and have the google-play services json be added 
+to our server
