@@ -149,9 +149,8 @@
             android:layout_alignEnd="@+id/makemeetingbutt"
             android:layout_alignLeft="@+id/makemeetingbutt"
             android:layout_alignStart="@+id/makemeetingbutt"
-            android:background="@android:color/holo_red_dark"
-            android:textColor="@color/cardview_light_background" />
-
+            android:background="@color/colorAccent"
+            />
     </RelativeLayout>
 
 </RelativeLayout>

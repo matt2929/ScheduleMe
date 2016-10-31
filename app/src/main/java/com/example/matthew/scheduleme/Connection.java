@@ -2,6 +2,7 @@ package com.example.matthew.scheduleme;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
@@ -13,7 +14,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.people.v1.People;
 
 import java.util.ArrayList;
 import static com.google.android.gms.analytics.internal.zzy.co;
@@ -99,7 +99,7 @@ public class Connection extends AppCompatActivity {
                 .build()
                 .setFromTokenResponse(tokenResponse);
 
-        People peopleService = new People.Builder(httpTransport, jsonFactory, credential)
-                .build();
+       // Contacts.People peopleService = new Contacts.People.Builder(httpTransport, jsonFactory, credential)
+      //        .build();
     }
 }
