@@ -39,13 +39,13 @@ public class UserHome extends Activity {
     ArrayList<user> users;
     Button signOut;
     Button viewFriends;
+    Button manageEvents;
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
-
     user thisUser;
-
     Button testPost;
     EditText put;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +86,15 @@ public class UserHome extends Activity {
                 Intent intentJump = new Intent(getApplicationContext(), Connection.class);
                 intentJump.putExtra("testUser", thisUser);
                 startActivity(intentJump);
+            }
+        });
+
+        manageEvents = (Button) findViewById(R.id.userhomemonoageevent);
+        manageEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MakeAMeeting.class);
+                startActivity(intent);
             }
         });
 
@@ -192,7 +201,7 @@ public class UserHome extends Activity {
         protected void onPostExecute(Greeting greeting) {
             String string = "";
             for (user u : users) {
-                string += "name: " + u.getName() + " password: " + u.getPassword() + " proff: " + u.getProfession() + " id: " + u.getId();
+                string += "name: " + u.getName() + " password: " + u.getPassword();
                 string += "\n";
             }
             textView.setText(string);
@@ -212,9 +221,7 @@ public class UserHome extends Activity {
                 Log.e("MainActivity", e.getMessage(), e);
                 Log.e("nope", "");
             }
-            thisUser.setId(4);
-            thisUser.setPassword("thePasswordThatPicked");
-            thisUser.setProfession("sexy dancer");
+            thisUser.setPassword("*************");
             String jsonInString = "";
             try {
                 jsonInString = mapper.writeValueAsString(thisUser);
