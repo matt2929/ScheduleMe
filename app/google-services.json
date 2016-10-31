@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "904330615405",
-    "project_id": "scheduleapp-147301"
+    "project_number": "548502393045",
+    "project_id": "scheduleme-145922"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:904330615405:android:310efa5951c37df8",
+        "mobilesdk_app_id": "1:548502393045:android:c7271a8548a32bcc",
         "android_client_info": {
           "package_name": "com.example.matthew.scheduleme"
         }
       },
       "oauth_client": [
         {
-          "client_id": "904330615405-hma87k1cohsbqt4b0i3427rbtp9aejl3.apps.googleusercontent.com",
+          "client_id": "548502393045-l7mv3cb2il9uljef4gv8mbbpskriicd9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.matthew.scheduleme",
-            "certificate_hash": "38E8B6C30594412940AF0B373CF341EC5D57FCCE"
+            "package_name": "com.example.matthew",
+            "certificate_hash": "C2D8C29F392C77E35EE1649DD9223BD427230813"
           }
         },
         {
-          "client_id": "904330615405-e80qnmgscm9d4a3sh5v06upuqftt46v9.apps.googleusercontent.com",
+          "client_id": "548502393045-p6cpjr60o3fve64ne63faaasjpkrtect.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPtII25aYEZxzPP71GqjGq8Wixk9pbOzM"
+          "current_key": "AIzaSyB-VE4Yz3_p7-5YbFNGecbGCm1I7aLOjl4"
         }
       ],
       "services": {

@@ -1,5 +1,75 @@
 package com.example.matthew.scheduleme;
 
+import android.*;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.DateTime;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.client.util.DateTime;
+
+import com.google.api.services.calendar.model.*;
+
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,20 +90,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,13 +104,11 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
-    private TextView hintText; // for showing hint
     private TextView mOutputText;
     private Button mCallApiButton;
     ProgressDialog mProgress;
     List<String> eventStrings;
     Button sendData;
-    user theUser;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -82,21 +138,10 @@ public class Schedule extends Activity
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        hintText = new TextView(this);
-        hintText.setLayoutParams(tlp);
-        hintText.setPadding(16, 16, 16, 16);
-        hintText.setVerticalScrollBarEnabled(true);
-        hintText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
-        activityLayout.addView(hintText);
-
         mCallApiButton = new Button(this);
         mCallApiButton.setText(BUTTON_TEXT);
-        //button for sending events string to userhome
         sendData=new Button(this);
         sendData.setClickable(false);
-        sendData.setVisibility(View.INVISIBLE);
-
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,8 +149,6 @@ public class Schedule extends Activity
                 mOutputText.setText("");
                 getResultsFromApi();
                 sendData.setClickable(true);
-                sendData.setVisibility(View.VISIBLE);
-                sendData.setText("Back To User Home");
                 mCallApiButton.setEnabled(true);
             }
         });
@@ -117,24 +160,16 @@ public class Schedule extends Activity
         mOutputText.setPadding(16, 16, 16, 16);
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
+        mOutputText.setText(
+                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
         activityLayout.addView(mOutputText);
 
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Calling Google Calendar API ...");
-
-        //send back the events string to userhome
-        Intent i = getIntent();
-        theUser = (user) i.getSerializableExtra("testUser");
         sendData.setOnClickListener(new View.OnClickListener() {
-           @Override
+            @Override
             public void onClick(View v) {
-             //   new HttpTaskPost().execute();
-               Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
-               ArrayList<String> temp = new ArrayList<String>();
-               temp.addAll(eventStrings);
-               theUser.setEvents(temp);
-               intentSendBack.putExtra("testUser", theUser);
-               startActivity(intentSendBack);
+                new HttpTaskPost().execute();
             }
         });
         setContentView(activityLayout);
@@ -517,6 +552,7 @@ public class Schedule extends Activity
             return eventStrings;
         }
 
+
         @Override
         protected void onPreExecute() {
             mOutputText.setText("");
@@ -524,6 +560,7 @@ public class Schedule extends Activity
             if(mProgress.isIndeterminate())
             mProgress.show();
         }
+
 
         @Override
         protected void onPostExecute(List<String> output) {
@@ -557,14 +594,12 @@ public class Schedule extends Activity
             }
         }
     }
-
-    /*
     private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
             user _user = new user();
-            String url = "http://warmachine.cse.buffalo.edu:8084/process_post";
+            String url = "http://warmachine.cse.buffalo.edu:8083/process_post";
             try {
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -572,11 +607,15 @@ public class Schedule extends Activity
                 Log.e("MainActivity", e.getMessage(), e);
                 Log.e("nope", "");
             }
-            _user.setId(4);
-            _user.setName("Ming Yao");
-            _user.setPassword("pass");
+            _user.setName(Login.getGoogleAccount().toString());
+            _user.setPassword("weiners");
             _user.setEvents(eventStrings);
-            _user.setProfession("sexy dancer");
+
+            _user.setAllFriends(new ArrayList<String>());
+            ArrayList<String> strings=new ArrayList<String>();
+            strings.add("meet up to blow eachother");
+            strings.add("dongmaster");
+            _user.setEvents(strings);
             String jsonInString = "";
             try {
                 jsonInString = mapper.writeValueAsString(_user);
@@ -597,5 +636,5 @@ public class Schedule extends Activity
             Log.e("what","what");
         }
     }
-    */
+
 }

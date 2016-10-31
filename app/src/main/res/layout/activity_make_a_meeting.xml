@@ -16,54 +16,142 @@
         android:ems="10"
         android:id="@+id/SetUpMeeting"
         android:fontFamily="cursive"
-        android:textSize="50dp"
+        android:textSize="30sp"
         android:textColor="#FFFFFF"
-        android:layout_marginTop="40dp"/>
+        android:textAlignment="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-    <GridLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="1"
-        android:layout_centerInParent="true">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/SetUpMeeting">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/existingtextview"
+            android:layout_below="@+id/SetUpMeeting"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textAlignment="center"
+            android:layout_alignBottom="@+id/makeameetingtextview"
+            android:textSize="24sp"
+            tools:text="existingtextview" />
+
+        <Button
+            android:text="yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/existingyes" />
+
+        <Button
+            android:text="NO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/exisitngno"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/existingyes"
+            android:id="@+id/exisitnglist"
+            android:layout_below="@+id/existingtextview" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/SetUpMeeting">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="           Pick Your Date           "
-            android:id="@+id/btn_date"
+            android:text="Make a new invite"
+            android:id="@+id/makemeetingbutt"
             android:layout_gravity="center_horizontal"
-            android:layout_alignBottom="@+id/SetUpMeeting"
             android:background="#458940"
             android:textSize="20sp"
             android:textColor="#FFFFFF"
-            android:fontFamily="monospace"/>
+            android:fontFamily="monospace"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
         <EditText
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/in_date"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="50dp" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="           Pick Your Time           "
-            android:id="@+id/btn_time"
-            android:layout_below="@+id/btn_date"
-            android:layout_gravity="center_horizontal"
-            android:background="#458940"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:fontFamily="monospace"/>
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/makemeetingtext"
+            android:layout_above="@+id/makemeetingbutt"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-        <EditText
-            android:layout_width="200dp"
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/makemeetingbutt"
+            android:id="@+id/makemeetinglist"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <DatePicker
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/in_time"
-            android:layout_below="@+id/btn_date"
-            android:layout_gravity="center_horizontal" />
-    </GridLayout>
+            android:id="@+id/makeameetingcalstart"
+            android:layout_below="@+id/makemeetingbutt"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:headerBackground="@android:color/holo_purple" />
+
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/makeameetingcalend"
+            android:layout_below="@+id/makemeetingbutt"
+            android:layout_alignParentBottom="true"
+            android:headerBackground="@android:color/holo_orange_light" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/makeameetingtextview"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:layout_below="@+id/SetUpMeeting"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:text="Check Existing Invites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/makemeetingexistbutt"
+            android:layout_below="@+id/makemeetingbutt"
+            android:layout_alignRight="@+id/makemeetingbutt"
+            android:layout_alignEnd="@+id/makemeetingbutt"
+            android:layout_alignLeft="@+id/makemeetingbutt"
+            android:layout_alignStart="@+id/makemeetingbutt"
+            android:background="@android:color/holo_red_dark"
+            android:textColor="@color/cardview_light_background" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
