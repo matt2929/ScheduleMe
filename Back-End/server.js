@@ -1,3 +1,4 @@
+
 var express = require('express');
 var app = express();
 parser = require('body-parser');
@@ -24,15 +25,15 @@ var friendsListSchema= mongoose.Schema({
   Friends: [String]
 });
 
-var Friends=mongoose.model("Friends", friendsListSchema); 
+var Friends=mongoose.model("Friends", friendsListSchema);
 
 var eventListSchema= mongoose.Schema({
   User: String,
   Events: [Date]
 });
 
-var Events=mongoose.model("Events", eventListSchema) 
- 
+var Events=mongoose.model("Events", eventListSchema)
+
 });
 
 mongoose.connect('mongodb://localhost/test');
@@ -82,16 +83,26 @@ app.post('/process_post', function (req, res) {
    var password = a.password;
    var prof = a.profession;
    var id = a.id;
-   console.log("you just added a new user ~~~~~~~\n"+"Name: {"+name+"}\n"+"Password: {"+password+"}\n"+"Profession:i{"+prof+"}\nID: {"+id+"}");
-   db.collection('Test').insert(JSON.parse(req.body),function (err,doc){
-   console.log(date);
+   var person ={
+       User: a.name,
+       Password: a.password,
+       Profession: a.profession,
+       Id: a.id
+};
+//   console.log("you just added a new user ~~~~~~~\n"+"Name: {"+name+"}\n"+"Password: {"+password+"}\n"+"Profession:i{"+prof+"}\nID: {"+id+"}");
+   db.collection('Test').insert(person,function (err,doc){
+//   console.log(date);
 if(err) throw err;
 });
    db.close();
    res.end("");
 })
 
+<<<<<<< HEAD
 var server = app.listen(8082, function () {
+=======
+var server = app.listen(8083, function () {
+>>>>>>> 247e0142c58aa52f9ba87701e9bd1b3495b11941
    var host = server.address().address
    var port = server.address().port
 
