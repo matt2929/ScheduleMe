@@ -25,15 +25,15 @@ var friendsListSchema= mongoose.Schema({
   Friends: [String]
 });
 
-var Friends=mongoose.model("Friends", friendsListSchema);
+var Friends=mongoose.model("Friends", friendsListSchema); 
 
 var eventListSchema= mongoose.Schema({
   User: String,
   Events: [Date]
 });
 
-var Events=mongoose.model("Events", eventListSchema)
-
+var Events=mongoose.model("Events", eventListSchema) 
+ 
 });
 
 mongoose.connect('mongodb://localhost/test');
@@ -98,11 +98,7 @@ if(err) throw err;
    res.end("");
 })
 
-<<<<<<< HEAD
-var server = app.listen(8082, function () {
-=======
 var server = app.listen(8083, function () {
->>>>>>> 247e0142c58aa52f9ba87701e9bd1b3495b11941
    var host = server.address().address
    var port = server.address().port
 
