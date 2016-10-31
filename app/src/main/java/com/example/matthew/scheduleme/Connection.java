@@ -14,8 +14,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.people.v1.People;
-import com.google.api.services.people.v1.model.Person;
-import com.google.api.services.people.v1.model.ListConnectionsResponse;
+
 import java.util.ArrayList;
 import static com.google.android.gms.analytics.internal.zzy.co;
 
