@@ -33,11 +33,11 @@ import java.util.Iterator;
 public class UserHome extends Activity {
     Button goToCalender;
     Button testRest;
-    String valueString="username";
-    String result = "";
+    //String valueString="username";
+    //String result = "";
     EditText textView;
-    ArrayList<user> users;
-    Button signOut;
+    ArrayList<user> users = new ArrayList<user>();
+    Button signOutB;
     Button viewFriends;
     Button manageEvents;
     private static final String TAG = "SignOutActivity";
@@ -45,6 +45,7 @@ public class UserHome extends Activity {
     user thisUser;
     Button testPost;
     EditText put;
+    private GoogleApiClient signout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,16 @@ public class UserHome extends Activity {
                 Intent intent = new Intent(getApplicationContext(), Schedule.class);
                 intent.putExtra("testUser", thisUser);
                 startActivity(intent);
+            }
+        });
+
+        signOutB = (Button) findViewById(R.id.signOutBtn);
+        signOutB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserHome.this.signOut();
+                Intent intentSO = new Intent(getApplicationContext(), Login.class);
+                startActivity(intentSO);
             }
         });
 
@@ -118,41 +129,47 @@ public class UserHome extends Activity {
              //   valueString = put.getText().toString();
             }
 
-            private void signOut() {
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(@NonNull Status status) {
-                                //revokeAccess();
-//                        SharedPreferences prefs = getSharedPreferences(getApplicationContext().toString(),Context.MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = prefs.edit();
-                                //         System.out.println("HERERERERERERERERERERERERERERER"+getPreferences(getApplicationContext().MODE_PRIVATE).getAll().toString());
-//                        editor.remove(AccountManager.KEY_ACCOUNT_NAME);
-//                        editor.commit();
-                                String accPref = getPreferences(getApplicationContext().MODE_PRIVATE).getString(Schedule.PREF_ACCOUNT_NAME, null);
-                                //         System.out.println("ACCPREF:::" + accPref);
-                                accPref = "";
-                                Intent intenT = new Intent(getApplicationContext(), Login.class);
-                                startActivity(intenT);
-                                Log.e("butt2", "press");
-                                new HttpTaskPost().execute();
-                            }
-                        });
-                put = (EditText) findViewById(R.id.postname);
-                put.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        Log.e("butt1", "press");
-
-                        return true;
-                    }
-                });
-            }
-
             protected void onStart() {
                 UserHome.super.onStart();
             }
         });
+    }
+
+    /*
+     * Written by Dakota Lester
+     * Google Method Interpretation
+     * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
+     * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
+     * Used to sign a person out of their google account
+     */
+    private void signOut() {
+        if (signout != null && signout.isConnected()) {
+            signout.clearDefaultAccountAndReconnect().setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    signout.disconnect();
+                }
+            });
+        }
+    }
+
+    /*
+    * Written by Dakota Lester
+    * Google Method Interpretation
+    * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
+    * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
+    * Completed - need to figure where to place this in the code
+    * Delete users credentials
+     */
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(signout).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        // Removed
+                    }
+                }
+        );
     }
 
     /**
@@ -171,7 +188,7 @@ public class UserHome extends Activity {
                 Log.e("nope", "");
 
             }
-            String url = "http://warmachine.cse.buffalo.edu:8081/listUsers";
+            String url = "http://warmachine.cse.buffalo.edu:8082/listUsers";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
             String getTheData = restTemplate.getForObject(url, String.class, "Android");
@@ -180,7 +197,6 @@ public class UserHome extends Activity {
                 ob = new ObjectMapper().readValue(getTheData, new TypeReference<Collection<user>>() {
                 });
                 Log.e("Value", "" + ob.size());
-                users = new ArrayList<user>();
                 Iterator allPeople = ob.iterator();
                 while (allPeople.hasNext()) {
                     users.add((user) allPeople.next());
@@ -213,7 +229,7 @@ public class UserHome extends Activity {
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
         //    user _user = new user();
-            String url = "http://warmachine.cse.buffalo.edu:8081/process_post";
+            String url = "http://warmachine.cse.buffalo.edu:8082/process_post";
             try {
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());

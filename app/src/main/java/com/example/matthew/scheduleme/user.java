@@ -33,7 +33,6 @@ public class user implements Serializable{
         this.sentInvites = sentInvites;
     }
 
-    public ArrayList<String> getFriends() {return friends;}
     public void setName(String name) {
         this.name = name;
     }
