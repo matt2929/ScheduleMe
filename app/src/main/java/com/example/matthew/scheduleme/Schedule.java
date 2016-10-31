@@ -561,6 +561,7 @@ public class Schedule extends Activity
             mProgress.show();
         }
 
+
         @Override
         protected void onPostExecute(List<String> output) {
             mProgress.hide();
@@ -598,7 +599,7 @@ public class Schedule extends Activity
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
             user _user = new user();
-            String url = "http://warmachine.cse.buffalo.edu:8082/process_post";
+            String url = "http://warmachine.cse.buffalo.edu:8083/process_post";
             try {
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -606,11 +607,15 @@ public class Schedule extends Activity
                 Log.e("MainActivity", e.getMessage(), e);
                 Log.e("nope", "");
             }
-            _user.setId(4);
-            _user.setName(mCredential.getSelectedAccountName());
-            _user.setPassword("pass");
+            _user.setName(Login.getGoogleAccount().toString());
+            _user.setPassword("weiners");
             _user.setEvents(eventStrings);
-            _user.setProfession("sexy dancer");
+
+            _user.setAllFriends(new ArrayList<String>());
+            ArrayList<String> strings=new ArrayList<String>();
+            strings.add("meet up to blow eachother");
+            strings.add("dongmaster");
+            _user.setEvents(strings);
             String jsonInString = "";
             try {
                 jsonInString = mapper.writeValueAsString(_user);
