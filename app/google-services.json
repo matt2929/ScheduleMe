@@ -1,6 +1,3 @@
-
-
-
 {
   "project_info": {
     "project_number": "548502393045",
@@ -19,7 +16,7 @@
           "client_id": "548502393045-l7mv3cb2il9uljef4gv8mbbpskriicd9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.matthew.scheduleme",
+            "package_name": "com.example.matthew",
             "certificate_hash": "C2D8C29F392C77E35EE1649DD9223BD427230813"
           }
         },
