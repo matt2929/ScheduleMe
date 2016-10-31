@@ -131,6 +131,7 @@ public class Schedule extends Activity
              //   new HttpTaskPost().execute();
                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
                ArrayList<String> temp = new ArrayList<String>();
+               eventStrings.remove(0);
                temp.addAll(eventStrings);
                theUser.setEvents(temp);
                intentSendBack.putExtra("testUser", theUser);
