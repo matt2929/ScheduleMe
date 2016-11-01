@@ -608,13 +608,13 @@ public class Schedule extends Activity
                 Log.e("nope", "");
             }
             _user.setName(Login.getGoogleAccount().toString());
-            _user.setPassword("weiners");
+            _user.setPassword("winner");
             _user.setEvents(eventStrings);
 
             _user.setAllFriends(new ArrayList<String>());
             ArrayList<String> strings=new ArrayList<String>();
-            strings.add("meet up to blow eachother");
-            strings.add("dongmaster");
+            strings.add("blow baloons");
+            strings.add("dog master");
             _user.setEvents(strings);
             String jsonInString = "";
             try {
