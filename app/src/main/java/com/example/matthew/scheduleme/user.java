@@ -19,9 +19,7 @@ public class user implements Serializable{
     public List<String> events;
     public String getName(){return this.name;}
     public String getPassword() {return this.password;}
-    public List<String> getEvents() {
-        return events;
-    }
+    public List<String> getEvents() {return events;}
 
     public HashMap<String, ArrayList<String>> getSentInvites() {
         return sentInvites;
@@ -35,7 +33,6 @@ public class user implements Serializable{
         this.sentInvites = sentInvites;
     }
 
-    public ArrayList<String> getFriends() {return friends;}
     public void setName(String name) {
         this.name = name;
     }

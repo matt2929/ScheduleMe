@@ -42,13 +42,12 @@ public class Connection extends AppCompatActivity {
         friendsCount = thisU.getAllFriends().size();
         friendsList = (EditText) findViewById(R.id.friendsText);
         text = "";
-        friends = new ArrayList<String>();
         if (friendsCount > 0) {
             for (int i=0;i<friendsCount;i++) {
                 if (i == friendsCount-1) {
                     text = text + thisU.getAllFriends().get(i);
                 }else{
-                    text = text + thisU.getAllFriends().get(i)+"\n";
+                    text = text + thisU.getAllFriends().get(i) + "\n";
                 }
             }
             friendsList.setText(text);
@@ -57,6 +56,7 @@ public class Connection extends AppCompatActivity {
         }
     }
 
+    // for google api but no use right now
     public void setUp() throws IOException {
         HttpTransport httpTransport = new NetHttpTransport();
         JacksonFactory jsonFactory = new JacksonFactory();
@@ -99,7 +99,7 @@ public class Connection extends AppCompatActivity {
                 .build()
                 .setFromTokenResponse(tokenResponse);
 
-       // Contacts.People peopleService = new Contacts.People.Builder(httpTransport, jsonFactory, credential)
-      //        .build();
+        // Contacts.People peopleService = new Contacts.People.Builder(httpTransport, jsonFactory, credential)
+        //        .build();
     }
 }

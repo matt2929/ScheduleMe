@@ -34,7 +34,7 @@ public class MakeAMeeting extends AppCompatActivity {
     String eventName = "";
 
     protected void onCreate(Bundle savedInstanceState) {
-     ArrayList<String> friends = new ArrayList<String>();
+        ArrayList<String> friends = new ArrayList<String>();
         friends.add("grandma@yahoo.com");
         friends.add("angelLover@yahoo.com");
         friends.add("aditya@yahoo.com");
@@ -191,8 +191,8 @@ public class MakeAMeeting extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //here you can use the position to determine what checkbox to check
                 //this assumes that you have an array of your checkboxes as well. called checkbox
-            existingText.setText(events.get(position));
-            data=events.get(position);
+                existingText.setText(events.get(position));
+                data=events.get(position);
                 existingThirdView();
             }
         });    }
@@ -213,9 +213,6 @@ public class MakeAMeeting extends AppCompatActivity {
         existingText.setText(data);
     }
 }
-
-
-
 
 
 
