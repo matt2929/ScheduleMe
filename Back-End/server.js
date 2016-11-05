@@ -75,7 +75,7 @@ fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
 	res.end( JSON.stringify(map[req.params.id]));
    });
 })
-
+//------------Test post----------------------------------------------------------------------
 app.post('/process_post', function (req, res) {
    console.log(JSON.stringify(req.body));
    var a = JSON.parse(JSON.stringify(req.body));
@@ -97,6 +97,51 @@ if(err) throw err;
    db.close();
    res.end("");
 })
+//--------------post into friends table------------------------------------------------------------------------
+app.post('/user_post', function (req, res) {
+   console.log(JSON.stringify(req.body));
+   var a = JSON.parse(JSON.stringify(req.body));
+   var user = a.user;
+   var friends = a.friends;
+   var user ={
+       User: a.user,
+       Friends: a.friends
+};
+   db.collection('Friends').insert(user,function (err,doc){
+if(err) throw err;
+});
+   db.close();
+   res.end("");
+})
+//-----------------post into events table--------------------------------------------------------------------------------------------
+app.post('/events_post', function (req, res) {
+   console.log(JSON.stringify(req.body));
+   var a = JSON.parse(JSON.stringify(req.body));
+   var user = a.user;
+   var events = a.events;
+   var user ={
+       User: a.user,
+       Events: a.Events
+};
+   db.collection('Events').insert(user,function (err,doc){
+if(err) throw err;
+});
+   db.close();
+   res.end("");
+})
+//--------------------Get friends list-----------------------------------------------------------------------------------------------
+app.get('/friends_get',function(req,res){
+
+db.get('Friends').find({User: req.body}, function(err,result){
+if (err){
+res.send("error finding user");
+}else{
+res.send(result);
+}
+
+});
+});
+
 
 var server = app.listen(8083, function () {
    var host = server.address().address
