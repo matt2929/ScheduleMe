@@ -23,6 +23,7 @@
         <activity android:name=".Login" />
         <activity android:name=".UserHome" />
         <activity android:name=".Meetings" />
+        <activity android:name=".MakeAMeeting" />
         <activity android:name=".Schedule" />
         <activity
             android:name=".Connection"

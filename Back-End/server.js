@@ -82,16 +82,22 @@ app.post('/process_post', function (req, res) {
    var password = a.password;
    var prof = a.profession;
    var id = a.id;
-   console.log("you just added a new user ~~~~~~~\n"+"Name: {"+name+"}\n"+"Password: {"+password+"}\n"+"Profession:i{"+prof+"}\nID: {"+id+"}");
-   db.collection('Test').insert(JSON.parse(req.body),function (err,doc){
-   console.log(date);
+   var person ={
+       User: a.name,
+       Password: a.password,
+       Profession: a.profession,
+       Id: a.id
+};
+//   console.log("you just added a new user ~~~~~~~\n"+"Name: {"+name+"}\n"+"Password: {"+password+"}\n"+"Profession:i{"+prof+"}\nID: {"+id+"}");
+   db.collection('Test').insert(person,function (err,doc){
+//   console.log(date);
 if(err) throw err;
 });
    db.close();
    res.end("");
 })
 
-var server = app.listen(8082, function () {
+var server = app.listen(8083, function () {
    var host = server.address().address
    var port = server.address().port
 
