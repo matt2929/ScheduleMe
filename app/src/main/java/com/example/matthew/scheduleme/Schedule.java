@@ -13,12 +13,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -36,6 +38,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +71,6 @@ public class Schedule extends Activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-     //   System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
         super.onCreate(savedInstanceState);
         LinearLayout activityLayout = new LinearLayout(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -96,19 +98,17 @@ public class Schedule extends Activity
         sendData=new Button(this);
         sendData.setClickable(false);
         sendData.setVisibility(View.INVISIBLE);
-
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallApiButton.setEnabled(false);
-                mOutputText.setText("");
                 getResultsFromApi();
-                sendData.setClickable(true);
-                sendData.setVisibility(View.VISIBLE);
-                sendData.setText("Back To User Home");
+                // Removed the back to userhome button
+                // Useless on android with back implemented in
                 mCallApiButton.setEnabled(true);
             }
         });
+
         activityLayout.addView(mCallApiButton);
         activityLayout.addView(sendData);
 
@@ -126,16 +126,16 @@ public class Schedule extends Activity
         Intent i = getIntent();
         theUser = (user) i.getSerializableExtra("testUser");
         sendData.setOnClickListener(new View.OnClickListener() {
-           @Override
+            @Override
             public void onClick(View v) {
-             //   new HttpTaskPost().execute();
-               Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
-               ArrayList<String> temp = new ArrayList<String>();
-               eventStrings.remove(0);
-               temp.addAll(eventStrings);
-               theUser.setEvents(temp);
-               intentSendBack.putExtra("testUser", theUser);
-               startActivity(intentSendBack);
+                //   new HttpTaskPost().execute();
+                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
+                ArrayList<String> temp = new ArrayList<String>();
+                eventStrings.remove(0);
+                temp.addAll(eventStrings);
+                theUser.setEvents(temp);
+                intentSendBack.putExtra("testUser", theUser);
+                startActivity(intentSendBack);
             }
         });
         setContentView(activityLayout);
@@ -145,7 +145,6 @@ public class Schedule extends Activity
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
-     //   System.out.println("MCREDENTIALS ------ " + mCredential.getSelectedAccountName());
     }
 
 
@@ -166,7 +165,6 @@ public class Schedule extends Activity
         } else if (! isDeviceOnline()) {
             mOutputText.setText("No network connection available.");
         } else {
-          //  System.out.println("Hereeeeeeeeeeeeeeeeeeeeeee"+mCredential.getSelectedAccountName());
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -191,7 +189,7 @@ public class Schedule extends Activity
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
-               // System.out.println("Account Name"+accountName);
+                // System.out.println("Account Name"+accountName);
                 mCredential.setSelectedAccountName(accountName);
 
                 mCredential.setSelectedAccountName(Login.getGoogleAccount());
@@ -394,9 +392,14 @@ public class Schedule extends Activity
          * @throws IOException
          */
         private List<String> getDataFromApi() throws IOException {
-            // List the next 10 events from the primary calendar.
+            // Link with database to grab user calendar
+            // Instance of json class (Step 1)
             DateTime now = new DateTime(System.currentTimeMillis());
-             eventStrings = new ArrayList<String>();
+            // Put calendar info into an arraylist of each event with
+            // each event composing of a start, end, and current time
+            // Step 2
+            // List the next 10 events from the primary calendar.
+            eventStrings = new ArrayList<String>();
             Events events = mService.events().list("primary")
                     .setMaxResults(10)
                     .setTimeMin(now)
@@ -404,23 +407,6 @@ public class Schedule extends Activity
                     .setSingleEvents(true)
                     .execute();
             List<Event> items = events.getItems();
-            ArrayList<String> eve = new ArrayList<String>();
-            ArrayList<Integer> yearT = new ArrayList<Integer>();
-            ArrayList<Integer> monthT = new ArrayList<Integer>();
-            ArrayList<Integer> dayT = new ArrayList<Integer>();
-            ArrayList<Integer> hourT = new ArrayList<Integer>();
-            ArrayList<Integer> minT = new ArrayList<Integer>();
-            ArrayList<Integer> totalT = new ArrayList<Integer>();
-            ArrayList<Integer> endTime = new ArrayList<Integer>();
-            ArrayList<Integer> freeT = new ArrayList<Integer>();
-            for(int j=0; j<24; j++){
-                totalT.add(j);
-            }
-
-            String s="";
-            String s1="";
-            int i=0;
-
             for (Event event : items) {
                 DateTime start = event.getStart().getDateTime();
                 DateTime end = event.getEnd().getDateTime();
@@ -429,108 +415,116 @@ public class Schedule extends Activity
                     // the start date.
                     start = event.getStart().getDate();
                 }
-                //eventStrings.add(
-                //        String.format("%s (%s) (%s)", event.getSummary(), start, end));
-                eve.add(event.getSummary());
-                s = start.toString();
-                String[] parts = s.split("T");
-                String x = parts[0];
-                String y = parts[1];
-                parts = x.split("-");
-                String yearr = parts[0];
-                //String uu = parts[2];
-                int yea = Integer.parseInt(yearr);
-                yearT.add(yea);
-                String monthS= parts[1];
-                int mon = Integer.parseInt(monthS);
-                monthT.add(mon);
-
-                String dayS = parts[2];
-                int daY = Integer.parseInt(dayS);
-                dayT.add(daY);
-                String DayT = monthS+"/"+dayS+"/"+yearr;
-                parts = y.split(":");
-                String hourS = parts[0];
-                int hou = Integer.parseInt(hourS);
-                hourT.add(hou);
-                String miN = parts[1];
-                int minu = Integer.parseInt(miN);
-                minT.add(minu);
-                String startT = hourS+":"+miN;
-                s1=end.toString();
-                parts = s1.split("T");
-                String sh = parts[1];
-                parts = sh.split(":");
-                String endH = parts[0];
-                String endM = parts[1];
-                String endT = endH + ":" + endM;
-                int endt = Integer.parseInt(endH);
-                endTime.add(endt);
-
+                //parseStartTime(start);
+                //parseEndTime(end);
+                ComparStarEndTimes(start, end);
                 eventStrings.add(
-                        String.format("Event: %s Day: %s StartTime: %s EndTime: %s",eve.get(i), DayT, startT, endT));
-                i++;
+                        String.format("%s (%s) (%s)", event.getSummary(), start, end));
             }
-//            int p=0;
-//            int q=0;
-//            int r=0;
-//
-//           ArrayList<Integer> timeT = new ArrayList<Integer>();
-//           for (int k=0;k<10;k++){
-//               timeT.add(hourT.get(k));
-//               timeT.add(endTime.get(k));
-//           }
-//      //      for(int j=0;j<24;j++){
-      //          if(r<timeT.size()) {
-      //              if (totalT.get(j) == timeT.get(r)) {
-      //                  r++;
-      //                  while(timeT.get(r)!=totalT.get(j)){
-      //                      j++;
-      //                  }
-      //                  r++;
-      //                  j--;
-
-      //              }else{
-      //                  freeT.add(totalT.get(j));
-      //              }
-      //          }
-
-                // freeT.add(totalT.get(j));
-      //      }
-//            r=0;
-//            int j=0;
-//            ArrayList<Boolean> freeB = new ArrayList<Boolean>();
-//           // while(r<=endTime.size()) {
-//                for (j = 0; j < totalT.size(); j++) {
-//                    //       for(int k=0;k<endTime.size();k++){
-//                    if (totalT.get(j) != hourT.get(r)) {
-//                        freeB.add(true);
-//                    } else {
-//                        freeB.add(false);
-//                        r++;
-//                    }
-//                    //       }
-//                }
-//            //}
-//            eventStrings.add(
-//                String.format("String format that will be sent to compare free time per 24 hours where each boolean" +
-//                        " represent one hour (calculated from above calendar): %s", freeB));
+            // Compare users time frames given
+            // Step 3a
+            // Shows the first event for the user and displays in console
+            // When run in debug mode
+            /*
+            event.getSummary() - retrieves the name of the event
+            start - start time
+            end - end time
+            eventStrings - ArrayList of events in the following format
+            1. Event Name 2. Start time with year/day/month in military time
+            3. End time with year/day/month in military time
+             */
             return eventStrings;
         }
-
+        /*
+        * Written by Dakota Lester
+        * Parse the start time and date with splitting to be used
+        * for comparisons
+         */
+        private String parseStartTime(DateTime start)
+        {
+            String startstr = start.toString();
+            String[] starttime = startstr.split("T");
+            // Start Date of the event
+            String startdate = starttime[0];
+            // Start Time Of Event
+            String startime = starttime[1];
+            return startime;
+        }
+        /*
+        * Written by Dakota Lester
+        * Parse the end time and date with splitting
+        * to be used for comparisons
+         */
+        private String parseEndTime(DateTime end)
+        {
+            String endstr = end.toString();
+            String[] endTimeForm = endstr.split("T");
+            // End Date of the Event
+            String enddate = endTimeForm[0];
+            // End Time of Event
+            String endtime = endTimeForm[1];
+            return endtime;
+        }
+        /*
+        * Written by: Dakota Lester
+        * Create the time to calculate to find
+        * the difference to be used to compare for free time
+        * Temporary for one calendar event
+        * Easily can be changed to multiple events for testing
+        * purposes this is staying to one event as of now
+        * Return: ArrayList of type String with start and end times
+        * as strings
+         */
+        private void ComparStarEndTimes(DateTime start, DateTime end) {
+            String startComp = parseStartTime(start);
+            String endComp = parseEndTime(end);
+            String[] startTime = startComp.split(":");
+            String[] endTime = endComp.split(":");
+            ArrayList<Integer> hourlength = new ArrayList<>();
+            for (int i = 0; i < startTime.length; i++)
+            {
+                try
+                {
+                    // As the starttime is combined with Hr + Min an if statement
+                    // is put in place as the only necessary info is the
+                    // Hr and min rather than Time Zone and Seconds
+                    // Output: Start and End Time of Each Event[i]
+                    if (startTime[i].length() < 3 && startTime[i+1].length() < 3)
+                    {
+                        String star_Out = startTime[i] + startTime[i + 1];
+                        String end_Out = endTime[i] + endTime[i + 1];
+                        Log.e("Start", star_Out);
+                        Log.e("End", end_Out);
+                        // Hour Difference Math Begins
+                        hourlength.add(Integer.parseInt(end_Out) - Integer.parseInt(star_Out));
+                        if (hourlength.get(i) >= -2300 && hourlength.get(i) <= -1200)
+                        {
+                            // Marking military time with no negative time
+                            // in the case of the beginning time is 2AM and
+                            // the starting time was 11PM creating a negative time
+                            hourlength.set(i, hourlength.get(i) + 2400);
+                        }
+                    }
+                } catch (IndexOutOfBoundsException e)
+                {
+                    break;
+                }
+            }
+            Log.e("Difference", hourlength.toString());
+        }
         @Override
         protected void onPreExecute() {
             mOutputText.setText("");
-            //mProgress.hide();
             if(mProgress.isIndeterminate())
-            mProgress.show();
+                mProgress.show();
         }
 
         @Override
         protected void onPostExecute(List<String> output) {
+            String noevents = "You have Not Scheduled An Event!";
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+                mOutputText.setText(noevents);
             } else {
                 output.add(0, "Data retrieved using the Google Calendar API:");
                 mOutputText.setText(TextUtils.join("\n", output));
@@ -558,49 +552,4 @@ public class Schedule extends Activity
             }
         }
     }
-
-    /*
-    private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
-        @Override
-        protected Greeting doInBackground(Void... params) {
-            ObjectMapper mapper = new ObjectMapper();
-            user _user = new user();
-            String url = "http://warmachine.cse.buffalo.edu:8083/process_post";
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-                Log.e("nope", "");
-            }
-            _user.setName(Login.getGoogleAccount().toString());
-            _user.setPassword("winner");
-            _user.setEvents(eventStrings);
-
-            _user.setAllFriends(new ArrayList<String>());
-            ArrayList<String> strings=new ArrayList<String>();
-            strings.add("blow baloons");
-            strings.add("dog master");
-            _user.setEvents(strings);
-            String jsonInString = "";
-            try {
-                jsonInString = mapper.writeValueAsString(_user);
-                Log.e("json, ",jsonInString);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            RestTemplate restTemplate = new RestTemplate();
-            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
-            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            restTemplate.postForObject(url, _user,user.class);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Greeting greeting) {
-            Log.e("what","what");
-        }
-    }
-    */
 }
