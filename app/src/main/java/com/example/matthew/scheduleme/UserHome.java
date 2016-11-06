@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.api.client.testing.util.TestableByteArrayInputStream;
 
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -44,7 +45,7 @@ public class UserHome extends Activity {
     private GoogleApiClient mGoogleApiClient;
     user thisUser;
     Button testPost;
-    EditText put;
+    TextView put;
     private GoogleApiClient signout;
 
     @Override
@@ -119,7 +120,7 @@ public class UserHome extends Activity {
                     }
                 });
 
-        put = (EditText) findViewById(R.id.postname);
+        put = (TextView) findViewById(R.id.postname);
         put.setText(thisUser.getName());
         testPost = (Button) findViewById(R.id.takethenamebelowandpost);
         testPost.setOnClickListener(new View.OnClickListener() {
