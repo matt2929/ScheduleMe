@@ -410,7 +410,6 @@ public class Schedule extends Activity
             for (Event event : items) {
                 DateTime start = event.getStart().getDateTime();
                 DateTime end = event.getEnd().getDateTime();
-
                 if (start == null) {
                     // All-day events don't have start times, so just use
                     // the start date.
