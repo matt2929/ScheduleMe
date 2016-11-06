@@ -46,9 +46,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
-    private TextView hintText; // for showing hint
     private TextView mOutputText;
-    private Button mCallApiButton;
     ProgressDialog mProgress;
     List<String> eventStrings;
     Button sendData;
@@ -57,8 +55,6 @@ public class Schedule extends Activity
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-
-    private static final String BUTTON_TEXT = "Call Google Calendar API";
     static String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR, CalendarScopes.CALENDAR_READONLY,"https://www.googleapis.com/auth/plus.login" };
 
@@ -82,47 +78,27 @@ public class Schedule extends Activity
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        hintText = new TextView(this);
-        hintText.setLayoutParams(tlp);
-        hintText.setPadding(16, 16, 16, 16);
-        hintText.setVerticalScrollBarEnabled(true);
-        hintText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
-        activityLayout.addView(hintText);
+        mProgress = new ProgressDialog(this);
+        mProgress.setMessage("Calling Google Calendar API ...");
 
-        mCallApiButton = new Button(this);
-        mCallApiButton.setText(BUTTON_TEXT);
-        //button for sending events string to userhome
-        sendData=new Button(this);
-        sendData.setClickable(false);
-        sendData.setVisibility(View.INVISIBLE);
-
-        mCallApiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallApiButton.setEnabled(false);
-                mOutputText.setText("");
-                getResultsFromApi();
-                sendData.setClickable(true);
-                sendData.setVisibility(View.VISIBLE);
-                sendData.setText("Back To User Home");
-                mCallApiButton.setEnabled(true);
-            }
-        });
-        activityLayout.addView(mCallApiButton);
-        activityLayout.addView(sendData);
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
 
         mOutputText = new TextView(this);
+        mOutputText.setText("");
         mOutputText.setLayoutParams(tlp);
         mOutputText.setPadding(16, 16, 16, 16);
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        activityLayout.addView(mOutputText);
+        getResultsFromApi();
 
-        mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Calendar API ...");
+        sendData=new Button(this);
+        sendData.setClickable(true);
+        sendData.setVisibility(View.VISIBLE);
+        sendData.setText("Back To User Home");
+        activityLayout.addView(sendData);
 
-        //send back the events string to userhome
         Intent i = getIntent();
         theUser = (user) i.getSerializableExtra("testUser");
         sendData.setOnClickListener(new View.OnClickListener() {
@@ -138,17 +114,12 @@ public class Schedule extends Activity
                startActivity(intentSendBack);
             }
         });
+        activityLayout.addView(mOutputText);
         setContentView(activityLayout);
 
         // Initialize credentials and service object.
-
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
      //   System.out.println("MCREDENTIALS ------ " + mCredential.getSelectedAccountName());
     }
-
-
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -193,7 +164,6 @@ public class Schedule extends Activity
             if (accountName != null) {
                // System.out.println("Account Name"+accountName);
                 mCredential.setSelectedAccountName(accountName);
-
                 mCredential.setSelectedAccountName(Login.getGoogleAccount());
                 getResultsFromApi();
             } else {
