@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -44,12 +43,12 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.example.matthew.scheduleme.R.drawable.userhome_image;
-
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
+    private TextView hintText; // for showing hint
     private TextView mOutputText;
+    private Button mCallApiButton;
     ProgressDialog mProgress;
     List<String> eventStrings;
     Button sendData;
@@ -58,6 +57,8 @@ public class Schedule extends Activity
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+
+    private static final String BUTTON_TEXT = "Call Google Calendar API";
     static String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR, CalendarScopes.CALENDAR_READONLY,"https://www.googleapis.com/auth/plus.login" };
 
@@ -76,35 +77,52 @@ public class Schedule extends Activity
         activityLayout.setLayoutParams(lp);
         activityLayout.setOrientation(LinearLayout.VERTICAL);
         activityLayout.setPadding(16, 16, 16, 16);
-        activityLayout.setBackground(getResources().getDrawable());
 
         ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Calendar API ...");
+        hintText = new TextView(this);
+        hintText.setLayoutParams(tlp);
+        hintText.setPadding(16, 16, 16, 16);
+        hintText.setVerticalScrollBarEnabled(true);
+        hintText.setText(
+                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
+        activityLayout.addView(hintText);
 
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
+        mCallApiButton = new Button(this);
+        mCallApiButton.setText(BUTTON_TEXT);
+        //button for sending events string to userhome
+        sendData=new Button(this);
+        sendData.setClickable(false);
+        sendData.setVisibility(View.INVISIBLE);
+
+        mCallApiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallApiButton.setEnabled(false);
+                mOutputText.setText("");
+                getResultsFromApi();
+                sendData.setClickable(true);
+                sendData.setVisibility(View.VISIBLE);
+                sendData.setText("Back To User Home");
+                mCallApiButton.setEnabled(true);
+            }
+        });
+        activityLayout.addView(mCallApiButton);
+        activityLayout.addView(sendData);
 
         mOutputText = new TextView(this);
-        mOutputText.setText("");
         mOutputText.setLayoutParams(tlp);
         mOutputText.setPadding(16, 16, 16, 16);
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        mOutputText.setTextSize(10);
-        mOutputText.setTextColor(Color.BLACK);
-        getResultsFromApi();
+        activityLayout.addView(mOutputText);
 
-        sendData=new Button(this);
-        sendData.setClickable(true);
-        sendData.setVisibility(View.VISIBLE);
-        sendData.setText("Back To User Home");
-        activityLayout.addView(sendData);
+        mProgress = new ProgressDialog(this);
+        mProgress.setMessage("Calling Google Calendar API ...");
 
+        //send back the events string to userhome
         Intent i = getIntent();
         theUser = (user) i.getSerializableExtra("testUser");
         sendData.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +138,17 @@ public class Schedule extends Activity
                startActivity(intentSendBack);
             }
         });
-        activityLayout.addView(mOutputText);
         setContentView(activityLayout);
 
         // Initialize credentials and service object.
+
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
      //   System.out.println("MCREDENTIALS ------ " + mCredential.getSelectedAccountName());
     }
+
+
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -170,6 +193,7 @@ public class Schedule extends Activity
             if (accountName != null) {
                // System.out.println("Account Name"+accountName);
                 mCredential.setSelectedAccountName(accountName);
+
                 mCredential.setSelectedAccountName(Login.getGoogleAccount());
                 getResultsFromApi();
             } else {
