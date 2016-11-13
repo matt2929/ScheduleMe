@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +36,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
@@ -44,7 +46,7 @@ import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
+import android.net.Uri;
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
@@ -367,6 +369,46 @@ public class Schedule extends Activity
          * @throws IOException
          */
         private List<String> getDataFromApi() throws IOException {
+//            Event evenT = new Event()
+//                    .setSummary("Testing")
+//                    .setLocation("In lab")
+//                    .setDescription("Create event in calendar");
+//
+//            DateTime startDateTime = new DateTime("2016-11-09T22:00:00-04:00");
+//            EventDateTime starT = new EventDateTime()
+//                    .setDateTime(startDateTime)
+//                    .setTimeZone("America/New_York");
+//            evenT.setStart(starT);
+//
+//            DateTime endDateTime = new DateTime("2016-11-09T23:00:00-04:00");
+//            EventDateTime enD = new EventDateTime()
+//                    .setDateTime(endDateTime)
+//                    .setTimeZone("America/New_York");
+//            evenT.setEnd(enD);
+//
+//            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+//            evenT.setRecurrence(Arrays.asList(recurrence));
+
+//            EventAttendee[] attendees = new EventAttendee[] {
+//                    new EventAttendee().setEmail("lpage@example.com"),
+//                    new EventAttendee().setEmail("sbrin@example.com"),
+//            }
+//            event.setAttendees(Arrays.asList(attendees));
+//
+//            EventReminder[] reminderOverrides = new EventReminder[] {
+//                    new EventReminder().setMethod("email").setMinutes(24 * 60),
+//                    new EventReminder().setMethod("popup").setMinutes(10),
+//            };
+//            Event.Reminders reminders = new Event.Reminders()
+//                    .setUseDefault(false)
+//                    .setOverrides(Arrays.asList(reminderOverrides));
+//            event.setReminders(reminders);
+
+//            String calendarId = "primary";
+//            evenT = mService.events().insert(calendarId, evenT).execute();
+//            System.out.printf("Event created: %s\n", evenT.getHtmlLink());
+//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(evenT.getHtmlLink()));
+//            startActivity(browserIntent);
             // Link with database to grab user calendar
             // Instance of json class (Step 1)
             DateTime now = new DateTime(System.currentTimeMillis());
@@ -390,11 +432,12 @@ public class Schedule extends Activity
                     // the start date.
                     start = event.getStart().getDate();
                 }
-                //parseStartTime(start);
+                String startFinalValue=parseStartTime(start);
+                String endFinalValue=parseStartTime(end);
                 //parseEndTime(end);
-                ComparStarEndTimes(start, end);
+                //ComparStarEndTimes(start, end);
                 eventStrings.add(
-                        String.format("%s \n (%s) \n (%s)", event.getSummary(), start, end));
+                        String.format("%s \nEvent starting on %s \nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
             }
             // Compare users time frames given
             // Step 3a
@@ -411,7 +454,6 @@ public class Schedule extends Activity
             return eventStrings;
         }
         /*
-        * Written by Dakota Lester
         * Parse the start time and date with splitting to be used
         * for comparisons
          */
@@ -421,9 +463,23 @@ public class Schedule extends Activity
             String[] starttime = startstr.split("T");
             // Start Date of the event
             String startdate = starttime[0];
-            // Start Time Of Event
+//            // Start Time Of Event
             String startime = starttime[1];
-            return startime;
+            String[] startY = startime.split(":");
+            String startX = startY[0];
+            String startZ = startY[1];
+            String[] startA = startZ.split(":");
+            String startB=startA[0];
+            int timeHour = Integer.parseInt(startX);
+            String AmPm = "";
+            if(timeHour<12){
+                AmPm="AM";
+            }else{
+                AmPm="PM";
+            }
+            //int startZ= Integer.parseInt(startX);
+            String startFinal=startdate + " at "+ timeHour+":"+startB+" "+AmPm;
+            return startFinal;
         }
         /*
         * Written by Dakota Lester
