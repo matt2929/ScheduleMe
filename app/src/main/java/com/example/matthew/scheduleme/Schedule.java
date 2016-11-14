@@ -38,11 +38,14 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.people.v1.model.Date;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -434,6 +437,7 @@ public class Schedule extends Activity
                 }
                 String startFinalValue=parseStartTime(start);
                 String endFinalValue=parseStartTime(end);
+                compareEvent();
                 //parseEndTime(end);
                 //ComparStarEndTimes(start, end);
                 eventStrings.add(
@@ -452,6 +456,58 @@ public class Schedule extends Activity
             3. End time with year/day/month in military time
              */
             return eventStrings;
+        }
+        /*
+        * Written by: Dakota Lester
+        * Hardcoded events to check comparisons for two random events
+        * If the comparison works for two events it will work for
+        * any n events
+        * The following method is the testcase with two hardcoded events
+        * for the sake of time I did not call the comparison between one
+        * event's end time and the next events start time as the method are
+        * written and the work is there
+        * The start/end would need to be parsed which is already done in the
+        * the other methods as the times would be parsed, comparsions would be
+        * done and then pushed to the server
+         */
+        private void compareEvent()
+        {
+            // Event 1 start
+            Event event = new Event().setSummary("Testing").setLocation("A Place").setDescription("Random Event");
+            DateTime start = new DateTime("2016-11-14T22:00:00-04:00");
+            EventDateTime ev_star = new EventDateTime().setDateTime(start).setTimeZone("America/New York");
+            event.setStart(ev_star);
+            DateTime end = new DateTime("2016-11-14T23:00:00-04:00");
+            EventDateTime ev_end = new EventDateTime().setDateTime(end).setTimeZone("America/New York");
+            event.setEnd(ev_end);
+            // Event 1 end
+            // Event 2 start
+            Event event2 = new Event().setSummary("Other testing").setLocation("A special Place").setDescription("Comparisons");
+            DateTime start_ev2 = new DateTime("2016-11-14T18:00:00-04:00");
+            EventDateTime ev2_star = new EventDateTime().setDateTime(start).setTimeZone("America/New York");
+            event2.setStart(ev2_star);
+            DateTime end_ev2 = new DateTime("2016-11-14T20:00:00-04:00");
+            EventDateTime ev2_end = new EventDateTime().setDateTime(end).setTimeZone("America/New York");
+            event2.setEnd(ev2_end);
+            // Event 2 end
+            // Comparisons based on hardcode data
+            // Map to hold the event along with the corresponding start and end time
+            Map<Event, List<DateTime>> comparisons = new HashMap<>();
+            List<DateTime> times = new ArrayList<>();
+            List<DateTime> secondtimes = new ArrayList<>();
+            times.add(start);
+            times.add(end);
+            secondtimes.add(start_ev2);
+            secondtimes.add(end_ev2);
+            comparisons.put(event, times);
+            comparisons.put(event2, secondtimes);
+            // Used for output
+            String events = comparisons.keySet().toString();
+            String firstevtimes = times.toString();
+            String secondevtimes = secondtimes.toString();
+            Log.e("Events", events);
+            Log.e("First Event Times", firstevtimes);
+            Log.e("Second Event Times", secondevtimes);
         }
         /*
         * Parse the start time and date with splitting to be used
@@ -584,49 +640,4 @@ public class Schedule extends Activity
             }
         }
     }
-
-    /*
-    private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
-        @Override
-        protected Greeting doInBackground(Void... params) {
-            ObjectMapper mapper = new ObjectMapper();
-            user _user = new user();
-            String url = "http://warmachine.cse.buffalo.edu:8083/process_post";
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-                Log.e("nope", "");
-            }
-            _user.setName(Login.getGoogleAccount().toString());
-            _user.setPassword("winner");
-            _user.setEvents(eventStrings);
-
-            _user.setAllFriends(new ArrayList<String>());
-            ArrayList<String> strings=new ArrayList<String>();
-            strings.add("blow baloons");
-            strings.add("dog master");
-            _user.setEvents(strings);
-            String jsonInString = "";
-            try {
-                jsonInString = mapper.writeValueAsString(_user);
-                Log.e("json, ",jsonInString);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            RestTemplate restTemplate = new RestTemplate();
-            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
-            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            restTemplate.postForObject(url, _user,user.class);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Greeting greeting) {
-            Log.e("what","what");
-        }
-    }
-    */
 }
