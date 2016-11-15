@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 var app = express();
 parser = require('body-parser');
@@ -19,12 +21,16 @@ var testSchema= mongoose.Schema({
 
 var Test=mongoose.model("Test", testSchema);
 
-var friendsListSchema= mongoose.Schema({
-  User: String,
-  Friends: [String]
+var UserSchema= mongoose.Schema({
+  name: String,
+  friends: [String],
+  eventIsSent: [Boolean],
+  eventDate:[Date],		
+  eventNameAndFriends:[String],
+  eventAccepted: [Boolean],
 });
 
-var Friends=mongoose.model("Friends", friendsListSchema); 
+var User=mongoose.model("User", UserSchema); 
 
 var eventListSchema= mongoose.Schema({
   User: String,
@@ -35,7 +41,7 @@ var Events=mongoose.model("Events", eventListSchema)
  
 });
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/user');
 
 app.get('/listUsers', function (req, res) {
    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
@@ -100,13 +106,15 @@ if(err) throw err;
 app.post('/user_post', function (req, res) {
    console.log(JSON.stringify(req.body));
    var a = JSON.parse(JSON.stringify(req.body));
-   var user = a.user;
-   var friends = a.friends;
    var user ={
-       User: a.user,
-       Friends: a.friends
+       User: a.name,
+       Friends: a.friends,
+       Events: a.eventIsSent,
+       InviteDate: a.eventDate,
+       EventDateAndFriends: a.eventNameAndFriends,
+       Accepted: a.eventIsAccepted
 };
-   db.collection('Friends').insert(user,function (err,doc){
+   db.collection('User').insert(user,function (err,doc){
 if(err) throw err;
 });
    db.close();
@@ -122,6 +130,7 @@ app.post('/events_post', function (req, res) {
        User: a.user,
        Events: a.Events
 };
+console.log(db.stats());
    db.collection('Events').insert(user,function (err,doc){
 if(err) throw err;
 });
@@ -130,10 +139,9 @@ if(err) throw err;
 })
 //--------------------Get friends list-----------------------------------------------------------------------------------------------
 app.get('/friends_get',function(req,res){
-
-db.get('Friends').find({User: req.body}, function(err,result){
+db.collection('Friends').find({User: req.body}, function(err,result){
 if (err){
-res.send("error finding user");
+res.send("error retrieving friends");
 }else{
 res.send(result);
 }
@@ -141,6 +149,27 @@ res.send(result);
 });
 });
 
+//----------------------------------------------------------------------------------------------------------------------
+app.post('/getUser', function (req, res) {
+        var a = JSON.parse(JSON.stringify(req.body));
+	console.log("1:"+a.name);
+	db.collection('User').findOne({'name': a.name},function(err,q){
+        console.log(a.name);
+		console.log("we got here.");
+		if(err){
+		   console.log(err);
+		   return;
+		}
+		if(q){
+		   console.log('account exists');
+		   console.log(q);
+
+		}else{
+		console.log('good to go');
+		}
+   });
+});
+//-------------------------------------------------------------
 
 var server = app.listen(8083, function () {
    var host = server.address().address
