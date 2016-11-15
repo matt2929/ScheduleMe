@@ -1,0 +1,21 @@
+date: October 25, 2016
+meeting_type: TA # meeting_type can "group", "ta", or "instructor"
+attendance: [mcstaffo, asrathor, zhuoliny, eewalker, dakotale]
+absent: [prjones4]
+excused_absences: [ # Any legitamite excuses for absent team members
+  {ubit: prjones4, reason: Doctor Appointment},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: talked about what to do in the future (user contacts)},
+  {ubit: dakotale, progress: talked about what to do in the future},
+  {ubit: eewalker, progress: Json and warmachine progress along with future of sprint 3},
+  {ubit: mcstaffo, progress: Database progress for sprint 3},
+  {ubit: zhuoliny, progress: Connection class progress for sprint 3},
+  {ubit: prjones4, progress: }
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
