@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "548502393045",
-    "project_id": "scheduleme-145922"
+    "project_number": "1024360293317",
+    "project_id": "planar-momentum-144300"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:548502393045:android:c7271a8548a32bcc",
+        "mobilesdk_app_id": "1:1024360293317:android:310efa5951c37df8",
         "android_client_info": {
           "package_name": "com.example.matthew.scheduleme"
         }
       },
       "oauth_client": [
         {
-          "client_id": "548502393045-l7mv3cb2il9uljef4gv8mbbpskriicd9.apps.googleusercontent.com",
+          "client_id": "1024360293317-g26nqqls4010ktivp2ad02taq3nhjfvo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.matthew",
-            "certificate_hash": "C2D8C29F392C77E35EE1649DD9223BD427230813"
+            "package_name": "com.example.matthew.scheduleme",
+            "certificate_hash": "F3F6C4E784D8B4AD0B9F22389E1619C33E210D49"
           }
         },
         {
-          "client_id": "548502393045-p6cpjr60o3fve64ne63faaasjpkrtect.apps.googleusercontent.com",
+          "client_id": "1024360293317-sfb25fg61eiq8ec5vktaak54gpmp8n1f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-VE4Yz3_p7-5YbFNGecbGCm1I7aLOjl4"
+          "current_key": "AIzaSyBPlNq1O7xoJYtTC7op56yXxIg2f5gOvwo"
         }
       ],
       "services": {

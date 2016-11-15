@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.matthew.scheduleme"
-        minSdkVersion 15
+        minSdkVersion 11
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -32,10 +32,6 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // androidTestCompile 'junit:junit:4.12'
@@ -46,6 +42,9 @@ dependencies {
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
+    compile('com.google.apis:google-api-services-gmail:v1-rev49-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
     compile('com.google.apis:google-api-services-calendar:v3-rev213-1.22.0') {
@@ -53,7 +52,15 @@ dependencies {
         exclude module: 'httpclient'
         //exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    compile 'com.google.android.gms:play-services:9.6.1'
+    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.google.android.gms:play-services-plus:9.6.1'
+    compile 'com.google.android.gms:play-services-base:9.6.1'
+    compile 'com.google.android.gms:play-services-identity:9.6.1'
+    compile 'com.google.android.gms:play-services-appindexing:9.6.1'
+    compile 'com.google.android.gms:play-services-appinvite:9.6.1'
+    compile 'com.google.android.gms:play-services-analytics:9.6.1'
+    compile 'com.google.android.gms:play-services-drive:9.6.1'
+    compile 'com.google.apis:google-api-services-people:v1-rev4-1.22.0'
     testCompile 'junit:junit:4.12'
 }
 

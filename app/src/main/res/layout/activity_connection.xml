@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6b8c77">
+    android:background="@drawable/userhome_image">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:ems="10"
             android:id="@+id/friendsText"
             android:textColorLink="?attr/colorBackgroundFloating"
-            android:textColor="?attr/colorBackgroundFloating"
+            android:textColor="#0f71c6"
             android:textAlignment="center"
             android:clickable="false"
             android:cursorVisible="false"
@@ -32,7 +32,7 @@
         android:id="@+id/appbar"
         android:layout_height="79dp"
         android:layout_width="match_parent"
-        android:background="?attr/colorButtonNormal">
+        android:background="#073966">
 
         <TextView
             android:text="Your Friends"
@@ -41,7 +41,7 @@
             android:layout_gravity="center"
             android:id="@+id/tbTitle"
             android:layout_marginTop="20dp"
-            android:textColor="#15512b"
+            android:textColor="#ffffff"
             android:textSize="30dp" />
 
         <android.support.v7.widget.Toolbar

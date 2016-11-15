@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#4F9C4A"
+    android:background="@drawable/image_toolbar"
     tools:context="com.example.matthew.scheduleme.Login"
     android:id="@+id/sign_in_button"
     >
@@ -27,8 +27,8 @@
             android:id="@+id/textView"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:fontFamily="serif-monospace"
-            android:textSize="50sp"
-            android:textColor="#458940"
+            android:textSize="45sp"
+            android:textColor="#36949b"
             android:textAllCaps="false"
             android:layout_marginTop="80dp"/>
 
@@ -41,11 +41,11 @@
             android:textSize="50sp"
             android:textStyle="normal|bold"
             android:layout_marginBottom="70dp"
-            android:textColor="#FFFFFF" />
+            android:textColor="#36949b" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signin_button"
-            android:layout_width="wrap_content"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
