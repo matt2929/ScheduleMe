@@ -19,12 +19,16 @@ var testSchema= mongoose.Schema({
 
 var Test=mongoose.model("Test", testSchema);
 
-var friendsListSchema= mongoose.Schema({
-  User: String,
-  Friends: [String]
+var UserSchema= mongoose.Schema({
+  name: String,
+  friends: [String],
+  eventIsSent: [Boolean],
+  eventDate:[Date],             
+  eventNameAndFriends:[String],
+  eventAccepted: [Boolean],
 });
 
-var Friends=mongoose.model("Friends", friendsListSchema); 
+var User=mongoose.model("User", UserSchema); 
 
 var eventListSchema= mongoose.Schema({
   User: String,
@@ -100,13 +104,15 @@ if(err) throw err;
 app.post('/user_post', function (req, res) {
    console.log(JSON.stringify(req.body));
    var a = JSON.parse(JSON.stringify(req.body));
-   var user = a.user;
-   var friends = a.friends;
    var user ={
-       User: a.user,
-       Friends: a.friends
+       User: a.name,
+       Friends: a.friends,
+       Events: a.eventIsSent,
+       InviteDate: a.eventDate,
+       EventDateAndFriends: a.eventNameAndFriends,
+       Accepted: a.eventIsAccepted
 };
-   db.collection('Friends').insert(user,function (err,doc){
+   db.collection('User').insert(user,function (err,doc){
 if(err) throw err;
 });
    db.close();
@@ -129,16 +135,24 @@ if(err) throw err;
    res.end("");
 })
 //--------------------Get friends list-----------------------------------------------------------------------------------------------
-app.get('/friends_get',function(req,res){
+app.post('/getUser', function (req, res) {
+        var a = JSON.parse(JSON.stringify(req.body));
+        console.log("1:"+a.name);
+        db.collection('User').findOne({'name': a.name},function(err,q){
+        console.log(a.name);
+                console.log("we got here.");
+                if(err){
+                   console.log(err);
+                   return;
+                }
+                if(q){
+                   console.log('account exists');
+                   console.log(q);
 
-db.get('Friends').find({User: req.body}, function(err,result){
-if (err){
-res.send("error finding user");
-}else{
-res.send(result);
-}
-
-});
+                }else{
+                console.log('good to go');
+                }
+   });
 });
 
 
