@@ -39,8 +39,8 @@ public class SetUpMeeting extends AppCompatActivity {
     user user = new user();
     List<String> durations;
     Spinner spinner;
-    String duration;
-    int year, month, day;
+    static String duration;
+    static int year, month, day;
     ListView listView;
     int numReq = 0;
     int numCount = 0;
@@ -84,10 +84,11 @@ public class SetUpMeeting extends AppCompatActivity {
                 Log.e("Duration", "Duration: " + duration);
                 Log.e("Picked Friends", "" + friendTemp);
 
-                Intent intentBack = new Intent(getApplicationContext(), MakeAMeeting.class);
-                for(String s:friendTemp){
+                Intent intentBack = new Intent(getApplicationContext(), DakotaUltimatum.class);
+               startActivity( intentBack);
+                /* for(String s:friendTemp){
                     new HttpRequestTask2(s).execute();
-                }
+                }*/
             }
         });
         ArrayList<String> names = new ArrayList<String>();
@@ -178,3 +179,4 @@ public class SetUpMeeting extends AppCompatActivity {
         }
     }
 }
+
