@@ -49,8 +49,7 @@ public class SetUpMeeting extends AppCompatActivity {
                 year = dp.getYear();
                 month = (dp.getMonth()+1);
                 day = dp.getDayOfMonth();
-             //   Log.i("Picked Date", "year: " + year + " month: " + month + " day: " + day);
-             //   Log.i("Duration", "Duration: " + duration);
+             Log.e("Picked Date", "year: " + year + " month: " + month + " day: " + day);
                 Intent intentBack = new Intent(getApplicationContext(), MakeAMeeting.class);
             }
         });

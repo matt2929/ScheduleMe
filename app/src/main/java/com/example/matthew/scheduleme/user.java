@@ -132,7 +132,6 @@ public class user implements Serializable {
         public String getWhoInvitedMe() {
             return whoInvitedMe;
         }
-
         public void setWhoInvitedMe(String whoInvitedMe) {
             this.whoInvitedMe = whoInvitedMe;
         }

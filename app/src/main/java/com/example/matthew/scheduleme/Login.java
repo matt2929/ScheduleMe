@@ -129,7 +129,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:8081/getUser";
+            String url = "http://warmachine.cse.buffalo.edu:8084/getUser";
             username name = new username();
             name.setName(acct.getEmail());
             Log.e("value","{"+name.getName()+"}");
@@ -190,7 +190,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:8081/user_post";
+            String url = "http://warmachine.cse.buffalo.edu:8084/user_post";
             user tempUser = new user();
             tempUser.setName("matthewstafford29@gmail.com");
             try {
