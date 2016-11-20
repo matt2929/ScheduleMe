@@ -61,10 +61,10 @@ public class MakeAMeeting extends AppCompatActivity {
             "30 minutes", "1 hour", "1 hour & 30 minutes", "2 hours", "2 hours & 30 minutes", "3 hours", "3 hours & 30 minutes",
                 "4 hours", "4 hours & 30 minutes", "5 hours"
         };
-        friends = new String[thisU.getAllFriends().size()];
-        if (thisU.getAllFriends() != null) {
-            for (int i = 0; i < thisU.getAllFriends().size(); i++) {
-                friends[i] = thisU.getAllFriends().get(i);
+        friends = new String[thisU.getFriends().size()];
+        if (thisU.getFriends() != null) {
+            for (int i = 0; i < thisU.getFriends().size(); i++) {
+                friends[i] = thisU.getFriends().get(i).get(0);
             }
         }
 
