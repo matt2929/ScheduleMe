@@ -11,7 +11,7 @@ db.once('open', function() {
 var Schema=mongoose.Schema;
 var UserSchema= mongoose.Schema({
   name: String,
-  schedule:String,
+  schedule:[String],
   friends: [[String]],
   sentInvites: [],
   recievedInvites:[],		
@@ -36,7 +36,6 @@ app.get('/listUsers', function (req, res) {
 app.post('/user_post', function (req, res) {
    console.log("user_post"+JSON.stringify(req.body));
    var a = JSON.parse(JSON.stringify(req.body));
-
    var userTemp ={
        name: a.name,
        schedule: a.schedule,
@@ -45,7 +44,7 @@ app.post('/user_post', function (req, res) {
        recievedInvites: a.recievedInvites,
 
 }
-   db.collection('User').insert(a,function (err,doc){
+   db.collection('User').update(a,function (err,doc){
 if(err) throw err;
 });
    db.close();
@@ -58,7 +57,7 @@ app.post('/events_post', function (req, res) {
    var a = JSON.parse(JSON.stringify(req.body));
    var user = a.user;
    var events = a.events;
-   var user ={
+	var user ={
        User: a.user,
        Events: a.Events
 };
@@ -69,6 +68,59 @@ if(err) throw err;
    db.close();
    res.end("");
 })
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/*app.post('/update_post', function (req, res) {
+   console.log("update_post"+JSON.stringify(req.body));
+   var a = JSON.parse(JSON.stringify(req.body));
+   db.collection('User').update(
+        {name: a.name},
+		{$set:
+			{
+			friends: a.friends,
+			eventIsSent: a.eventIsSent,
+			eventDate: a.eventDate,
+			eventNameAndFriends: a.eventNameAndFriends,
+			eventIsAccepted: a.eventIsAccepted
+			
+			}
+		
+		}
+)
+   db.close();
+   res.end("");
+})*/
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+
+app.post('/update_events', function (req, res) {
+   console.log("update_post"+JSON.stringify(req.body));
+   var a = JSON.parse(JSON.stringify(req.body));
+/*   var userTemp ={
+       name: a.name,
+       friends: a.friends,
+       eventIsSent: a.eventIsSent,
+       eventDate: a.eventDate,
+       eventNameAndFriends: a.eventNameAndFriends,
+       eventIsAccepted: a.eventIsAccepted
+}*/
+   db.collection('User').update(
+	{name: a.name},
+		{$set:
+			{
+			friends: a.friends,
+			schedule: a.schedule,
+			sentInvites: a.sentInvites,
+			recievedInvites:a.recievedInvites ,
+			}
+		
+		}
+)
+   db.close();
+   res.end("");
+})
+
+
 
 //--------------------Get friends list-----------------------------------------------------------------------------------------------
 
@@ -92,40 +144,85 @@ app.post('/getUser', function (req, res) {
 		   console.log(err);
 		   return;
 		}
-		if(a!=null){
+		if(q!=null){
 		   console.log('account exists...');
-   		 var userTemp ={
-       name: q.name,
-       schedule: q.schedule,
-       friends: q.friends,
-       sentInvites : q.sentInvites,
-       recievedInvites: q.recievedInvites,
-	}
+   		   var userTemp ={
+       		   name: q.name,
+       		   schedule: q.schedule,
+      		   friends: q.friends,
+		   sentInvites : q.sentInvites,
+		   recievedInvites: q.recievedInvites,
+		}
 		console.log(q);
 		console.log( JSON.stringify(q));
 		res.end(JSON.stringify(q));
 		}else{
+   		   var userTemp ={
+                   name: a.name,
+       		   schedule: [],
+                   friends: [],
+                   sentInvites: [],
+                   recievedInvites: [],
 
-   var userTemp ={
-       name: a.name,
-       schedule: [],
-       friends: [],
-       sentInvites: [],
-       recievedInvites: [],
-
-}
-console.log(userTemp.name)
-   	db.collection('User').insert(userTemp,function (err,doc){
-	console.log("...added");
-	if(err) throw err;
-	});
-   
 		}
-		
+		console.log(userTemp.name)
+   		db.collection('User').insert(userTemp,function (err,doc){
+		console.log("...added");
+		res.end(JSON.stringify(userTemp));
+		if(err) throw err;
+		});
+		}		
    });
 });
+
+
+
+
+app.post('/getUser2', function (req, res) {
+        var a = JSON.parse(JSON.stringify(req.body));
+	console.log("1:{"+a.name+"}");
+	db.collection('User').findOne({'name': a.name},function(err,q){	
+		if(err){
+		   console.log("uh oh getUser2()");
+		   console.log(err);
+		   return;
+		}
+		if(q!=null){
+		   console.log('account exists...');
+   		   var userTemp ={
+       		   name: q.name,
+       		   schedule: q.schedule,
+      		   friends: q.friends,
+		   sentInvites : q.sentInvites,
+		   recievedInvites: q.recievedInvites,
+		}
+		console.log(q);
+		console.log( JSON.stringify(q.schedule));
+		res.end(JSON.stringify(q));
+		}else{
+   		   var userTemp ={
+                   name: a.name,
+       		   schedule: [],
+                   friends: [],
+                   sentInvites: [],
+                   recievedInvites: [],
+
+		}
+		console.log(userTemp.name)
+   		db.collection('User').insert(userTemp,function (err,doc){
+		console.log("...added");
+		res.end(JSON.stringify(userTemp.schedule));
+		if(err) throw err;
+		});
+		}		
+   });
+});
+
+
+
+
 //-------------------------------------------------------------
-/*app.post('/update_post', function (req, res) {
+app.post('/update_post', function (req, res) {
    console.log("update_post"+JSON.stringify(req.body));
    var a = JSON.parse(JSON.stringify(req.body));
    var userTemp ={
@@ -137,14 +234,26 @@ console.log(userTemp.name)
        eventIsAccepted: a.eventIsAccepted
 }
    db.collection('User').update(
-	{name:}
-})
+        {name: a.name},
+		{$set:
+			{
+			friends: a.friends,
+			schedule: a.schedule,
+			sentInvites: a.sentInvites,
+			recievedInvites:a.recievedInvites ,
+			}
+		
+		}
+)
    db.close();
    res.end("");
-})*/
+})
+
+
+
 //---------------------------------------------------
 
-var server = app.listen(8081, function () {
+var server = app.listen(8087, function () {
    var host = server.address().address
    var port = server.address().port
    console.log("Example app listening at http://%s:%s", host, port)
