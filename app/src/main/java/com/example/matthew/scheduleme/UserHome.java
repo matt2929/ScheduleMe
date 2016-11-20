@@ -95,7 +95,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         // for connection class
         Intent intent = getIntent();
         thisUser = (user) intent.getSerializableExtra("testUser");
-        thisUser.setAllFriends(new ArrayList<String>());
+        //thisUser.setFriends(new ArrayList<String>());
         ArrayList<String> testFriends = new ArrayList<String>();
         String one = "Jimmy Johns";
         String two = "OMG MEH";
@@ -107,7 +107,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         testFriends.add(three);
         testFriends.add(four);
         testFriends.add(five);
-        thisUser.setAllFriends(testFriends);
+       // thisUser.setFriends(testFriends);
 
         goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         goToCalender.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +159,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
                     @Override
                     public void onClick(View view) {
                         Log.e("butt1", "press");
-                        new HttpRequestTask().execute();
+                    //    new UserHome.HttpRequestTask().execute();
                     }
                 });
 
@@ -169,8 +169,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         testPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HttpTaskPost().execute();
-             //   valueString = put.getText().toString();
+                //   valueString = put.getText().toString();
             }
 
             protected void onStart() {
@@ -225,56 +224,8 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
     /**
      * A placeholder fragment containing a simple view.
      */
-    private class HttpRequestTask extends AsyncTask<Void, Void, Greeting> {
-        @Override
-        protected Greeting doInBackground(Void... params) {
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                // Greeting greeting = restTemplate.getForObject(url, Greeting.class);
-//                return greeting;
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-                Log.e("nope", "");
 
-            }
-            String url = "http://warmachine.cse.buffalo.edu:8082/listUsers";
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-            String getTheData = restTemplate.getForObject(url, String.class, "Android");
-            Collection<user> ob;
-            try {
-                ob = new ObjectMapper().readValue(getTheData, new TypeReference<Collection<user>>() {
-                });
-                Log.e("Value", "" + ob.size());
-                Iterator allPeople = ob.iterator();
-                while (allPeople.hasNext()) {
-                    users.add((user) allPeople.next());
-                }
-                Log.e("Value", "" + users.get(0).getName());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e("print", "well that didnt work");
-            }
-            Log.e("something", getTheData);
-
-            // user[] result = restTemplate.getForObject(url, user[].class, "Android");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Greeting greeting) {
-            String string = "";
-            for (user u : users) {
-                string += "name: " + u.getName() + " password: " + u.getPassword();
-                string += "\n";
-            }
-            textView.setText(string);
-        }
-    }
-
-    private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
+    public class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
@@ -287,7 +238,6 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
                 Log.e("MainActivity", e.getMessage(), e);
                 Log.e("nope", "");
             }
-            thisUser.setPassword("*************");
             String jsonInString = "";
             try {
                 jsonInString = mapper.writeValueAsString(thisUser);
@@ -298,7 +248,6 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             restTemplate.postForObject(url, thisUser, user.class);
             return null;
         }

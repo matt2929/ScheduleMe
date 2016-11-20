@@ -31,12 +31,6 @@ public class MakeAMeeting extends AppCompatActivity {
     user thisU;
     Dialog setupMeeting;
     Button createMeeting;
-    String[] days, months, years, durations, friends;
-    Spinner ds, ms, ys, duras, fs;
-    String pickedDay, pickedMonth, pickedYear, pickedFriends, pickedDuration;
-    DatePicker datepicker;
-    TimePicker timepicker;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_a_meeting);

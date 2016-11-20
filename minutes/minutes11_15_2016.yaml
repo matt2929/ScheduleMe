@@ -1,0 +1,21 @@
+date: November 15, 2016
+meeting_type: ta # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny, eewalker, dakotale]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: make new creating meetings show in the google calendar},
+  {ubit: eewalker, progress: Database},
+  {ubit: dakotale, progress: compare free time},
+  {ubit: mcstaffo, progress: talk about what to do for Database & rest api next and progress},
+  {ubit: prjones4, progress: Database},
+  {ubit: zhuoliny, progress: talk about what next to do},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
