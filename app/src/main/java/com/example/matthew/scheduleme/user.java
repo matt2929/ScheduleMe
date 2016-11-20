@@ -22,7 +22,15 @@ public class user implements Serializable {
     public String User;
     @JsonIgnoreProperties
     public String user;
-    String schedule;
+    @JsonIgnoreProperties
+    public String eventIsSent;
+    @JsonIgnoreProperties
+    public String eventNameAndFriends;
+    @JsonIgnoreProperties
+    public String eventDate;
+    @JsonIgnoreProperties
+    public String eventIsAccepted;
+    List<String> schedule;
     ArrayList<ArrayList<String>> friends = new ArrayList<ArrayList<String>>();
     ArrayList<sentInvite> sentInvites = new ArrayList<sentInvite>();
     ArrayList<recievedInvite> recievedInvites = new ArrayList<recievedInvite>();
@@ -63,7 +71,7 @@ public class user implements Serializable {
         return _id;
     }
 
-    public String getSchedule() {
+    public List<String> getSchedule() {
         return schedule;
     }
 
@@ -75,7 +83,7 @@ public class user implements Serializable {
         this._id = _id;
     }
 
-    public void setSchedule(String schedule) {
+    public void setSchedule(ArrayList<String> schedule) {
         this.schedule = schedule;
     }
 

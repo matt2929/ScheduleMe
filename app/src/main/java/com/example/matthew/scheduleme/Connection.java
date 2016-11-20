@@ -3,6 +3,7 @@ package com.example.matthew.scheduleme;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
@@ -32,7 +41,7 @@ public class Connection extends AppCompatActivity {
 
         friendsCount = 0;
         Intent intent = getIntent();
-        thisU = (user) intent.getSerializableExtra("testUser");
+        thisU = Login.USERZHU;
         friendsCount = thisU.getFriends().size();
         friendsList = (EditText) findViewById(R.id.friendsText);
         text = "";
@@ -62,21 +71,34 @@ public class Connection extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                        ArrayList<ArrayList<String>> tempArr = thisU.getFriends();
-                        for(int i=0;i<tempArr.size();i++){
-                            if(tempArr.get(i).get(0)==friendEmail.getText().toString()){
+                        boolean exist=false;
+                        for(int i=0;i<tempArr.size();i++) {
+                            if (tempArr.get(i).get(0) == friendEmail.getText().toString()) {
+                                exist = true;
                                 Toast.makeText(getApplicationContext(), "This friend already exists", Toast.LENGTH_SHORT).show();
-                            }else{
-                                tempArr.add(new ArrayList<String>());
-                                tempArr.get(tempArr.size()-1).add(friendEmail.getText().toString());
+                                break;
+                            } else {
+
                             }
                         }
+                            if(!exist) {
+                                Toast.makeText(getApplicationContext(), "Friend added", Toast.LENGTH_SHORT).show();
+                                tempArr.add(new ArrayList<String>());
+                                tempArr.get(tempArr.size()-1).add(friendEmail.getText().toString());
+                                Log.e("New Friend",""+tempArr.get(tempArr.size()-1).get(0));
+                            }
+
+
+                        Login.USERZHU.setFriends(tempArr);
                         String temp = friendsList.getText().toString();
                         temp = temp + "\n" + friendEmail.getText().toString();
                         friendsList.setText(temp);
                         friendEmail.setText("");
                         friendInfo.dismiss();
+                        new HttpSendDatumDank().execute();
                     }
                 });
+
                 cancil = (Button) friendInfo.findViewById(R.id.cancil);
                 cancil.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -88,5 +110,32 @@ public class Connection extends AppCompatActivity {
                 friendInfo.show();
             }
         });
+    }
+    public class HttpSendDatumDank extends AsyncTask<Void, Void, Greeting> {
+        @Override
+        protected Greeting doInBackground(Void... params) {
+            ObjectMapper mapper = new ObjectMapper();
+            String url = "http://warmachine.cse.buffalo.edu:"+Login.values+"/update_post";
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+            String jsonInString = "";
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new ResourceHttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+            String stringThis= restTemplate.postForObject(url,Login.USERZHU,String.class);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Greeting greeting) {
+            Log.e("I ran","I ran");
+        }
     }
 }

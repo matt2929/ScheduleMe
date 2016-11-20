@@ -10,4 +10,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.matthew.scheduleme.DakotaUltimatum">
 
+    <TextView
+        android:text="Here is your data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:fontFamily="cursive" />
+
+    <TextView
+        android:text="data goes here"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dakotasSolution"
+        android:textAlignment="center"
+        android:textSize="20sp" />
 </RelativeLayout>

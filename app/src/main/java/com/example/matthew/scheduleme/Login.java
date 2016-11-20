@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     static user USERZHU =new user();
-
+    static int values =8087;
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
@@ -117,11 +117,10 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         return acct.getEmail();
     }
     public class HttpRequestTask extends AsyncTask<Void, Void, Greeting> {
-
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:8082/getUser";
+            String url = "http://warmachine.cse.buffalo.edu:"+values+"/getUser";
             username name = new username();
             name.setName(acct.getEmail());
             Log.e("value","{"+name.getName()+"}");
@@ -180,7 +179,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:8082/user_post";
+            String url = "http://warmachine.cse.buffalo.edu:"+values+"/user_post";
             user tempUser = new user();
             tempUser.setName("matthewstafford29@gmail.com");
             try {
