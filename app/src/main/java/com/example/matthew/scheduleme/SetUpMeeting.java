@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,11 @@ public class SetUpMeeting extends AppCompatActivity {
     Spinner spinner;
     String duration;
     int year, month, day;
-
+    ListView listView;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setupmeeting);
-
+        listView = (ListView) findViewById(R.id.friendListViewZhuZhu);
         save = (Button) findViewById(R.id.saveMeeting);
         dp = (DatePicker) findViewById(R.id.datePicker);
         spinner = (Spinner) findViewById(R.id.durations);
@@ -42,7 +43,7 @@ public class SetUpMeeting extends AppCompatActivity {
         durations.add("270 minutes (4.5 hours)");
         durations.add("300 minutes (5 hours)");
         duration = "";
-
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,Login.));
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

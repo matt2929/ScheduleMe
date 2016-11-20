@@ -22,6 +22,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
+    public static user THEUSER = new user();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
