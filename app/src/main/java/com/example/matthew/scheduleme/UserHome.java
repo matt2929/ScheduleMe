@@ -12,11 +12,52 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.auth.api.Auth;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerFuture;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -29,30 +70,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-public class UserHome extends Activity {
+public class UserHome extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button goToCalender;
     Button testRest;
     //String valueString="username";
-    //String result = "";
+    String result = "";
     EditText textView;
-    ArrayList<user> users = new ArrayList<user>();
-    Button signOutB;
+    ArrayList<user> users;
+    Button signOut;
     Button viewFriends;
     Button manageEvents;
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
     user thisUser;
     Button testPost;
-    EditText put;
-    private GoogleApiClient signout;
+    TextView put;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userhome);
         textView = (EditText) findViewById(R.id.upcommingdata);
-
+        goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         // for connection class
         Intent intent = getIntent();
         thisUser = (user) intent.getSerializableExtra("testUser");
@@ -80,13 +119,17 @@ public class UserHome extends Activity {
             }
         });
 
-        signOutB = (Button) findViewById(R.id.signOutBtn);
-        signOutB.setOnClickListener(new View.OnClickListener() {
+        signOut=(Button) findViewById(R.id.signout_button);
+        GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
+        signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserHome.this.signOut();
-                Intent intentSO = new Intent(getApplicationContext(), Login.class);
-                startActivity(intentSO);
+                switch (v.getId()){
+                    case R.id.signout_button:
+                        signOut();
+                        break;
+                }
             }
         });
 
@@ -104,8 +147,9 @@ public class UserHome extends Activity {
         manageEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MakeAMeeting.class);
-                startActivity(intent);
+                Intent intentJ = new Intent(getApplicationContext(), MakeAMeeting.class);
+                intentJ.putExtra("testUser", thisUser);
+                startActivity(intentJ);
             }
         });
 
@@ -119,7 +163,7 @@ public class UserHome extends Activity {
                     }
                 });
 
-        put = (EditText) findViewById(R.id.postname);
+        put = (TextView) findViewById(R.id.postname);
         put.setText(thisUser.getName());
         testPost = (Button) findViewById(R.id.takethenamebelowandpost);
         testPost.setOnClickListener(new View.OnClickListener() {
@@ -134,42 +178,48 @@ public class UserHome extends Activity {
         });
     }
 
-    /*
-     * Written by Dakota Lester
-     * Google Method Interpretation
-     * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
-     * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
-     * Used to sign a person out of their google account
-     */
-    private void signOut() {
-        if (signout != null && signout.isConnected()) {
-            signout.clearDefaultAccountAndReconnect().setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(Status status) {
-                    signout.disconnect();
-                }
-            });
-        }
-    }
-
-    /*
-    * Written by Dakota Lester
-    * Google Method Interpretation
-    * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
-    * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
-    * Completed - need to figure where to place this in the code
-    * Delete users credentials
-     */
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(signout).setResultCallback(
+    private void signOut(){
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        // Removed
+                        //revokeAccess();
+//                        SharedPreferences prefs = getSharedPreferences(getApplicationContext().toString(),Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = prefs.edit();
+                        //         System.out.println("HERERERERERERERERERERERERERERER"+getPreferences(getApplicationContext().MODE_PRIVATE).getAll().toString());
+//                        editor.remove(AccountManager.KEY_ACCOUNT_NAME);
+//                        editor.commit();
+                        String accPref = getPreferences(getApplicationContext().MODE_PRIVATE).getString(Schedule.PREF_ACCOUNT_NAME, null);
+                        //         System.out.println("ACCPREF:::" + accPref);
+                        accPref = "";
+                        Intent intenT = new Intent(getApplicationContext(), Login.class);
+                        startActivity(intenT);
+
                     }
                 }
         );
     }
+
+
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                    }
+                });
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG,"onConnectionFailed:"+connectionResult);
+    }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -207,4 +257,5 @@ public class UserHome extends Activity {
             Log.e("what", "what");
         }
     }
+
 }

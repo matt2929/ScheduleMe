@@ -3,151 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#4F9C4A">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Make An New Meeting!!!"
-        android:ems="10"
-        android:id="@+id/SetUpMeeting"
-        android:fontFamily="cursive"
-        android:textSize="30sp"
-        android:textColor="#FFFFFF"
-        android:textAlignment="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+    android:background="@drawable/userhome_image">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/SetUpMeeting">
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/existingtextview"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            tools:text="existingtextview" />
+        android:layout_height="match_parent">
 
         <Button
-            android:text="yes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/existingyes" />
-
-        <Button
-            android:text="NO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/exisitngno"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <ListView
+            android:text="Create a Meeting"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/existingyes"
-            android:id="@+id/exisitnglist"
-            android:layout_below="@+id/existingtextview" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/SetUpMeeting">
-
-        <Button
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Make a new invite"
-            android:id="@+id/makemeetingbutt"
-            android:layout_gravity="center_horizontal"
-            android:background="#458940"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:fontFamily="monospace"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/makemeetingtext"
-            android:layout_above="@+id/makemeetingbutt"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/makemeetingbutt"
-            android:id="@+id/makemeetinglist"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <DatePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/makeameetingcalstart"
-            android:layout_below="@+id/makemeetingbutt"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:headerBackground="@android:color/holo_purple" />
-
-        <DatePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/makeameetingcalend"
-            android:layout_below="@+id/makemeetingbutt"
-            android:layout_alignParentBottom="true"
-            android:headerBackground="@android:color/holo_orange_light" />
-
-        <Button
-            android:text="Check Existing Invites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/makemeetingexistbutt"
-            android:layout_below="@+id/makemeetingbutt"
-            android:layout_alignRight="@+id/makemeetingbutt"
-            android:layout_alignEnd="@+id/makemeetingbutt"
-            android:layout_alignLeft="@+id/makemeetingbutt"
-            android:layout_alignStart="@+id/makemeetingbutt"
-            android:background="@color/colorAccent"
-            />
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/makeameetingtextview"
-            android:textAlignment="center"
-            android:textSize="30sp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="37dp" />
+            android:layout_margin="10dp"
+            android:clickable="true"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textSize="15dp"
+            android:textColor="#ffffff"
+            android:background="#073966"
+            android:fontFamily="sans-serif-smallcaps"
+            android:typeface="normal"
+            android:id="@+id/setup_meeting" />
     </RelativeLayout>
 
 </RelativeLayout>
