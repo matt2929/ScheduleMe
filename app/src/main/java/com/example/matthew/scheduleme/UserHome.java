@@ -147,8 +147,9 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         manageEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MakeAMeeting.class);
-                startActivity(intent);
+                Intent intentJ = new Intent(getApplicationContext(), MakeAMeeting.class);
+                intentJ.putExtra("testUser", thisUser);
+                startActivity(intentJ);
             }
         });
 
