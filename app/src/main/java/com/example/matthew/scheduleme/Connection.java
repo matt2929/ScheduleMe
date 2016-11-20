@@ -13,6 +13,9 @@ import android.app.Dialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class Connection extends AppCompatActivity {
     user thisU;
