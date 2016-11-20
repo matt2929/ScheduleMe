@@ -47,7 +47,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     String stringThis;
     Button button;
     ArrayList<user> users = new ArrayList<user>();
-    user TheUser = new user();
+    static user  TheUser = new user();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
