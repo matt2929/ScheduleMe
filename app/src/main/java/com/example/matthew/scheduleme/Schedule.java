@@ -380,48 +380,6 @@ public class Schedule extends Activity
          * @throws IOException
          */
         private List<String> getDataFromApi() throws IOException {
-//            Event evenT = new Event()
-//                    .setSummary("Testing")
-//                    .setLocation("In lab")
-//                    .setDescription("Create event in calendar");
-//
-//            DateTime startDateTime = new DateTime("2016-11-09T22:00:00-04:00");
-//            EventDateTime starT = new EventDateTime()
-//                    .setDateTime(startDateTime)
-//                    .setTimeZone("America/New_York");
-//            evenT.setStart(starT);
-//
-//            DateTime endDateTime = new DateTime("2016-11-09T23:00:00-04:00");
-//            EventDateTime enD = new EventDateTime()
-//                    .setDateTime(endDateTime)
-//                    .setTimeZone("America/New_York");
-//            evenT.setEnd(enD);
-//
-//            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
-//            evenT.setRecurrence(Arrays.asList(recurrence));
-
-//            EventAttendee[] attendees = new EventAttendee[] {
-//                    new EventAttendee().setEmail("lpage@example.com"),
-//                    new EventAttendee().setEmail("sbrin@example.com"),
-//            }
-//            event.setAttendees(Arrays.asList(attendees));
-//
-//            EventReminder[] reminderOverrides = new EventReminder[] {
-//                    new EventReminder().setMethod("email").setMinutes(24 * 60),
-//                    new EventReminder().setMethod("popup").setMinutes(10),
-//            };
-//            Event.Reminders reminders = new Event.Reminders()
-//                    .setUseDefault(false)
-//                    .setOverrides(Arrays.asList(reminderOverrides));
-//            event.setReminders(reminders);
-
-//            String calendarId = "primary";
-//            evenT = mService.events().insert(calendarId, evenT).execute();
-//            System.out.printf("Event created: %s\n", evenT.getHtmlLink());
-//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(evenT.getHtmlLink()));
-//            startActivity(browserIntent);
-            // Link with database to grab user calendar
-            // Instance of json class (Step 1)
             DateTime now = new DateTime(System.currentTimeMillis());
             // Put calendar info into an arraylist of each event with
             // each event composing of a start, end, and current time
@@ -443,13 +401,10 @@ public class Schedule extends Activity
                     // the start date.
                     start = event.getStart().getDate();
                 }
-                String startFinalValue=parseStartTime(start);
-                String endFinalValue=parseStartTime(end);
-                compareEvent();
                 //parseEndTime(end);
                 //ComparStarEndTimes(start, end);
                 eventStrings.add(
-                        String.format("%s \nEvent starting on %s \nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
+                        String.format("%s", event.getSummary()));
             }
             // Compare users time frames given
             // Step 3a
@@ -465,148 +420,6 @@ public class Schedule extends Activity
              */
             new HttpSendEventDank().execute();
             return eventStrings;
-        }
-        /*
-        * Written by: Dakota Lester
-        * Hardcoded events to check comparisons for two random events
-        * If the comparison works for two events it will work for
-        * any n events
-        * The following method is the testcase with two hardcoded events
-        * for the sake of time I did not call the comparison between one
-        * event's end time and the next events start time as the method are
-        * written and the work is there
-        * The start/end would need to be parsed which is already done in the
-        * the other methods as the times would be parsed, comparsions would be
-        * done and then pushed to the server
-         */
-        private void compareEvent()
-        {
-            // Event 1 start
-            Event event = new Event().setSummary("Testing").setLocation("A Place").setDescription("Random Event");
-            DateTime start = new DateTime("2016-11-14T22:00:00-04:00");
-            EventDateTime ev_star = new EventDateTime().setDateTime(start).setTimeZone("America/New York");
-            event.setStart(ev_star);
-            DateTime end = new DateTime("2016-11-14T23:00:00-04:00");
-            EventDateTime ev_end = new EventDateTime().setDateTime(end).setTimeZone("America/New York");
-            event.setEnd(ev_end);
-            // Event 1 end
-            // Event 2 start
-            Event event2 = new Event().setSummary("Other testing").setLocation("A special Place").setDescription("Comparisons");
-            DateTime start_ev2 = new DateTime("2016-11-14T18:00:00-04:00");
-            EventDateTime ev2_star = new EventDateTime().setDateTime(start).setTimeZone("America/New York");
-            event2.setStart(ev2_star);
-            DateTime end_ev2 = new DateTime("2016-11-14T20:00:00-04:00");
-            EventDateTime ev2_end = new EventDateTime().setDateTime(end).setTimeZone("America/New York");
-            event2.setEnd(ev2_end);
-            // Event 2 end
-            // Comparisons based on hardcode data
-            // Map to hold the event along with the corresponding start and end time
-            Map<Event, List<DateTime>> comparisons = new HashMap<>();
-            List<DateTime> times = new ArrayList<>();
-            List<DateTime> secondtimes = new ArrayList<>();
-            times.add(start);
-            times.add(end);
-            secondtimes.add(start_ev2);
-            secondtimes.add(end_ev2);
-            comparisons.put(event, times);
-            comparisons.put(event2, secondtimes);
-            // Used for output
-            String events = comparisons.keySet().toString();
-            String firstevtimes = times.toString();
-            String secondevtimes = secondtimes.toString();
-            Log.e("Events", events);
-            Log.e("First Event Times", firstevtimes);
-            Log.e("Second Event Times", secondevtimes);
-        }
-        /*
-        * Parse the start time and date with splitting to be used
-        * for comparisons
-         */
-        private String parseStartTime(DateTime start)
-        {
-            String startstr = start.toString();
-            String[] starttime = startstr.split("T");
-            // Start Date of the event
-            String startdate = starttime[0];
-//            // Start Time Of Event
-            String startime = starttime[1];
-            String[] startY = startime.split(":");
-            String startX = startY[0];
-            String startZ = startY[1];
-            String[] startA = startZ.split(":");
-            String startB=startA[0];
-            int timeHour = Integer.parseInt(startX);
-            String AmPm = "";
-            if(timeHour<12){
-                AmPm="AM";
-            }else{
-                AmPm="PM";
-            }
-            //int startZ= Integer.parseInt(startX);
-            String startFinal=startdate + " at "+ timeHour+":"+startB+" "+AmPm;
-            return startFinal;
-        }
-        /*
-        * Written by Dakota Lester
-        * Parse the end time and date with splitting
-        * to be used for comparisons
-         */
-        private String parseEndTime(DateTime end)
-        {
-            String endstr = end.toString();
-            String[] endTimeForm = endstr.split("T");
-            // End Date of the Event
-            String enddate = endTimeForm[0];
-            // End Time of Event
-            String endtime = endTimeForm[1];
-            return endtime;
-        }
-        /*
-        * Written by: Dakota Lester
-        * Create the time to calculate to find
-        * the difference to be used to compare for free time
-        * Temporary for one calendar event
-        * Easily can be changed to multiple events for testing
-        * purposes this is staying to one event as of now
-        * Return: ArrayList of type String with start and end times
-        * as strings
-         */
-        private void ComparStarEndTimes(DateTime start, DateTime end) {
-            String startComp = parseStartTime(start);
-            String endComp = parseEndTime(end);
-            String[] startTime = startComp.split(":");
-            String[] endTime = endComp.split(":");
-            ArrayList<Integer> hourlength = new ArrayList<>();
-            for (int i = 0; i < startTime.length; i++)
-            {
-                try
-                {
-                    // As the starttime is combined with Hr + Min an if statement
-                    // is put in place as the only necessary info is the
-                    // Hr and min rather than Time Zone and Seconds
-                    // Output: Start and End Time of Each Event[i]
-                    if (startTime[i].length() < 3 && startTime[i+1].length() < 3)
-                    {
-                        String star_Out = startTime[i] + startTime[i + 1];
-                        String end_Out = endTime[i] + endTime[i + 1];
-                        Log.e("Start", star_Out);
-                        Log.e("End", end_Out);
-                        // Hour Difference Math Begins
-                        hourlength.add(Integer.parseInt(end_Out) - Integer.parseInt(star_Out));
-                        if (hourlength.get(i) >= -2300 && hourlength.get(i) <= -1200)
-                        {
-                            // Marking military time with no negative time
-                            // in the case of the beginning time is 2AM and
-                            // the starting time was 11PM creating a negative time
-                            hourlength.set(i, hourlength.get(i) + 2400);
-                        }
-                    }
-                } catch (IndexOutOfBoundsException e)
-                {
-                    break;
-                }
-            }
-            Log.e("Difference", hourlength.toString());
         }
 
         @Override
