@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/layoutSetMeeting"
     android:background="@drawable/userhome_image">
@@ -8,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:textColor="#073966"
         android:fontFamily="sans-serif-smallcaps"
         android:typeface="normal"
@@ -25,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="25dp"
         android:id="@+id/durations"/>
 
     <Button
@@ -33,10 +35,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/saveMeeting"
         android:layout_gravity="bottom"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:clickable="true"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:textColor="#ffffff"
         android:background="#073966"
         android:fontFamily="sans-serif-smallcaps"
