@@ -119,7 +119,7 @@ public class Schedule extends Activity
                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
                ArrayList<String> temp = new ArrayList<String>();
                temp.addAll(eventStrings);
-               theUser.setEvents(temp);
+               //theUser.setEvents(temp);
                intentSendBack.putExtra("testUser", theUser);
                startActivity(intentSendBack);
             }

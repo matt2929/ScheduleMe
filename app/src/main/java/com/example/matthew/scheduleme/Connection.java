@@ -30,15 +30,15 @@ public class Connection extends AppCompatActivity {
         friendsCount = 0;
         Intent intent = getIntent();
         thisU = (user) intent.getSerializableExtra("testUser");
-        friendsCount = thisU.getAllFriends().size();
+        friendsCount = thisU.getFriends().size();
         friendsList = (EditText) findViewById(R.id.friendsText);
         text = "";
         if (friendsCount > 0) {
             for (int i = 0; i < friendsCount; i++) {
                 if (i == friendsCount - 1) {
-                    text = text + thisU.getAllFriends().get(i);
+                    text = text + thisU.getFriends().get(i).get(0);
                 } else {
-                    text = text + thisU.getAllFriends().get(i) + "\n";
+                    text = text + thisU.getFriends().get(i).get(0) + "\n";
                 }
             }
             friendsList.setText(text);
@@ -58,7 +58,15 @@ public class Connection extends AppCompatActivity {
                 save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        thisU.addAFriend(friendEmail.getText().toString());
+                       ArrayList<ArrayList<String>> tempArr = thisU.getFriends();
+                        for(int i=0;i<tempArr.size();i++){
+                            if(tempArr.get(i).get(0)==friendEmail.getText().toString()){
+                                Toast.makeText(getApplicationContext(), "This friend already exists", Toast.LENGTH_SHORT).show();
+                            }else{
+                                tempArr.add(new ArrayList<String>());
+                                tempArr.get(tempArr.size()-1).add(friendEmail.getText().toString());
+                            }
+                        }
                         String temp = friendsList.getText().toString();
                         temp = temp + "\n" + friendEmail.getText().toString();
                         friendsList.setText(temp);
