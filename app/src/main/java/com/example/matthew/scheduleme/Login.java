@@ -8,10 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.auth.api.Auth;
@@ -21,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.api.client.json.Json;
 
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -29,25 +25,21 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-
-import static android.R.id.list;
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
+    static user USERZHU =new user();
+
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
     String stringThis;
     Button button;
     ArrayList<user> users = new ArrayList<user>();
-    static user  TheUser = new user();
+    user TheUser = new user();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +121,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:8084/getUser";
+            String url = "http://warmachine.cse.buffalo.edu:8082/getUser";
             username name = new username();
             name.setName(acct.getEmail());
             Log.e("value","{"+name.getName()+"}");
@@ -172,25 +164,23 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             ObjectMapper objectMapper = new ObjectMapper();
 
             Log.e("greet","value"+stringThis);
-            user anuser=new user();
-            try {
-                anuser = objectMapper.readValue(stringThis, user.class);
+           try {
+                USERZHU = objectMapper.readValue(stringThis, user.class);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("Cant Convert!!!","no");
-            }
-            Log.e("sys",anuser.getSentInvites().get(0).getFriendsAccepted().get(0).get(0));
+            }catch (Exception e){
 
-
+           }
+        //    Log.e("sys", USERZHU.getSentInvites().get(0).getFriendsAccepted().get(0).get(0));
         }
-
     }
 
     public class HttpSendDatum extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:8084/user_post";
+            String url = "http://warmachine.cse.buffalo.edu:8082/user_post";
             user tempUser = new user();
             tempUser.setName("matthewstafford29@gmail.com");
             try {
@@ -238,4 +228,3 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     }
 
 }
-

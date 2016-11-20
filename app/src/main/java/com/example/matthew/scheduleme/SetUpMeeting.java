@@ -15,14 +15,18 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.matthew.scheduleme.R.id.durations;
+
 public class SetUpMeeting extends AppCompatActivity {
     Button save;
     DatePicker dp;
+    user user =new user();
     List<String> durations;
     Spinner spinner;
     String duration;
     int year, month, day;
     ListView listView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setupmeeting);
@@ -43,14 +47,21 @@ public class SetUpMeeting extends AppCompatActivity {
         durations.add("270 minutes (4.5 hours)");
         durations.add("300 minutes (5 hours)");
         duration = "";
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,Login.USER));
+        ArrayList<String> friendTemp = new ArrayList<String>();
+        for(int i=0; i<Login.USERZHU.getFriends().size();i++){
+            friendTemp.add(Login.USERZHU.getFriends().get(i).get(0));
+        }
+
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,friendTemp));
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 year = dp.getYear();
                 month = (dp.getMonth()+1);
                 day = dp.getDayOfMonth();
-             Log.e("Picked Date", "year: " + year + " month: " + month + " day: " + day);
+             //   Log.i("Picked Date", "year: " + year + " month: " + month + " day: " + day);
+             //   Log.i("Duration", "Duration: " + duration);
                 Intent intentBack = new Intent(getApplicationContext(), MakeAMeeting.class);
             }
         });
