@@ -42,8 +42,7 @@ public class MakeAMeeting extends AppCompatActivity {
         events.add("More fun with Aditya");
         events.add("homework");
         events.add("JK just more aditya");
-        User.setEvents(events);
-        User.setAllFriends(friends);
+        //User.setFriends(friends);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_a_meeting);
         mainButt = (Button) findViewById(R.id.makemeetingbutt);
@@ -156,10 +155,10 @@ public class MakeAMeeting extends AppCompatActivity {
         mainTextView.setVisibility(View.VISIBLE);
         endDatePicker.setVisibility(View.INVISIBLE);
         mainTextView.setText("Pick Friends");
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, User.friends);
+       // ArrayAdapter<String> itemsAdapter =
+      //          new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, User.friends);
 
-        mainListView.setAdapter(itemsAdapter);
+     //   mainListView.setAdapter(itemsAdapter);
         mainButt.setText("Set Up A Meeting");
         mainButt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,14 +182,12 @@ public class MakeAMeeting extends AppCompatActivity {
         existingList.setVisibility(View.VISIBLE);
         existingText.setVisibility(View.VISIBLE);
         existingText.setText("Existing Meetings");
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, User.events);
-        existingList.setAdapter(itemsAdapter);
+        //ArrayAdapter<String> itemsAdapter =
+        //       new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, User.getEventNameAndFriends());
+       // existingList.setAdapter(itemsAdapter);
         existingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //here you can use the position to determine what checkbox to check
-                //this assumes that you have an array of your checkboxes as well. called checkbox
                 existingText.setText(events.get(position));
                 data=events.get(position);
                 existingThirdView();

@@ -133,7 +133,7 @@ public class Schedule extends Activity
                ArrayList<String> temp = new ArrayList<String>();
                eventStrings.remove(0);
                temp.addAll(eventStrings);
-               theUser.setEvents(temp);
+               //theUser.setEvents(temp);
                intentSendBack.putExtra("testUser", theUser);
                startActivity(intentSendBack);
             }

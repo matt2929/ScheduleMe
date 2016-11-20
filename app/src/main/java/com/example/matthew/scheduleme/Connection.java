@@ -39,15 +39,15 @@ public class Connection extends AppCompatActivity {
         friendsCount = 0;
         Intent intent = getIntent();
         thisU = (user) intent.getSerializableExtra("testUser");
-        friendsCount = thisU.getAllFriends().size();
+        friendsCount = thisU.getFriends().size();
         friendsList = (EditText) findViewById(R.id.friendsText);
         text = "";
         if (friendsCount > 0) {
             for (int i=0;i<friendsCount;i++) {
                 if (i == friendsCount-1) {
-                    text = text + thisU.getAllFriends().get(i);
+                    text = text + thisU.getFriends().get(i);
                 }else{
-                    text = text + thisU.getAllFriends().get(i) + "\n";
+                    text = text + thisU.getFriends().get(i) + "\n";
                 }
             }
             friendsList.setText(text);
