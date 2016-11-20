@@ -46,28 +46,6 @@ public class MakeAMeeting extends AppCompatActivity {
         createMeeting = (Button) findViewById(R.id.setup_meeting);
         setupMeeting = new Dialog(this);
 
-        days = new String[] {
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-                "11", "12", "13", "14", "15", "16", "17", "18", "19",
-                "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
-        };
-        months = new String[] {
-            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-        };
-        years = new String[] {
-            "2016", "2017", "2018", "2019", "2020", "2021", "2022"
-        };
-        durations = new String[] {
-            "30 minutes", "1 hour", "1 hour & 30 minutes", "2 hours", "2 hours & 30 minutes", "3 hours", "3 hours & 30 minutes",
-                "4 hours", "4 hours & 30 minutes", "5 hours"
-        };
-        friends = new String[thisU.getAllFriends().size()];
-        if (thisU.getAllFriends() != null) {
-            for (int i = 0; i < thisU.getAllFriends().size(); i++) {
-                friends[i] = thisU.getAllFriends().get(i);
-            }
-        }
-
         createMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
