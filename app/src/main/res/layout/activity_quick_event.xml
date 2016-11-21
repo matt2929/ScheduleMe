@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@drawable/userhome_image">
+
+
+        <TextView
+            android:text="Create a quick event!"
+            android:fontFamily="cursive"
+            android:textSize="30sp"
+            android:textColor="#ff0000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6.63" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Enter event's name"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColorHint="#0000ff"
+            android:textSize="20dp"
+            android:ems="10"
+            android:id="@+id/texteventname"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Enter Location"
+            android:ems="10"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColorHint="#0000ff"
+            android:textSize="20dp"
+            android:id="@+id/editlocation"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Enter Start Date as YYYY-MM-DD"
+            android:textColorHint="#0000ff"
+            android:textSize="20dp"
+            android:id="@+id/editstartdate"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Enter Start Time as HH:MM"
+            android:textColorHint="#0000ff"
+            android:textSize="20dp"
+            android:id="@+id/editstarttime"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Enter End Date as YYYY-MM-DD"
+            android:textColorHint="#0000ff"
+            android:textSize="20dp"
+            android:id="@+id/editenddate"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Enter End Time as HH:MM"
+            android:textColorHint="#0000ff"
+            android:textSize="20dp"
+            android:id="@+id/editendtime"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Enter attendes email"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textSize="20dp"
+            android:textColorHint="#0000ff"
+            android:id="@+id/editTime"
+            android:layout_weight="6.63"
+            android:textIsSelectable="false" />
+
+        <Button
+            android:text="SAVE"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonsaveEE"
+            android:textColor="#ffffff"
+            android:background="#0078ff"
+            android:textSize="20dp"
+            android:layout_weight="6.63" />
+
+</LinearLayout>
