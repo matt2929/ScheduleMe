@@ -130,7 +130,6 @@ public class Schedule extends Activity
                if (eventStrings != null) {
                    temp.addAll(eventStrings);
                }
-               new HttpSendEventDank();
                intentSendBack.putExtra("testUser", theUser);
                startActivity(intentSendBack);
             }
@@ -702,6 +701,7 @@ public class Schedule extends Activity
             } else {
                 output.add(0, "Your Current Events: ");
                 mOutputText.setText(TextUtils.join("\n\n", output));
+                new HttpSendEventDank();
             }
         }
 

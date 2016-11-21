@@ -69,7 +69,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void signIn(){
         Intent signInIntent=Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
     }
 
     @Override
