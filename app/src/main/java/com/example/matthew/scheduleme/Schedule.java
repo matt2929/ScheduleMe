@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -51,13 +53,19 @@ import java.util.Map;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import android.net.Uri;
+
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
     ProgressDialog mProgress;
     QuickEventNext qen;
-    List<String> eventStrings;
+    ArrayList<String> eventStrings;
     Button sendData;
     user theUser;
     //TextView mMeeting;
@@ -487,6 +495,7 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
+            new HttpSendEventDank().execute();
             return eventStrings;
         }
         /*
@@ -716,5 +725,31 @@ public class Schedule extends Activity
             }
         }
     }
-
+    public class HttpSendEventDank extends AsyncTask<Void, Void, Greeting> {
+        @Override
+        protected Greeting doInBackground(Void... params) {
+            ObjectMapper mapper = new ObjectMapper();
+            String url = "http://warmachine.cse.buffalo.edu:"+Login.values+"/update_events";
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+            String jsonInString = "";
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new ResourceHttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+            Login.USERZHU.setSchedule(eventStrings);
+            String stringThis= restTemplate.postForObject(url,Login.USERZHU,String.class);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Greeting greeting) {
+            Log.e("I pushed to server","I pushed to server");
+        }
+    }
 }
