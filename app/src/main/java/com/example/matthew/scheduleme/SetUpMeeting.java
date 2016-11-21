@@ -85,7 +85,7 @@ public class SetUpMeeting extends AppCompatActivity {
                 Log.e("Picked Friends", "" + friendTemp);
 
                 Intent intentBack = new Intent(getApplicationContext(), DakotaUltimatum.class);
-               startActivity( intentBack);
+                startActivity(intentBack);
                 /* for(String s:friendTemp){
                     new HttpRequestTask2(s).execute();
                 }*/

@@ -126,7 +126,9 @@ public class Schedule extends Activity
              //   new HttpTaskPost().execute();
                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
                ArrayList<String> temp = new ArrayList<String>();
-               temp.addAll(eventStrings);
+               if (eventStrings != null) {
+                   temp.addAll(eventStrings);
+               }
                //theUser.setEvents(temp);
                intentSendBack.putExtra("testUser", theUser);
                startActivity(intentSendBack);
@@ -366,6 +368,7 @@ public class Schedule extends Activity
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
+                
                 return getDataFromApi();
             } catch (Exception e) {
                 mLastError = e;
@@ -418,7 +421,7 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
-            new HttpSendEventDank().execute();
+       //     new HttpSendEventDank().execute();
             return eventStrings;
         }
 
