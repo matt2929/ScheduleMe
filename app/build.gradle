@@ -41,9 +41,6 @@ dependencies {
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile('com.google.apis:google-api-services-gmail:v1-rev49-1.22.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
     compile('com.google.apis:google-api-services-calendar:v3-rev213-1.22.0') {
