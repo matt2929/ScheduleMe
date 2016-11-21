@@ -42,7 +42,7 @@ public class DakotaUltimatum extends AppCompatActivity {
         for(int y=0;y<24;y++){
             if(Schedule.freetime.charAt(y)=='T'){
                 if(y==0){
-                        finalfreetime.add("12 AM");
+                    finalfreetime.add("12 AM");
                 }
                 else if(y>12){
                     int asd = y;
@@ -115,7 +115,7 @@ public class DakotaUltimatum extends AppCompatActivity {
         String date;
         String startTime, endTime;
         public int getMonth(){
-          return Integer.valueOf(date.split("-")[1]);
+            return Integer.valueOf(date.split("-")[1]);
         }
         public int getDay(){
             return Integer.valueOf(date.split("-")[2]);

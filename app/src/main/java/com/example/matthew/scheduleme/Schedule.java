@@ -127,15 +127,16 @@ public class Schedule extends Activity
         Intent i = getIntent();
         theUser = (user) i.getSerializableExtra("testUser");
         sendData.setOnClickListener(new View.OnClickListener() {
-           @Override
+            @Override
             public void onClick(View v) {
-               Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
-               ArrayList<String> temp = new ArrayList<String>();
-               if (eventStrings != null) {
-                   temp.addAll(eventStrings);
-               }
-               intentSendBack.putExtra("testUser", theUser);
-               startActivity(intentSendBack);
+                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
+                ArrayList<String> temp = new ArrayList<String>();
+                if (eventStrings != null) {
+                    temp.addAll(eventStrings);
+                }
+                new HttpSendEventDank();
+                intentSendBack.putExtra("testUser", theUser);
+                startActivity(intentSendBack);
             }
         });
         activityLayout.addView(mOutputText);
@@ -385,40 +386,40 @@ public class Schedule extends Activity
          */
         private List<String> getDataFromApi() throws IOException {
 
-                if(QuickEventNext.writer==1) {
-                    QuickEventNext.writer=0;
-                    Event eve = new Event()
-                            .setSummary(QuickEventNext.eventN)
-                            .setLocation(QuickEventNext.locationN);
+            if(QuickEventNext.writer==1) {
+                QuickEventNext.writer=0;
+                Event eve = new Event()
+                        .setSummary(QuickEventNext.eventN)
+                        .setLocation(QuickEventNext.locationN);
 
-                    DateTime datetimeE = new DateTime(QuickEventNext.startdateN + "T" + QuickEventNext.starttimeN + ":00-05:00");
-                    EventDateTime startE = new EventDateTime()
-                            .setDateTime(datetimeE)
-                            .setTimeZone("America/New_York");
-                    eve.setStart(startE);
+                DateTime datetimeE = new DateTime(QuickEventNext.startdateN + "T" + QuickEventNext.starttimeN + ":00-05:00");
+                EventDateTime startE = new EventDateTime()
+                        .setDateTime(datetimeE)
+                        .setTimeZone("America/New_York");
+                eve.setStart(startE);
 
-                    DateTime dateTimeEnd = new DateTime(QuickEventNext.enddateN + "T" + QuickEventNext.endtimeN + ":00-05:00");
-                    EventDateTime startEnd = new EventDateTime()
-                            .setDateTime(dateTimeEnd)
-                            .setTimeZone("America/New_York");
-                    eve.setEnd(startEnd);
+                DateTime dateTimeEnd = new DateTime(QuickEventNext.enddateN + "T" + QuickEventNext.endtimeN + ":00-05:00");
+                EventDateTime startEnd = new EventDateTime()
+                        .setDateTime(dateTimeEnd)
+                        .setTimeZone("America/New_York");
+                eve.setEnd(startEnd);
 
-                    String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
-                    eve.setRecurrence(Arrays.asList(recurrence));
+                String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
+                eve.setRecurrence(Arrays.asList(recurrence));
 
-                    EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
-                    for (int i =0; i<qen.friendsList.size();i++){
-                        attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
-                    }
-                    eve.setAttendees(Arrays.asList(attendees));
-
-                    String calendarId = "primary";
-
-                    eve = mService.events().insert(calendarId, eve).execute();
-                    System.out.printf("Event created: %s\n", eve.getHtmlLink());
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
-                    startActivity(browserIntent);
+                EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
+                for (int i =0; i<qen.friendsList.size();i++){
+                    attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
                 }
+                eve.setAttendees(Arrays.asList(attendees));
+
+                String calendarId = "primary";
+
+                eve = mService.events().insert(calendarId, eve).execute();
+                System.out.printf("Event created: %s\n", eve.getHtmlLink());
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
+                startActivity(browserIntent);
+            }
 //            Event evenT = new Event()
 //                    .setSummary("Testing")
 //                    .setLocation("In lab")
@@ -501,7 +502,7 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
-         //   new HttpSendEventDank().execute();
+            //   new HttpSendEventDank().execute();
 
             if(SetUpMeeting.check==1){
 
@@ -613,33 +614,46 @@ public class Schedule extends Activity
             for(int i = 0; i<24; i++){
                 twentyfour[i]=a;
                 a++;
-        //        System.out.println("A");
+                //        System.out.println("A");
             }
-          //  System.out.println("B");
+            //  System.out.println("B");
             int j=0;
             System.out.println(resultDate.size());
             for(int k = 0;k<24;k++){
-                if(j<=resultDate.size()) {
+                if(j<resultDate.size()) {
                     //System.out.println("Itsasdfda");
-                    if (twentyfour[k] == resultDate.get(j)) {
+                    System.out.println("Check 1 " +twentyfour[k]);
+                    System.out.println("Check 2 "+resultDate.get(j));
+                    if (twentyfour[k]==resultDate.get(j)) {
+
                         twehr[k] = "F";
                         j = j + 2;
-                      //  System.out.println("B");
+                          System.out.println("B");
                     }else{
-                        //System.out.println("C");
+                        System.out.println("C");
                         twehr[k]="T";
                     }
                 }else{
-                   // System.out.println("D");
+                     System.out.println("D");
                     twehr[k]="T";
                 }
             }
-
+//            int p=0;
+//            for(int k=0; k<24;k++){
+//                if(resultDate.get(p)==twentyfour[k] && p<=resultDate.size()){
+//                    twehr[k]="F";
+//                    System.out.println("C");
+//                    p=p+2;
+//                }else{
+//                    twehr[k]="T";
+//                    System.out.println("D");
+//                }
+//
             for(int z=0; z<twehr.length;z++) {
                 freetime=freetime+twehr[z];
 
             }
-            System.out.println(freetime);
+            System.out.println("Freetime"+freetime);
 //            String[] finalfreetime=new String[24];
 //            for(int y=0;y<24;y++){
 //                if(freetime.charAt(y)=='T'){
@@ -678,7 +692,7 @@ public class Schedule extends Activity
             return endtime;
         }
 
-//        public void createFreeTime(){
+        //        public void createFreeTime(){
 //            int[] twentyfour = new int[24];
 //            int a = 0;
 //            for(int i = 0; i<24; i++){
@@ -752,37 +766,37 @@ public class Schedule extends Activity
             //Ask for a meeting name from user
             //mMeeting.setVisibility(View.VISIBLE);
 
-                    Event eve = new Event()
-                .setSummary(qen.eventN)
-                .setLocation(qen.locationN);
+            Event eve = new Event()
+                    .setSummary(qen.eventN)
+                    .setLocation(qen.locationN);
 
-        DateTime datetimeE = new DateTime(qen.startdateN+"T"+qen.starttimeN+":00-04:00");
-        EventDateTime startE = new EventDateTime()
-                .setDateTime(datetimeE)
-                .setTimeZone("America/New_York");
-        eve.setStart(startE);
+            DateTime datetimeE = new DateTime(qen.startdateN+"T"+qen.starttimeN+":00-04:00");
+            EventDateTime startE = new EventDateTime()
+                    .setDateTime(datetimeE)
+                    .setTimeZone("America/New_York");
+            eve.setStart(startE);
 
-        DateTime dateTimeEnd = new DateTime(qen.enddateN+"T"+qen.endtimeN+":00-04:00");
-        EventDateTime startEnd = new EventDateTime()
-                .setDateTime(dateTimeEnd)
-                .setTimeZone("America/New_York");
-        eve.setEnd(startEnd);
+            DateTime dateTimeEnd = new DateTime(qen.enddateN+"T"+qen.endtimeN+":00-04:00");
+            EventDateTime startEnd = new EventDateTime()
+                    .setDateTime(dateTimeEnd)
+                    .setTimeZone("America/New_York");
+            eve.setEnd(startEnd);
 
-        String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
             eve.setRecurrence(Arrays.asList(recurrence));
 
             EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
-        for (int i =0; i<qen.friendsList.size();i++){
-            attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
-        }
+            for (int i =0; i<qen.friendsList.size();i++){
+                attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
+            }
             eve.setAttendees(Arrays.asList(attendees));
 
-        String calendarId = "primary";
+            String calendarId = "primary";
 
-        eve = mService.events().insert(calendarId, eve).execute();
-        System.out.printf("Event created: %s\n", eve.getHtmlLink());
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
-        startActivity(browserIntent);
+            eve = mService.events().insert(calendarId, eve).execute();
+            System.out.printf("Event created: %s\n", eve.getHtmlLink());
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
+            startActivity(browserIntent);
 
         }
 
@@ -791,7 +805,7 @@ public class Schedule extends Activity
             mOutputText.setText("");
             //mProgress.hide();
             if(mProgress.isIndeterminate())
-            mProgress.show();
+                mProgress.show();
         }
 
         @Override
@@ -802,7 +816,6 @@ public class Schedule extends Activity
             } else {
                 output.add(0, "Your Current Events: ");
                 mOutputText.setText(TextUtils.join("\n\n", output));
-                new HttpSendEventDank();
             }
         }
 

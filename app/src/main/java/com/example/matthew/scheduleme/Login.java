@@ -69,6 +69,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void signIn(){
         Intent signInIntent=Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
+
     }
 
     @Override
@@ -80,7 +81,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 handleSignInResult(result);
             }
         }
-       // super.onBackPressed();
+        // super.onBackPressed();
     }
     private void handleSignInResult(GoogleSignInResult result){
         Log.d(TAG,"handleSignInResult:"+result.isSuccess());
@@ -88,7 +89,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             acct = result.getSignInAccount();
 
 //            System.out.println("ACCTCTCTCTCTCTCTCTC EMAILLLLL"+acct.getEmail());
-           // mStatusTextView.setText(getString(R.string.sign_in_fmt,acct.getDisplayName()));
+            // mStatusTextView.setText(getString(R.string.sign_in_fmt,acct.getDisplayName()));
             updateUI(true);
         }else{
             updateUI(false);
@@ -146,7 +147,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             username usertemp=new username();
             try {
                 Log.e("json returned",stringThis);
-              TheUser=  mapper.readValue(stringThis, user.class);
+                TheUser=  mapper.readValue(stringThis, user.class);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -162,15 +163,15 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             ObjectMapper objectMapper = new ObjectMapper();
 
             Log.e("greet","value"+stringThis);
-           try {
+            try {
                 USERZHU = objectMapper.readValue(stringThis, user.class);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("Cant Convert!!!","no");
             }catch (Exception e){
 
-           }
-        //    Log.e("sys", USERZHU.getSentInvites().get(0).getFriendsAccepted().get(0).get(0));
+            }
+            //    Log.e("sys", USERZHU.getSentInvites().get(0).getFriendsAccepted().get(0).get(0));
         }
     }
 
@@ -221,7 +222,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         @Override
         protected void onPostExecute(Greeting greeting) {
-        Log.e("I ran","I ran");
+            Log.e("I ran","I ran");
         }
     }
 
