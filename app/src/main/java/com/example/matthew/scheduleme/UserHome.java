@@ -80,6 +80,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
     Button signOut;
     Button viewFriends;
     Button manageEvents;
+    Button quickEvents;
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
     user thisUser;
@@ -94,7 +95,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         // for connection class
         Intent intent = getIntent();
-        thisUser = (user) intent.getSerializableExtra("testUser");
+        thisUser = Login.USERZHU;
         //thisUser.setFriends(new ArrayList<String>());
         ArrayList<String> testFriends = new ArrayList<String>();
         String one = "Jimmy Johns";
@@ -133,6 +134,15 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        quickEvents = (Button) findViewById(R.id.updateCalendar);
+        quickEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentQuick = new Intent(getApplicationContext(), QuickEventNext.class);
+                startActivity(intentQuick);
+            }
+        });
+
         viewFriends = (Button) findViewById(R.id.userhomeconnections);
         viewFriends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +174,7 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
                 });
 
         put = (TextView) findViewById(R.id.postname);
-        put.setText(thisUser.getName());
+        put.setText(Login.USERZHU.getName());
         testPost = (Button) findViewById(R.id.takethenamebelowandpost);
         testPost.setOnClickListener(new View.OnClickListener() {
             @Override
