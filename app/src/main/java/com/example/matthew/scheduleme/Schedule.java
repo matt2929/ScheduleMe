@@ -473,7 +473,7 @@ public class Schedule extends Activity
                 compareEvent();
                 ComparStarEndTimes(start, end);
                 eventStrings.add(
-                        String.format("%s \nEvent starting on %s \nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
+                        String.format("%s\nEvent starting on %s\nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
             }
             // Compare users time frames given
             // Step 3a
