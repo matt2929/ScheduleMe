@@ -400,11 +400,13 @@ public class Schedule extends Activity
                     // All-day events don't have start times, so just use
                     // the start date.
                     start = event.getStart().getDate();
+                    end = event.getEnd().getDateTime();
                 }
-                //parseEndTime(end);
-                //ComparStarEndTimes(start, end);
-                eventStrings.add(
-                        String.format("%s", event.getSummary()));
+                eventStrings.add(event.getSummary()
+                        +","+(""+(event.getStart().getDateTime())).split("T")[0]
+                        +","+(""+(event.getStart().getDateTime())).split("T")[1]
+                        +","+(""+(event.getEnd().getDateTime())).split("T")[0]
+                        +","+(""+(event.getEnd().getDateTime())).split("T")[1]);
             }
             // Compare users time frames given
             // Step 3a

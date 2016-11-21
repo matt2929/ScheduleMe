@@ -39,6 +39,8 @@ TextView text;
      */
     private void compareEvent()
     {
+
+
         // Map to hold the event along with the corresponding start and end time
         // Added hardcoded data
         Map<Event, ArrayList<DateTime>> bob = new HashMap<>();
@@ -46,6 +48,8 @@ TextView text;
         // Times to hardcode events...
         Event bobeve_1 = new Event().setSummary("Study For 331").setLocation("Lockwood").setDescription("Studying for Final");
         Event timeve_1 = new Event().setSummary("Study For 331").setLocation("Lockwood").setDescription("Studying for Final");
+
+
         // Start Time of all events
         DateTime bobstart = new DateTime("2016-11-21T08:00:00-04:00");
         DateTime timstart = new DateTime("2016-11-21T10:00:00-04:00");
