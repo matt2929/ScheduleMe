@@ -9,6 +9,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.client.util.DateTime;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,119 +19,109 @@ import java.util.Date;
 import java.util.Calendar;
 
 public class DakotaUltimatum extends AppCompatActivity {
-TextView text;
+    TextView text;
     static String duration;
     int year, month, day;
-    ArrayList<ArrayList<String>> temp=SetUpMeeting.friendsEvents;//array list where index 0 is name and everything else is the event data.
+    ArrayList<ArrayList<String>> temp = SetUpMeeting.friendsEvents;//array list where index 0 is name and everything else is the event data.
+    ArrayList<ArrayList<ZhuZhuEvent>> eventArray = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         year = SetUpMeeting.year;
-        month=SetUpMeeting.month;
-        day=SetUpMeeting.day;
-        duration =  SetUpMeeting.duration;
+        month = SetUpMeeting.month;
+        day = SetUpMeeting.day;
+        duration = SetUpMeeting.duration;
         setContentView(R.layout.activity_dakota_ultimatum);
         text = (TextView) findViewById(R.id.dakotasSolution);
-        compareEvent();
+        ArrayList<ZhuZhuEvent> zhuZhuEvents=new ArrayList<>();
+if(Login.USERZHU.getSchedule().size()>0) {
+    for (int j = 1; j < Login.USERZHU.getSchedule().size(); j++) {
+        ZhuZhuEvent tempE = new ZhuZhuEvent();
+        tempE.setDate(getStartDateFromString(Login.USERZHU.getSchedule().get(j)));
+        tempE.setEndTime(getEndTimeFromString(Login.USERZHU.getSchedule().get(j)));
+        tempE.setStartTime(getEndTimeFromString(Login.USERZHU.getSchedule().get(j)));
+        zhuZhuEvents.add(tempE);
     }
-    /*
-     * Written by: Dakota Lester
-     */
-    private void compareEvent()
-    {
-
-
-        // Map to hold the event along with the corresponding start and end time
-        // Added hardcoded data
-        Map<Event, ArrayList<DateTime>> bob = new HashMap<>();
-        Map<Event, ArrayList<DateTime>> tim = new HashMap<>();
-        // Times to hardcode events...
-        Event bobeve_1 = new Event().setSummary("Study For 331").setLocation("Lockwood").setDescription("Studying for Final");
-        Event timeve_1 = new Event().setSummary("Study For 331").setLocation("Lockwood").setDescription("Studying for Final");
-
-
-        // Start Time of all events
-        DateTime bobstart = new DateTime("2016-11-21T08:00:00-04:00");
-        DateTime timstart = new DateTime("2016-11-21T10:00:00-04:00");
-        EventDateTime bobtime = new EventDateTime().setDateTime(bobstart).setTimeZone("America/New_York");
-        EventDateTime timtime = new EventDateTime().setDateTime(timstart).setTimeZone("America/New_York");
-        bobeve_1.setStart(bobtime);
-        timeve_1.setStart(timtime);
-        // End Time of all events
-        DateTime bobendDateTime = new DateTime("2016-11-21T09:00:00-04:00");
-        DateTime timendDateTime = new DateTime("2016-11-21T11:00:00-04:00");
-        EventDateTime bobend = new EventDateTime().setDateTime(bobendDateTime).setTimeZone("America/New_York");
-        EventDateTime timend = new EventDateTime().setDateTime(timendDateTime).setTimeZone("America/New_York");
-        bobeve_1.setEnd(bobend);
-        timeve_1.setEnd(timend);
-        // Hardcode ends
-        // Algo begins
-        ArrayList<DateTime> bobstimes = new ArrayList<>();
-        ArrayList<DateTime> timstimes = new ArrayList<>();
-        // User 1
-        bobstimes.add(bobstart);
-        bobstimes.add(bobendDateTime);
-        bob.put(bobeve_1, bobstimes);
-        // User 2
-        timstimes.add(timstart);
-        timstimes.add(timendDateTime);
-        tim.put(timeve_1, timstimes);
-        // Comparisons start (2 people)
-        // Converts the value to milliseconds
-        // where 3600000 = 1 hr
-        for(int i = 0; i < bobstimes.size(); i++)
-        {
-            ArrayList<Long> diffintimes = new ArrayList<>();
-            try {
-                // Initial difference of each users events (duration of there event)
-                long diff_b = bobstimes.get(i + 1).getValue() - bobstimes.get(i).getValue();
-                long diff_t = timstimes.get(i + 1).getValue() - timstimes.get(i).getValue();
-                // Converrt to minutes
-                long diffmin_b = TimeUnit.MILLISECONDS.toMinutes(diff_b);
-                long diffmin_t = TimeUnit.MILLISECONDS.toMinutes(diff_t);
-                diffintimes.add(diffmin_b);
-                diffintimes.add(diffmin_t);
-            } catch (IndexOutOfBoundsException e)
-            {
-                break;
+    eventArray.add(zhuZhuEvents);
+}
+        for(int i=0;i<temp.size();i++){
+            ArrayList<ZhuZhuEvent> tempzhuZhuEvents=new ArrayList<>();
+            for(int j=1;j<temp.get(i).size();j++){
+                ZhuZhuEvent tempE=new ZhuZhuEvent();
+                 tempE.setDate(getStartDateFromString(temp.get(i).get(j)));
+                tempE.setEndTime(getEndTimeFromString(temp.get(i).get(j)));
+                tempE.setStartTime(getEndTimeFromString(temp.get(i).get(j)));
+                tempzhuZhuEvents.add(tempE);
             }
-            // If conditions for free time
-            if(bobstart.isDateOnly() || timstart.isDateOnly())
-            {
-                text.setText("There are no available free times, sorry :(");
-            }
-            if((timstart.getValue() - bobendDateTime.getValue()) <= 0
-                    || (bobstart.getValue() - timendDateTime.getValue()) <= 0)
-            {
-                text.setText("There are no available free times, sorry :(");
-            }
-            if((timstart.getValue() - bobendDateTime.getValue()) > 0) {
-                text.setText("There is free time available as follows:");
-                // Gets current time
-                try {
-                    for (int j = 0; j < 5; j++) {
-                        // Gets current time
-                        Date date = new Date();
-                        // Output
-                        ArrayList<String> moretimes = new ArrayList<>();
-                        // Makes the output look nice
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(date);
-                        // Add 30 minutes to the calendar free times
-                        cal.add(Calendar.MINUTE, 30);
-                        moretimes.add(sdf.format(cal.getTime()));
-                        // settext does not display all the complete list of times
-                        // as of now it will only display the previous message and
-                        // current time no looping can be done with setText
-                        text.setText(text.getText() + "\n" + moretimes.get(j));
-                    }
-                }catch (IndexOutOfBoundsException e)
-                {
-                    break;
-                }
-            }
+            eventArray.add(tempzhuZhuEvents);
         }
+    }
+
+    public String getStartDateFromString(String s) {
+        Log.i("getStartDateFromString", s.split("\n")[1].substring(18, 28));
+        return s.split("\n")[1].substring(18, 28);
+    }
+
+    public String getEndDateFromString(String s) {
+        Log.i("getEndDateFromString", s.split("\n")[2].substring(17, 27));
+        return s.split("\n")[2].substring(17, 27);
+    }
+
+    public String getStartTimeFromString(String s) {
+        Log.i("getStartTimeFromString", s.split("\n")[1].substring(28));
+        return s.split("\n")[1].substring(28);
+
+    }
+
+    public String getEndTimeFromString(String s) {
+        Log.i("getEndTimeFromString", s.split("\n")[2].substring(30));
+        return s.split("\n")[2].substring(30);
+
+    }
+
+    public class ZhuZhuEvent {
+        String date;
+        String startTime, endTime;
+        public int getMonth(){
+          return Integer.valueOf(date.split("-")[1]);
+        }
+        public int getDay(){
+            return Integer.valueOf(date.split("-")[2]);
+        }
+        public int getYear(){
+            return Integer.valueOf(date.split("-")[0]);
+        }
+
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
+        }
+
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
+
+    }
+
+
+    public ArrayList<ArrayList<String>> getTemp() {
+        return temp;
     }
 }
