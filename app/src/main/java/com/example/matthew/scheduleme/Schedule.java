@@ -127,7 +127,10 @@ public class Schedule extends Activity
             public void onClick(View v) {
                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
                ArrayList<String> temp = new ArrayList<String>();
-               temp.addAll(eventStrings);
+               if (eventStrings != null) {
+                   temp.addAll(eventStrings);
+               }
+               new HttpSendEventDank();
                intentSendBack.putExtra("testUser", theUser);
                startActivity(intentSendBack);
             }
@@ -363,7 +366,8 @@ public class Schedule extends Activity
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                return getDataFromApi();
+                getDataFromApi();
+                return eventStrings;
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -376,7 +380,7 @@ public class Schedule extends Activity
          * @return List of Strings describing returned events.
          * @throws IOException
          */
-        private List<String> getDataFromApi() throws IOException {
+        private void getDataFromApi() throws IOException {
 
                 if(QuickEventNext.writer==1) {
                     QuickEventNext.writer=0;
@@ -399,12 +403,11 @@ public class Schedule extends Activity
                     String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
                     eve.setRecurrence(Arrays.asList(recurrence));
 
-                    for (int i = 0; i < QuickEventNext.friendsList.size(); i++) {
-                      EventAttendee[] attendees = new EventAttendee[]{
-                                new EventAttendee().setEmail(QuickEventNext.friendsList.get(i)),
-                        };
-                        eve.setAttendees(Arrays.asList(attendees));
+                    EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
+                    for (int i =0; i<qen.friendsList.size();i++){
+                        attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
                     }
+                    eve.setAttendees(Arrays.asList(attendees));
 
                     String calendarId = "primary";
 
@@ -495,8 +498,7 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
-            new HttpSendEventDank().execute();
-            return eventStrings;
+         //   new HttpSendEventDank().execute();
         }
         /*
         * Written by: Dakota Lester
@@ -669,12 +671,11 @@ public class Schedule extends Activity
         String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
             eve.setRecurrence(Arrays.asList(recurrence));
 
+            EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
         for (int i =0; i<qen.friendsList.size();i++){
-            EventAttendee[] attendees = new EventAttendee[]{
-                    new EventAttendee().setEmail(qen.friendsList.get(i)),
-            };
-            eve.setAttendees(Arrays.asList(attendees));
+            attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
         }
+            eve.setAttendees(Arrays.asList(attendees));
 
         String calendarId = "primary";
 
