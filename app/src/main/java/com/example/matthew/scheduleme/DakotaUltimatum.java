@@ -21,11 +21,11 @@ import java.util.Calendar;
 public class DakotaUltimatum extends AppCompatActivity {
     TextView text;
     static String duration;
-    int year, month, day;
-    boolean[] allTimes = new boolean[24];
+    public static int year, month, day;
+    public static String dateee = "";
+
     ArrayList<ArrayList<String>> temp = SetUpMeeting.friendsEvents;//array list where index 0 is name and everything else is the event data.
     ArrayList<ArrayList<ZhuZhuEvent>> eventArray = new ArrayList<>();
-    ArrayList<ZhuZhuEvent> bigevent = new ArrayList<ZhuZhuEvent>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +36,57 @@ public class DakotaUltimatum extends AppCompatActivity {
         duration = SetUpMeeting.duration;
         setContentView(R.layout.activity_dakota_ultimatum);
         text = (TextView) findViewById(R.id.dakotasSolution);
-        ArrayList<ZhuZhuEvent> zhuZhuEvents = new ArrayList<>();
-        if (Login.USERZHU.getSchedule().size() > 0) {
-            for (int j = 1; j < Login.USERZHU.getSchedule().size(); j++) {
-                
+        int q=0;
+
+        ArrayList<String> finalfreetime=new ArrayList<>();
+        for(int y=0;y<24;y++){
+            if(Schedule.freetime.charAt(y)=='T'){
+                if(y==0){
+                    finalfreetime.add("12 AM");
+                }
+                else if(y>12){
+                    int asd = y;
+                    asd=asd-12;
+                    finalfreetime.add(asd + " PM");
+                }
+                else if(y==12){
+                    finalfreetime.add("12 PM");
+                }
+                else {
+                    finalfreetime.add(y+ " AM");
+                }
             }
-            eventArray.add(zhuZhuEvents);
         }
-        for (int i = 0; i < temp.size(); i++) {
-            ArrayList<ZhuZhuEvent> tempzhuZhuEvents = new ArrayList<>();
-            for (int j = 1; j < temp.get(i).size(); j++) {
-                ZhuZhuEvent tempE = new ZhuZhuEvent();
-                tempE.setDate(getStartDateFromString(temp.get(i).get(j)));
-                tempE.setEndTime(getEndTimeFromString(temp.get(i).get(j)));
-                tempE.setStartTime(getEndTimeFromString(temp.get(i).get(j)));
-                tempzhuZhuEvents.add(tempE);
-            }
-            eventArray.add(tempzhuZhuEvents);
+        String finalresult="";
+        for (int x =0;x<finalfreetime.size();x++){
+            finalresult=finalresult+finalfreetime.get(x) +"\n";
         }
+
+        text.setText(finalresult);
+
+//        ArrayList<ZhuZhuEvent> zhuZhuEvents=new ArrayList<>();
+//        if(Login.USERZHU.getSchedule().size()>0) {
+//    for (int j = 1; j < Login.USERZHU.getSchedule().size(); j++) {
+//        ZhuZhuEvent tempE = new ZhuZhuEvent();
+//        tempE.setDate(getStartDateFromString(Login.USERZHU.getSchedule().get(j)));
+//        tempE.setEndTime(getEndTimeFromString(Login.USERZHU.getSchedule().get(j)));
+//        tempE.setStartTime(getEndTimeFromString(Login.USERZHU.getSchedule().get(j)));
+//        zhuZhuEvents.add(tempE);
+//    }
+//    eventArray.add(zhuZhuEvents);
+//}
+//        for(int i=0;i<temp.size();i++){
+//            ArrayList<ZhuZhuEvent> tempzhuZhuEvents=new ArrayList<>();
+//            for(int j=1;j<temp.get(i).size();j++){
+//                ZhuZhuEvent tempE=new ZhuZhuEvent();
+//                 tempE.setDate(getStartDateFromString(temp.get(i).get(j)));
+//                tempE.setEndTime(getEndTimeFromString(temp.get(i).get(j)));
+//                tempE.setStartTime(getEndTimeFromString(temp.get(i).get(j)));
+//                tempzhuZhuEvents.add(tempE);
+//            }
+//            eventArray.add(tempzhuZhuEvents);
+//        }
+//        dateee =year+"-"+month+"-"+day;
     }
 
     public String getStartDateFromString(String s) {
@@ -81,16 +114,13 @@ public class DakotaUltimatum extends AppCompatActivity {
     public class ZhuZhuEvent {
         String date;
         String startTime, endTime;
-
-        public int getMonth() {
+        public int getMonth(){
             return Integer.valueOf(date.split("-")[1]);
         }
-
-        public int getDay() {
+        public int getDay(){
             return Integer.valueOf(date.split("-")[2]);
         }
-
-        public int getYear() {
+        public int getYear(){
             return Integer.valueOf(date.split("-")[0]);
         }
 
@@ -109,7 +139,6 @@ public class DakotaUltimatum extends AppCompatActivity {
 
         public void setDate(String date) {
             this.date = date;
-
         }
 
         public void setEndTime(String endTime) {
@@ -120,19 +149,28 @@ public class DakotaUltimatum extends AppCompatActivity {
             this.startTime = startTime;
         }
 
-        public String returnTheFuckingDatum(ArrayList<ArrayList<ZhuZhuEvent>> e) {
-            String timesToMeet="";
-            ArrayList<ZhuZhuEvent> BigTime = new ArrayList<>();
-            for(int i=0;i<e.size();i++){
-                for(int j=0;j<e.get(i).size();j++){
-
-                }
-            }
-        }
-        public boolean checkInteruption(ArrayList)
     }
+
 
     public ArrayList<ArrayList<String>> getTemp() {
         return temp;
     }
+
+//    public void freeTimeCreater(){
+//        ArrayList<String> starttimeList = new ArrayList<>();
+//        String freetime="";
+//        ZhuZhuEvent eventT;
+//        ArrayList<String> freetimeList = new ArrayList<>();
+//        for(int i=0;i<eventArray.size();i++){
+//            for(int j=0;j<eventArray.get(i).size();j++){
+//                String date = eventArray.get(i).get(j).getDate();
+//                if(eventT.getDate()==date) {
+//                    String starttime = eventArray.get(i).get(j).getStartTime();
+//                    starttimeList.add(starttime);
+//                }
+//            }
+//
+//        }
+//
+//    }
 }

@@ -37,10 +37,13 @@ public class SetUpMeeting extends AppCompatActivity {
     Button save;
     DatePicker dp;
     user user = new user();
+    public static int check =0;
     List<String> durations;
     Spinner spinner;
     static String duration;
+    public static String freetime = "";
     static int year, month, day;
+    public static String comparing="";
     ListView listView;
     int numReq = 0;
     int numCount = 0;
@@ -80,12 +83,14 @@ public class SetUpMeeting extends AppCompatActivity {
                 year = dp.getYear();
                 month = (dp.getMonth() + 1);
                 day = dp.getDayOfMonth();
+                comparing = year+"-"+month+"-"+day;
+                System.out.println("Date Selected:"+ comparing);
                 Log.e("Picked Date", "year: " + year + " month: " + month + " day: " + day);
                 Log.e("Duration", "Duration: " + duration);
                 Log.e("Picked Friends", "" + friendTemp);
-
-                Intent intentBack = new Intent(getApplicationContext(), DakotaUltimatum.class);
-               startActivity( intentBack);
+                check=1;
+                Intent intentBack = new Intent(getApplicationContext(), Schedule.class);
+                startActivity(intentBack);
                 /* for(String s:friendTemp){
                     new HttpRequestTask2(s).execute();
                 }*/
@@ -119,6 +124,7 @@ public class SetUpMeeting extends AppCompatActivity {
             }
         });
     }
+
 
     public class HttpRequestTask2 extends AsyncTask<Void, Void, Greeting> {
         String Name = "";
@@ -178,5 +184,5 @@ public class SetUpMeeting extends AppCompatActivity {
             }
         }
     }
-}
 
+}

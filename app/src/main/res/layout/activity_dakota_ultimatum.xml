@@ -11,7 +11,7 @@
     tools:context="com.example.matthew.scheduleme.DakotaUltimatum">
 
     <TextView
-        android:text="Here is your data"
+        android:text="Here are your free times!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
