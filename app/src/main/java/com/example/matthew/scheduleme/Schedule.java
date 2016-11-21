@@ -49,6 +49,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -67,7 +68,10 @@ public class Schedule extends Activity
     QuickEventNext qen;
     ArrayList<String> eventStrings;
     Button sendData;
+    public static int timeHourN=0;
+    public static ArrayList<Integer> resultDate = new ArrayList<>();
     user theUser;
+    public static String freetime = "";
     //TextView mMeeting;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -380,7 +384,7 @@ public class Schedule extends Activity
          * @return List of Strings describing returned events.
          * @throws IOException
          */
-        private void getDataFromApi() throws IOException {
+        private List<String> getDataFromApi() throws IOException {
 
                 if(QuickEventNext.writer==1) {
                     QuickEventNext.writer=0;
@@ -481,8 +485,8 @@ public class Schedule extends Activity
                 }
                 String startFinalValue=parseStartTime(start);
                 String endFinalValue=parseStartTime(end);
-                compareEvent();
-                ComparStarEndTimes(start, end);
+                //compareEvent();
+                //ComparStarEndTimes(start, end);
                 eventStrings.add(
                         String.format("%s\nEvent starting on %s\nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
             }
@@ -499,6 +503,15 @@ public class Schedule extends Activity
             3. End time with year/day/month in military time
              */
          //   new HttpSendEventDank().execute();
+
+            if(SetUpMeeting.check==1){
+
+                createFreeTime();
+                SetUpMeeting.check=0;
+                Intent intent2 = new Intent(getApplicationContext(),DakotaUltimatum.class);
+                startActivity(intent2);
+            }
+            return eventStrings;
         }
         /*
         * Written by: Dakota Lester
@@ -570,6 +583,13 @@ public class Schedule extends Activity
             String[] startA = startZ.split(":");
             String startB=startA[0];
             int timeHour = Integer.parseInt(startX);
+            timeHourN = Integer.parseInt(startX);
+            System.out.println(startdate);
+            //change this condition to something good
+            if(startdate.equals(SetUpMeeting.comparing) && SetUpMeeting.check==1) {
+                resultDate.add(timeHourN);
+            }
+            System.out.println(resultDate+"asdhoashdiasd");
             String AmPm = "";
             if(timeHour<12){
                 AmPm="AM";
@@ -580,9 +600,68 @@ public class Schedule extends Activity
                 }
                 AmPm="PM";
             }
+            System.out.println(timeHourN);
             //int startZ= Integer.parseInt(startX);
             String startFinal=startdate + " at "+ timeHour+":"+startB+" "+AmPm;
             return startFinal;
+        }
+
+
+        public void createFreeTime(){
+            int[] twentyfour = new int[24];
+            String[] twehr = new String[24];
+            int a = 0;
+            for(int i = 0; i<24; i++){
+                twentyfour[i]=a;
+                a++;
+        //        System.out.println("A");
+            }
+          //  System.out.println("B");
+            int j=0;
+            System.out.println(resultDate.size());
+            for(int k = 0;k<24;k++){
+                if(j<=resultDate.size()) {
+                    //System.out.println("Itsasdfda");
+                    if (twentyfour[k] == resultDate.get(j)) {
+                        twehr[k] = "F";
+                        j = j + 2;
+                      //  System.out.println("B");
+                    }else{
+                        //System.out.println("C");
+                        twehr[k]="T";
+                    }
+                }else{
+                   // System.out.println("D");
+                    twehr[k]="T";
+                }
+            }
+
+            for(int z=0; z<twehr.length;z++) {
+                freetime=freetime+twehr[z];
+
+            }
+            System.out.println(freetime);
+//            String[] finalfreetime=new String[24];
+//            for(int y=0;y<24;y++){
+//                if(freetime.charAt(y)=='T'){
+//                    if(y==0){
+//                        finalfreetime[y] = "12 AM";
+//                    }
+//                    else if(y>12){
+//                        y=y-12;
+//                        finalfreetime[y] = y + " PM";
+//                    }
+//                    else if(y==12){
+//                        finalfreetime[y] = "12 PM";
+//                    }
+//                    else {
+//                        finalfreetime[y] = y + "AM";
+//                    }
+//                }
+//            }
+//            for (int x =0;x<24;x++){
+//                System.out.println(finalfreetime[x]);
+//            }
         }
         /*
         * Written by Dakota Lester
@@ -599,6 +678,28 @@ public class Schedule extends Activity
             String endtime = endTimeForm[1];
             return endtime;
         }
+
+//        public void createFreeTime(){
+//            int[] twentyfour = new int[24];
+//            int a = 0;
+//            for(int i = 0; i<24; i++){
+//                twentyfour[i]=a;
+//                a++;
+//            }
+//            String freetimestring="";
+//            int j=0;
+//            for(int i=0; i<24; i++) {
+////                for (int j=0; j<resultDate.size();j++) {
+//                    if (twentyfour[i] == resultDate.get(j)){
+//                        j++;
+//                        freetimestring= freetimestring+"F";
+//                    }else{
+//                        freetimestring = freetimestring+"T";
+//                    }
+//                //}
+//            }
+//            System.out.print(freetimestring);
+//        }
         /*
         * Written by: Dakota Lester
         * Create the time to calculate to find
