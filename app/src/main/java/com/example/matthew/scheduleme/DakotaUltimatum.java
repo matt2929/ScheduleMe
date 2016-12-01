@@ -94,32 +94,34 @@ public class DakotaUltimatum extends AppCompatActivity {
             }
         }
         ArrayList<TimeStore> hrs = new ArrayList<>();
-        for (int comp = 0; comp < 12; comp++)
-        {
-            TimeStore temp = new TimeStore(comp, comp++);
+        for (int comp = 0; comp < 24; comp++) {
+            TimeStore temp = new TimeStore(comp, comp + 1);
             hrs.add(temp);
-        }
+        }/*
+        for(int comp =0; comp < (1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0]));comp++){
+            TimeStore temp = new TimeStore(comp, comp + 1);
+            temp.setEventInfo("You can meet from"+(1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp)/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp+1);
+
+            hrs.add(temp);
+        }*/
         ArrayList<TimeStore> savehrs = new ArrayList<>();
-        for (TimeStore ts : hrs)
-        {
-            for(ZhuZhuEvent zzh: combonationOfMeeting)
-            {
+        for (TimeStore ts : hrs) {
+            for (ZhuZhuEvent zzh : combonationOfMeeting) {
                 ZhuZhuEvent first = zzh;
                 TimeStore second = ts;
-                if(first.getStartHour() == ts.getStartHour())
-                {
+                if (first.getStartHour() == ts.getStartHour()) {
                     savehrs.add(ts);
                 }
             }
-            for(TimeStore shrs: savehrs)
-            {
-                hrs.remove(shrs);
-            }
+        }
+
+        for (TimeStore shrs : savehrs) {
+            hrs.remove(shrs);
         }
         ArrayList<String> strings = new ArrayList<String>();
         Log.e("combo", "" + combonationOfMeeting.size());
         for (TimeStore tstore : hrs) {
-            String value = "start: " + tstore.getStartHour() + " end: " + tstore.getEndHour();
+            String value = "You can meet at: " + tstore.getStartHour();
             strings.add(value);
             Log.e("event:", value);
         }
@@ -178,7 +180,17 @@ public class DakotaUltimatum extends AppCompatActivity {
             String timeStamp = startTime.split(" ")[3];
             Log.e("time stamp", timeStamp);
             Log.e("startHour", "" + Integer.valueOf(startTime.split(":")[0].substring(4)));
-            return Integer.valueOf(startTime.split(":")[0].substring(4));
+            if (timeStamp == "PM") {
+                if (Integer.valueOf(startTime.split(":")[0].substring(4)) == 12) {
+                    return 0;
+                } else {
+                    return Integer.valueOf(startTime.split(":")[0].substring(4)) + 12;
+                }
+
+            } else {
+                return Integer.valueOf(startTime.split(":")[0].substring(4));
+
+            }
         }
 
         public int getStartMin() {
@@ -233,7 +245,7 @@ public class DakotaUltimatum extends AppCompatActivity {
     public class TimeStore {
         int StartHour = 0;
         int EndHour = 0;
-
+        String eventInfo="";
         public TimeStore(int startHour, int endHour) {
             StartHour = startHour;
             EndHour = endHour;
@@ -245,6 +257,13 @@ public class DakotaUltimatum extends AppCompatActivity {
 
         public int getStartHour() {
             return StartHour;
+        }
+        public void setEventInfo(String s){
+            eventInfo=s;
+        }
+
+        public String getEventInfo() {
+            return eventInfo;
         }
     }
 }
