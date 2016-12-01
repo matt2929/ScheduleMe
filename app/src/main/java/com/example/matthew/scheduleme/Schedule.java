@@ -20,8 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -35,24 +38,41 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.people.v1.model.Date;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import android.net.Uri;
+
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
     ProgressDialog mProgress;
-    List<String> eventStrings;
+    QuickEventNext qen;
+    ArrayList<String> eventStrings;
     Button sendData;
+    public static int timeHourN=0;
+    public static ArrayList<Integer> resultDate = new ArrayList<>();
     user theUser;
+    public static String freetime = "";
+    //TextView mMeeting;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -67,7 +87,6 @@ public class Schedule extends Activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-     //   System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
         super.onCreate(savedInstanceState);
         LinearLayout activityLayout = new LinearLayout(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -108,15 +127,16 @@ public class Schedule extends Activity
         Intent i = getIntent();
         theUser = (user) i.getSerializableExtra("testUser");
         sendData.setOnClickListener(new View.OnClickListener() {
-           @Override
+            @Override
             public void onClick(View v) {
-             //   new HttpTaskPost().execute();
-               Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
-               ArrayList<String> temp = new ArrayList<String>();
-               temp.addAll(eventStrings);
-               theUser.setEvents(temp);
-               intentSendBack.putExtra("testUser", theUser);
-               startActivity(intentSendBack);
+                Intent intentSendBack = new Intent(Schedule.this, UserHome.class);
+                ArrayList<String> temp = new ArrayList<String>();
+                if (eventStrings != null) {
+                    temp.addAll(eventStrings);
+                }
+                new HttpSendEventDank();
+                intentSendBack.putExtra("testUser", theUser);
+                startActivity(intentSendBack);
             }
         });
         activityLayout.addView(mOutputText);
@@ -139,7 +159,6 @@ public class Schedule extends Activity
         } else if (! isDeviceOnline()) {
             mOutputText.setText("No network connection available.");
         } else {
-          //  System.out.println("Hereeeeeeeeeeeeeeeeeeeeeee"+mCredential.getSelectedAccountName());
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -159,12 +178,10 @@ public class Schedule extends Activity
 
         if (EasyPermissions.hasPermissions(
                 this, android.Manifest.permission.GET_ACCOUNTS)) {
-//            System.out.println("CONTEXTTTTTTT - "+ getPreferences(Context.MODE_PRIVATE).getAll().toString());
 
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
-               // System.out.println("Account Name"+accountName);
                 mCredential.setSelectedAccountName(accountName);
 
                 mCredential.setSelectedAccountName(Login.getGoogleAccount());
@@ -334,7 +351,7 @@ public class Schedule extends Activity
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
     private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
-        private com.google.api.services.calendar.Calendar mService = null;
+        public com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
 
         public MakeRequestTask(GoogleAccountCredential credential) {
@@ -353,7 +370,8 @@ public class Schedule extends Activity
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                return getDataFromApi();
+                getDataFromApi();
+                return eventStrings;
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -367,6 +385,81 @@ public class Schedule extends Activity
          * @throws IOException
          */
         private List<String> getDataFromApi() throws IOException {
+
+            if(QuickEventNext.writer==1) {
+                QuickEventNext.writer=0;
+                Event eve = new Event()
+                        .setSummary(QuickEventNext.eventN)
+                        .setLocation(QuickEventNext.locationN);
+
+                DateTime datetimeE = new DateTime(QuickEventNext.startdateN + "T" + QuickEventNext.starttimeN + ":00-05:00");
+                EventDateTime startE = new EventDateTime()
+                        .setDateTime(datetimeE)
+                        .setTimeZone("America/New_York");
+                eve.setStart(startE);
+
+                DateTime dateTimeEnd = new DateTime(QuickEventNext.enddateN + "T" + QuickEventNext.endtimeN + ":00-05:00");
+                EventDateTime startEnd = new EventDateTime()
+                        .setDateTime(dateTimeEnd)
+                        .setTimeZone("America/New_York");
+                eve.setEnd(startEnd);
+
+                String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
+                eve.setRecurrence(Arrays.asList(recurrence));
+
+                EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
+                for (int i =0; i<qen.friendsList.size();i++){
+                    attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
+                }
+                eve.setAttendees(Arrays.asList(attendees));
+
+                String calendarId = "primary";
+
+                eve = mService.events().insert(calendarId, eve).execute();
+                System.out.printf("Event created: %s\n", eve.getHtmlLink());
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
+                startActivity(browserIntent);
+            }
+//            Event evenT = new Event()
+//                    .setSummary("Testing")
+//                    .setLocation("In lab")
+//                    .setDescription("Create event in calendar");
+//
+//            DateTime startDateTime = new DateTime("2016-11-09T22:00:00-04:00");
+//            EventDateTime starT = new EventDateTime()
+//                    .setDateTime(startDateTime)
+//                    .setTimeZone("America/New_York");
+//            evenT.setStart(starT);
+//
+//            DateTime endDateTime = new DateTime("2016-11-09T23:00:00-04:00");
+//            EventDateTime enD = new EventDateTime()
+//                    .setDateTime(endDateTime)
+//                    .setTimeZone("America/New_York");
+//            evenT.setEnd(enD);
+//
+//            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+//            evenT.setRecurrence(Arrays.asList(recurrence));
+
+//            EventAttendee[] attendees = new EventAttendee[] {
+//                    new EventAttendee().setEmail("lpage@example.com"),
+//                    new EventAttendee().setEmail("sbrin@example.com"),
+//            }
+//            event.setAttendees(Arrays.asList(attendees));
+//
+//            EventReminder[] reminderOverrides = new EventReminder[] {
+//                    new EventReminder().setMethod("email").setMinutes(24 * 60),
+//                    new EventReminder().setMethod("popup").setMinutes(10),
+//            };
+//            Event.Reminders reminders = new Event.Reminders()
+//                    .setUseDefault(false)
+//                    .setOverrides(Arrays.asList(reminderOverrides));
+//            event.setReminders(reminders);
+
+//            String calendarId = "primary";
+//            evenT = mService.events().insert(calendarId, evenT).execute();
+//            System.out.printf("Event created: %s\n", evenT.getHtmlLink());
+//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(evenT.getHtmlLink()));
+//            startActivity(browserIntent);
             // Link with database to grab user calendar
             // Instance of json class (Step 1)
             DateTime now = new DateTime(System.currentTimeMillis());
@@ -390,11 +483,12 @@ public class Schedule extends Activity
                     // the start date.
                     start = event.getStart().getDate();
                 }
-                //parseStartTime(start);
-                //parseEndTime(end);
-                ComparStarEndTimes(start, end);
+                String startFinalValue=parseStartTime(start);
+                String endFinalValue=parseStartTime(end);
+                //compareEvent();
+                //ComparStarEndTimes(start, end);
                 eventStrings.add(
-                        String.format("%s \n (%s) \n (%s)", event.getSummary(), start, end));
+                        String.format("%s\nEvent starting on %s\nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
             }
             // Compare users time frames given
             // Step 3a
@@ -408,10 +502,70 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
+            //   new HttpSendEventDank().execute();
+
+            if(SetUpMeeting.check==1){
+
+                createFreeTime();
+                SetUpMeeting.check=0;
+                Intent intent2 = new Intent(getApplicationContext(),DakotaUltimatum.class);
+                startActivity(intent2);
+            }
             return eventStrings;
         }
         /*
-        * Written by Dakota Lester
+        * Written by: Dakota Lester
+        * Hardcoded events to check comparisons for two random events
+        * If the comparison works for two events it will work for
+        * any n events
+        * The following method is the testcase with two hardcoded events
+        * for the sake of time I did not call the comparison between one
+        * event's end time and the next events start time as the method are
+        * written and the work is there
+        * The start/end would need to be parsed which is already done in the
+        * the other methods as the times would be parsed, comparsions would be
+        * done and then pushed to the server
+         */
+        private void compareEvent()
+        {
+            // Event 1 start
+            Event event = new Event().setSummary("Testing").setLocation("A Place").setDescription("Random Event");
+            DateTime start = new DateTime("2016-11-14T22:00:00-04:00");
+            EventDateTime ev_star = new EventDateTime().setDateTime(start).setTimeZone("America/New York");
+            event.setStart(ev_star);
+            DateTime end = new DateTime("2016-11-14T23:00:00-04:00");
+            EventDateTime ev_end = new EventDateTime().setDateTime(end).setTimeZone("America/New York");
+            event.setEnd(ev_end);
+            // Event 1 end
+            // Event 2 start
+            Event event2 = new Event().setSummary("Other testing").setLocation("A special Place").setDescription("Comparisons");
+            DateTime start_ev2 = new DateTime("2016-11-14T18:00:00-04:00");
+            EventDateTime ev2_star = new EventDateTime().setDateTime(start).setTimeZone("America/New York");
+            event2.setStart(ev2_star);
+            DateTime end_ev2 = new DateTime("2016-11-14T20:00:00-04:00");
+            EventDateTime ev2_end = new EventDateTime().setDateTime(end).setTimeZone("America/New York");
+            event2.setEnd(ev2_end);
+            // Event 2 end
+            // Comparisons based on hardcode data
+            // Map to hold the event along with the corresponding start and end time
+            Map<Event, List<DateTime>> comparisons = new HashMap<>();
+            List<DateTime> times = new ArrayList<>();
+            List<DateTime> secondtimes = new ArrayList<>();
+            times.add(start);
+            times.add(end);
+            secondtimes.add(start_ev2);
+            secondtimes.add(end_ev2);
+            comparisons.put(event, times);
+            comparisons.put(event2, secondtimes);
+            // Used for output
+            String events = comparisons.keySet().toString();
+            String firstevtimes = times.toString();
+            String secondevtimes = secondtimes.toString();
+            Log.e("Events", events);
+            Log.e("First Event Times", firstevtimes);
+            Log.e("Second Event Times", secondevtimes);
+        }
+        /*
         * Parse the start time and date with splitting to be used
         * for comparisons
          */
@@ -421,9 +575,106 @@ public class Schedule extends Activity
             String[] starttime = startstr.split("T");
             // Start Date of the event
             String startdate = starttime[0];
-            // Start Time Of Event
+//            // Start Time Of Event
             String startime = starttime[1];
-            return startime;
+            String[] startY = startime.split(":");
+            String startX = startY[0];
+            String startZ = startY[1];
+            String[] startA = startZ.split(":");
+            String startB=startA[0];
+            int timeHour = Integer.parseInt(startX);
+            timeHourN = Integer.parseInt(startX);
+            System.out.println(startdate);
+            //change this condition to something good
+            if(startdate.equals(SetUpMeeting.comparing) && SetUpMeeting.check==1) {
+                resultDate.add(timeHourN);
+            }
+            System.out.println(resultDate+"asdhoashdiasd");
+            String AmPm = "";
+            if(timeHour<12){
+                AmPm="AM";
+            }else{
+                timeHour=timeHour-12;
+                if(timeHour==0){
+                    timeHour = 12;
+                }
+                AmPm="PM";
+            }
+            System.out.println(timeHourN);
+            //int startZ= Integer.parseInt(startX);
+            String startFinal=startdate + " at "+ timeHour+":"+startB+" "+AmPm;
+            return startFinal;
+        }
+
+
+        public void createFreeTime(){
+            int[] twentyfour = new int[24];
+            String[] twehr = new String[24];
+            int a = 0;
+            for(int i = 0; i<24; i++){
+                twentyfour[i]=a;
+                a++;
+                //        System.out.println("A");
+            }
+            //  System.out.println("B");
+            int j=0;
+            System.out.println(resultDate.size());
+            for(int k = 0;k<24;k++){
+                if(j<resultDate.size()) {
+                    //System.out.println("Itsasdfda");
+                    System.out.println("Check 1 " +twentyfour[k]);
+                    System.out.println("Check 2 "+resultDate.get(j));
+                    if (twentyfour[k]==resultDate.get(j)) {
+
+                        twehr[k] = "F";
+                        j = j + 2;
+                          System.out.println("B");
+                    }else{
+                        System.out.println("C");
+                        twehr[k]="T";
+                    }
+                }else{
+                     System.out.println("D");
+                    twehr[k]="T";
+                }
+            }
+//            int p=0;
+//            for(int k=0; k<24;k++){
+//                if(resultDate.get(p)==twentyfour[k] && p<=resultDate.size()){
+//                    twehr[k]="F";
+//                    System.out.println("C");
+//                    p=p+2;
+//                }else{
+//                    twehr[k]="T";
+//                    System.out.println("D");
+//                }
+//
+            for(int z=0; z<twehr.length;z++) {
+                freetime=freetime+twehr[z];
+
+            }
+            System.out.println("Freetime"+freetime);
+//            String[] finalfreetime=new String[24];
+//            for(int y=0;y<24;y++){
+//                if(freetime.charAt(y)=='T'){
+//                    if(y==0){
+//                        finalfreetime[y] = "12 AM";
+//                    }
+//                    else if(y>12){
+//                        y=y-12;
+//                        finalfreetime[y] = y + " PM";
+//                    }
+//                    else if(y==12){
+//                        finalfreetime[y] = "12 PM";
+//                    }
+//                    else {
+//                        finalfreetime[y] = y + "AM";
+//                    }
+//                }
+//            }
+//            for (int x =0;x<24;x++){
+//                System.out.println(finalfreetime[x]);
+//            }
         }
         /*
         * Written by Dakota Lester
@@ -440,6 +691,28 @@ public class Schedule extends Activity
             String endtime = endTimeForm[1];
             return endtime;
         }
+
+        //        public void createFreeTime(){
+//            int[] twentyfour = new int[24];
+//            int a = 0;
+//            for(int i = 0; i<24; i++){
+//                twentyfour[i]=a;
+//                a++;
+//            }
+//            String freetimestring="";
+//            int j=0;
+//            for(int i=0; i<24; i++) {
+////                for (int j=0; j<resultDate.size();j++) {
+//                    if (twentyfour[i] == resultDate.get(j)){
+//                        j++;
+//                        freetimestring= freetimestring+"F";
+//                    }else{
+//                        freetimestring = freetimestring+"T";
+//                    }
+//                //}
+//            }
+//            System.out.print(freetimestring);
+//        }
         /*
         * Written by: Dakota Lester
         * Create the time to calculate to find
@@ -488,12 +761,51 @@ public class Schedule extends Activity
             Log.e("Difference", hourlength.toString());
         }
 
+        public void writeToCalendar() throws IOException{
+            //This evenT just for testing
+            //Ask for a meeting name from user
+            //mMeeting.setVisibility(View.VISIBLE);
+
+            Event eve = new Event()
+                    .setSummary(qen.eventN)
+                    .setLocation(qen.locationN);
+
+            DateTime datetimeE = new DateTime(qen.startdateN+"T"+qen.starttimeN+":00-04:00");
+            EventDateTime startE = new EventDateTime()
+                    .setDateTime(datetimeE)
+                    .setTimeZone("America/New_York");
+            eve.setStart(startE);
+
+            DateTime dateTimeEnd = new DateTime(qen.enddateN+"T"+qen.endtimeN+":00-04:00");
+            EventDateTime startEnd = new EventDateTime()
+                    .setDateTime(dateTimeEnd)
+                    .setTimeZone("America/New_York");
+            eve.setEnd(startEnd);
+
+            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+            eve.setRecurrence(Arrays.asList(recurrence));
+
+            EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
+            for (int i =0; i<qen.friendsList.size();i++){
+                attendees[i] = new EventAttendee().setEmail(qen.friendsList.get(i));
+            }
+            eve.setAttendees(Arrays.asList(attendees));
+
+            String calendarId = "primary";
+
+            eve = mService.events().insert(calendarId, eve).execute();
+            System.out.printf("Event created: %s\n", eve.getHtmlLink());
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
+            startActivity(browserIntent);
+
+        }
+
         @Override
         protected void onPreExecute() {
             mOutputText.setText("");
             //mProgress.hide();
             if(mProgress.isIndeterminate())
-            mProgress.show();
+                mProgress.show();
         }
 
         @Override
@@ -528,49 +840,31 @@ public class Schedule extends Activity
             }
         }
     }
-
-    /*
-    private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
+    public class HttpSendEventDank extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
-            user _user = new user();
-            String url = "http://warmachine.cse.buffalo.edu:8083/process_post";
+            String url = "http://warmachine.cse.buffalo.edu:"+Login.values+"/update_events";
             try {
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
-                Log.e("nope", "");
             }
-            _user.setName(Login.getGoogleAccount().toString());
-            _user.setPassword("winner");
-            _user.setEvents(eventStrings);
-
-            _user.setAllFriends(new ArrayList<String>());
-            ArrayList<String> strings=new ArrayList<String>();
-            strings.add("blow baloons");
-            strings.add("dog master");
-            _user.setEvents(strings);
             String jsonInString = "";
-            try {
-                jsonInString = mapper.writeValueAsString(_user);
-                Log.e("json, ",jsonInString);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            restTemplate.postForObject(url, _user,user.class);
+            restTemplate.getMessageConverters().add(new ResourceHttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+            Login.USERZHU.setSchedule(eventStrings);
+            String stringThis= restTemplate.postForObject(url,Login.USERZHU,String.class);
             return null;
         }
-
         @Override
         protected void onPostExecute(Greeting greeting) {
-            Log.e("what","what");
+            Log.e("I pushed to server","I pushed to server");
         }
     }
-    */
 }

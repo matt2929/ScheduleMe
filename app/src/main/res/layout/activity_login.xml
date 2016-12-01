@@ -23,29 +23,30 @@
 
         <TextView
             android:text="Schedule"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/textView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:fontFamily="serif-monospace"
-            android:textSize="45sp"
-            android:textColor="#36949b"
-            android:textAllCaps="false"
-            android:layout_marginTop="80dp"/>
-
-        <TextView
-            android:text="Schedule"
             android:layout_gravity="center"
             android:id="@+id/textView2"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:fontFamily="cursive"
-            android:textSize="50sp"
+            android:textSize="65sp"
             android:textStyle="normal|bold"
-            android:layout_marginBottom="70dp"
+            android:layout_marginTop="50dp"
             android:textColor="#36949b" />
+
+        <TextView
+            android:text="Schedule"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/textView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:fontFamily="serif-monospace"
+            android:textSize="25sp"
+            android:textColor="#ff4a02"
+            android:textAllCaps="false"
+            android:layout_marginBottom="40dp"
+            />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signin_button"
-            android:layout_width="175dp"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
@@ -59,6 +60,12 @@
             android:textColor="#ffffff"
             android:fontFamily="sans-serif-smallcaps"
             android:typeface="normal" />
+
+        <Button
+            android:text="Send Data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sendFakeData" />
 
     </GridLayout>
 

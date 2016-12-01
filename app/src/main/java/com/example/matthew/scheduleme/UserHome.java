@@ -12,15 +12,55 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.android.gms.auth.api.Auth;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.api.client.testing.util.TestableByteArrayInputStream;
+
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerFuture;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -30,34 +70,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-public class UserHome extends Activity {
+public class UserHome extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button goToCalender;
     Button testRest;
     //String valueString="username";
-    //String result = "";
+    String result = "";
     EditText textView;
-    ArrayList<user> users = new ArrayList<user>();
-    Button signOutB;
+    ArrayList<user> users;
+    Button signOut;
     Button viewFriends;
     Button manageEvents;
+    Button quickEvents;
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
     user thisUser;
     Button testPost;
     TextView put;
-    private GoogleApiClient signout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userhome);
         textView = (EditText) findViewById(R.id.upcommingdata);
-
+        goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         // for connection class
         Intent intent = getIntent();
-        thisUser = (user) intent.getSerializableExtra("testUser");
-        thisUser.setAllFriends(new ArrayList<String>());
+        thisUser = Login.USERZHU;
+        //thisUser.setFriends(new ArrayList<String>());
         ArrayList<String> testFriends = new ArrayList<String>();
         String one = "Jimmy Johns";
         String two = "OMG MEH";
@@ -69,7 +108,7 @@ public class UserHome extends Activity {
         testFriends.add(three);
         testFriends.add(four);
         testFriends.add(five);
-        thisUser.setAllFriends(testFriends);
+       // thisUser.setFriends(testFriends);
 
         goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         goToCalender.setOnClickListener(new View.OnClickListener() {
@@ -81,13 +120,26 @@ public class UserHome extends Activity {
             }
         });
 
-        signOutB = (Button) findViewById(R.id.signOutBtn);
-        signOutB.setOnClickListener(new View.OnClickListener() {
+        signOut=(Button) findViewById(R.id.signout_button);
+        GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
+        signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserHome.this.signOut();
-                Intent intentSO = new Intent(getApplicationContext(), Login.class);
-                startActivity(intentSO);
+                switch (v.getId()){
+                    case R.id.signout_button:
+                        signOut();
+                        break;
+                }
+            }
+        });
+
+        quickEvents = (Button) findViewById(R.id.updateCalendar);
+        quickEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentQuick = new Intent(getApplicationContext(), QuickEventNext.class);
+                startActivity(intentQuick);
             }
         });
 
@@ -105,8 +157,9 @@ public class UserHome extends Activity {
         manageEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MakeAMeeting.class);
-                startActivity(intent);
+                Intent intentJ = new Intent(getApplicationContext(), MakeAMeeting.class);
+                intentJ.putExtra("testUser", thisUser);
+                startActivity(intentJ);
             }
         });
 
@@ -116,18 +169,17 @@ public class UserHome extends Activity {
                     @Override
                     public void onClick(View view) {
                         Log.e("butt1", "press");
-                        new HttpRequestTask().execute();
+                    //    new UserHome.HttpRequestTask().execute();
                     }
                 });
 
         put = (TextView) findViewById(R.id.postname);
-        put.setText(thisUser.getName());
+        put.setText(Login.USERZHU.getName());
         testPost = (Button) findViewById(R.id.takethenamebelowandpost);
         testPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HttpTaskPost().execute();
-             //   valueString = put.getText().toString();
+                //   valueString = put.getText().toString();
             }
 
             protected void onStart() {
@@ -136,96 +188,54 @@ public class UserHome extends Activity {
         });
     }
 
-    /*
-     * Written by Dakota Lester
-     * Google Method Interpretation
-     * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
-     * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
-     * Used to sign a person out of their google account
-     */
-    private void signOut() {
-        if (signout != null && signout.isConnected()) {
-            signout.clearDefaultAccountAndReconnect().setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(Status status) {
-                    signout.disconnect();
-                }
-            });
-        }
-    }
-
-    /*
-    * Written by Dakota Lester
-    * Google Method Interpretation
-    * MUST HAVE GoogleApiClient.onConnected CALLED FIRST THEN
-    * SIGN OUT IS ALLOWED or EXPECTION WILL BE THROWN
-    * Completed - need to figure where to place this in the code
-    * Delete users credentials
-     */
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(signout).setResultCallback(
+    private void signOut(){
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        // Removed
+                        //revokeAccess();
+//                        SharedPreferences prefs = getSharedPreferences(getApplicationContext().toString(),Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = prefs.edit();
+                        //         System.out.println("HERERERERERERERERERERERERERERER"+getPreferences(getApplicationContext().MODE_PRIVATE).getAll().toString());
+//                        editor.remove(AccountManager.KEY_ACCOUNT_NAME);
+//                        editor.commit();
+                        String accPref = getPreferences(getApplicationContext().MODE_PRIVATE).getString(Schedule.PREF_ACCOUNT_NAME, null);
+                        //         System.out.println("ACCPREF:::" + accPref);
+                        accPref = "";
+                        Intent intenT = new Intent(getApplicationContext(), Login.class);
+                        startActivity(intenT);
+
                     }
                 }
         );
     }
 
+
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                    }
+                });
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG,"onConnectionFailed:"+connectionResult);
+    }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
-    private class HttpRequestTask extends AsyncTask<Void, Void, Greeting> {
-        @Override
-        protected Greeting doInBackground(Void... params) {
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                // Greeting greeting = restTemplate.getForObject(url, Greeting.class);
-//                return greeting;
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-                Log.e("nope", "");
 
-            }
-            String url = "http://warmachine.cse.buffalo.edu:8082/listUsers";
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-            String getTheData = restTemplate.getForObject(url, String.class, "Android");
-            Collection<user> ob;
-            try {
-                ob = new ObjectMapper().readValue(getTheData, new TypeReference<Collection<user>>() {
-                });
-                Log.e("Value", "" + ob.size());
-                Iterator allPeople = ob.iterator();
-                while (allPeople.hasNext()) {
-                    users.add((user) allPeople.next());
-                }
-                Log.e("Value", "" + users.get(0).getName());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e("print", "well that didnt work");
-            }
-            Log.e("something", getTheData);
-
-            // user[] result = restTemplate.getForObject(url, user[].class, "Android");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Greeting greeting) {
-            String string = "";
-            for (user u : users) {
-                string += "name: " + u.getName() + " password: " + u.getPassword();
-                string += "\n";
-            }
-            textView.setText(string);
-        }
-    }
-
-    private class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
+    public class HttpTaskPost extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {
             ObjectMapper mapper = new ObjectMapper();
@@ -238,7 +248,6 @@ public class UserHome extends Activity {
                 Log.e("MainActivity", e.getMessage(), e);
                 Log.e("nope", "");
             }
-            thisUser.setPassword("*************");
             String jsonInString = "";
             try {
                 jsonInString = mapper.writeValueAsString(thisUser);
@@ -249,7 +258,6 @@ public class UserHome extends Activity {
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             restTemplate.postForObject(url, thisUser, user.class);
             return null;
         }
@@ -259,4 +267,5 @@ public class UserHome extends Activity {
             Log.e("what", "what");
         }
     }
+
 }
