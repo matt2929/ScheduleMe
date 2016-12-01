@@ -93,11 +93,33 @@ public class DakotaUltimatum extends AppCompatActivity {
                 }
             }
         }
-
+        ArrayList<TimeStore> hrs = new ArrayList<>();
+        for (int comp = 0; comp < 12; comp++)
+        {
+            TimeStore temp = new TimeStore(comp, comp++);
+            hrs.add(temp);
+        }
+        ArrayList<TimeStore> savehrs = new ArrayList<>();
+        for (TimeStore ts : hrs)
+        {
+            for(ZhuZhuEvent zzh: combonationOfMeeting)
+            {
+                ZhuZhuEvent first = zzh;
+                TimeStore second = ts;
+                if(first.getStartHour() == ts.getStartHour())
+                {
+                    savehrs.add(ts);
+                }
+            }
+            for(TimeStore shrs: savehrs)
+            {
+                hrs.remove(shrs);
+            }
+        }
         ArrayList<String> strings = new ArrayList<String>();
         Log.e("combo", "" + combonationOfMeeting.size());
-        for (ZhuZhuEvent z : combonationOfMeeting) {
-            String value = "start: " + z.startTime + " end: " + z.endTime;
+        for (TimeStore tstore : hrs) {
+            String value = "start: " + tstore.getStartHour() + " end: " + tstore.getEndHour();
             strings.add(value);
             Log.e("event:", value);
         }
