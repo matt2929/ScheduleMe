@@ -93,11 +93,53 @@ public class DakotaUltimatum extends AppCompatActivity {
                 }
             }
         }
-        ArrayList<TimeStore> hrs = new ArrayList<>();
-        for (int comp = 0; comp < 24; comp++) {
-            TimeStore temp = new TimeStore(comp, comp + 1);
-            hrs.add(temp);
-        }/*
+
+
+
+
+        int starthr = 7;
+        int deadlinehr = 23;
+        int startmin = 0;
+        int deadlinemin = 0;
+
+
+        int duration = Integer.valueOf(SetUpMeeting.duration.split(" ")[0]);
+
+        ArrayList<TimeStore> hrs = new ArrayList<TimeStore>();
+
+        while(starthr+duration/60<=deadlinehr) {
+            if (combonationOfMeeting.size() == 0){
+                hrs.add(new TimeStore("need a way to find date", starthr, startmin, deadlinehr, deadlinemin));
+
+
+            } else {
+
+                ZhuZhuEvent current = combonationOfMeeting.get(0);
+                int durHour = duration / 60;
+                int durMin = duration % 60;
+
+                int endhr = starthr + durHour;
+                int endmin = startmin + durMin;
+                if (endmin > 60) {
+                    endhr = endhr + 1;
+                    endmin = endmin - 60;
+                }
+
+                if (endhr < current.getStartHour()) {
+                    hrs.add(new TimeStore(current.getDate(), starthr, startmin, current.getStartHour(), current.getStartMin()));
+                } else if (endmin == current.getStartHour() && endmin <= current.getStartMin()) {
+                    hrs.add(new TimeStore(current.getDate(), starthr, startmin, current.getStartHour(), current.getStartMin()));
+                } else {
+                    starthr = current.getEndHour();
+                    startmin = current.getEndMin();
+                    combonationOfMeeting.remove(0);
+                }
+
+            }
+        }
+
+        ;
+        /*
         for(int comp =0; comp < (1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0]));comp++){
             TimeStore temp = new TimeStore(comp, comp + 1);
             temp.setEventInfo("You can meet from"+(1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp)/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp+1);
@@ -243,27 +285,34 @@ public class DakotaUltimatum extends AppCompatActivity {
     }
 
     public class TimeStore {
-        int StartHour = 0;
-        int EndHour = 0;
+        int StartHour;
+        int EndHour;
+        int StartMin;
+        int EndMin;
+        String Date;
+
         String eventInfo="";
-        public TimeStore(int startHour, int endHour) {
-            StartHour = startHour;
-            EndHour = endHour;
+        public TimeStore(String date, int starth, int startm, int endh, int endm) {
+            Date = date;
+            StartHour = starth;
+            StartMin = startm;
+            EndHour = endh;
+            EndMin = endm;
         }
+
+        public String getDate() {return Date;}
 
         public int getEndHour() {
             return EndHour;
         }
-
+        public int getEndMin() {
+            return EndMin;
+        }
         public int getStartHour() {
             return StartHour;
         }
-        public void setEventInfo(String s){
-            eventInfo=s;
-        }
-
-        public String getEventInfo() {
-            return eventInfo;
+        public int getStartMin() {
+            return StartMin;
         }
     }
 }
