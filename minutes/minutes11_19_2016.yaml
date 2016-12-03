@@ -1,0 +1,24 @@
+date: November 19, 2016
+meeting_type: group # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: make events write in the google calendar},
+  {ubit: mcstaffo, progress: Database, rest api},
+  {ubit: prjones4, progress: Database},
+  {ubit: zhuoliny, progress: GUI, Make user's info create and save},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+1.During the course of the meeting members persued competion of 
+recieving user data through restful api calls 
+2.updating server data with new friends through restful api calls  
+3.update a specific users data to acknowledge if a user has accepted his invite  
+4.finally pass the data to the sender of invites so he can compare the times. 

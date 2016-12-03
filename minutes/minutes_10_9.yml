@@ -1,0 +1,24 @@
+date: October 9, 2016
+meeting_type: group # meeting_type can "group", "ta", or "instructor"
+attendance: [prjones4, mcstaffo, asrathor, zhuoliny, eewalker, dakotale]
+absent: []
+excused_absences: [ # Any legitamite excuses for absent team members
+  {},
+  {}
+  ]
+task_progress: [ # All group members must be included here even if they haven't made any progress since the last meeting
+  {ubit: asrathor, progress: Finished Google API and GUI interaction},
+  {ubit: dakotale, progress: Finished Google API and GUI interaction},
+  {ubit: eewalker, progress: Ability to ping the server and have a reply back from the server},
+  {ubit: mcstaffo, progress: Showing of the GUI without working buttons/ Working on server backend to have the server interact with the GUI},
+  {ubit: prjones4, progress: Wrote multiple node.js scheme to help with server backend},
+  {ubit: zhuoliny, progress: Explain the layout of the GUI w/ mcstaffo},
+  ]
+issues: [ # Post any issues here. Issues that cannot be addressed by the group should especially be included
+  {},
+  {}
+  ]
+Notes:  | # Anything covered in the meeting that doesn't fit elsewhere.
+Pushed the overall application along with server backend to GitHub and 
+as a result also pushed git issues (scrum board) to GitHub.  Recorded the
+video for Sprint 2 and officially completed the requirements for Sprint 2.
