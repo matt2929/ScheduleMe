@@ -186,10 +186,8 @@ public class DakotaUltimatum extends AppCompatActivity {
                 } else {
                     return Integer.valueOf(startTime.split(":")[0].substring(4)) + 12;
                 }
-
             } else {
                 return Integer.valueOf(startTime.split(":")[0].substring(4));
-
             }
         }
 
