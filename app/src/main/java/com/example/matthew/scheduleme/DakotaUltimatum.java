@@ -43,12 +43,14 @@ public class DakotaUltimatum extends AppCompatActivity {
         month = SetUpMeeting.month;
         day = SetUpMeeting.day;
         duration = SetUpMeeting.duration;
+        if(duration==null){
+            duration="30";
+        }
         setContentView(R.layout.activity_dakota_ultimatum);
         text = (TextView) findViewById(R.id.dakotasSolution);
         int q = 0;
         listView = (ListView) findViewById(R.id.returnedValues);
         ArrayList<ZhuZhuEvent> combonationOfMeeting = new ArrayList<ZhuZhuEvent>();
-        ArrayList<ZhuZhuEvent> zhuZhuEvents = new ArrayList<>();
         if (Login.USERZHU.getSchedule().size() > 0) {
             for (int j = 1; j < Login.USERZHU.getSchedule().size(); j++) {
                 ZhuZhuEvent tempE = new ZhuZhuEvent();
@@ -71,14 +73,15 @@ public class DakotaUltimatum extends AppCompatActivity {
             @Override
             public int compare(ZhuZhuEvent o1, ZhuZhuEvent o2) {
                 if ((o1.getStartHour() == o2.getStartHour() && o1.getStartMin() < o2.getStartMin()) || o1.getStartHour() < o2.getStartHour()) {
-                    return 1;
+                    return -1;
                 } else if (o1.getStartHour() == o2.getStartHour() && o1.getStartMin() == o2.getStartMin()) {
                     return 0;
                 } else {
-                    return -1;
+                    return 1;
                 }
             }
         });
+        Log.e("sort", "ended");
         int index = 0;
         for (int i = 0; i < eventArray.size(); i++) {
             if (combonationOfMeeting.size() == 0) {
@@ -86,15 +89,14 @@ public class DakotaUltimatum extends AppCompatActivity {
             } else {
                 ZhuZhuEvent first = eventArray.get(i);
                 ZhuZhuEvent second = combonationOfMeeting.get(combonationOfMeeting.size() - 1);
-                if ((first.getStartHour() >= second.getEndHour())) {
-                    eventArray.get(i).setEndTime(second.getEndTime());
+                if ((first.getStartHour() <= second.getEndHour()&&first.getEndHour()>=second.getEndHour())) {
+                    combonationOfMeeting.get(combonationOfMeeting.size()-1).setEndTime(first.getEndTime());
                 } else {
                     combonationOfMeeting.add(first);
                 }
             }
         }
-
-
+        Log.e("combo", "ended");
 
 
         int starthr = 7;
@@ -104,13 +106,19 @@ public class DakotaUltimatum extends AppCompatActivity {
 
 
         int duration = Integer.valueOf(SetUpMeeting.duration.split(" ")[0]);
-
+        for(ZhuZhuEvent combonationOfMeeting1: combonationOfMeeting){
+            Log.e("start","size:" +combonationOfMeeting.size()
+                    +" starthr: "+ combonationOfMeeting1.getStartHour()
+                    +" finishhr: "+ combonationOfMeeting1.getEndHour());
+        }
         ArrayList<TimeStore> hrs = new ArrayList<TimeStore>();
 
-        while(starthr+duration/60<=deadlinehr) {
-            if (combonationOfMeeting.size() == 0){
-                hrs.add(new TimeStore("need a way to find date", starthr, startmin, deadlinehr, deadlinemin));
+        while (starthr + duration / 60 <= deadlinehr) {
 
+
+            if (combonationOfMeeting.size() == 0) {
+                hrs.add(new TimeStore("need a way to find date", starthr, startmin, deadlinehr, deadlinemin));
+                break;
 
             } else {
 
@@ -120,20 +128,25 @@ public class DakotaUltimatum extends AppCompatActivity {
 
                 int endhr = starthr + durHour;
                 int endmin = startmin + durMin;
+
                 if (endmin > 60) {
                     endhr = endhr + 1;
                     endmin = endmin - 60;
                 }
-
+                Log.e("whats breaking", "starthr: " + starthr + " duration: " + duration + " endhr: " + endhr + " size: " + combonationOfMeeting.size());
+                Log.e("this might break", "Zhu: " + current.getStartHour() + " endhr " + endhr);
                 if (endhr < current.getStartHour()) {
+                    Log.e("adding", "added");
                     hrs.add(new TimeStore(current.getDate(), starthr, startmin, current.getStartHour(), current.getStartMin()));
                 } else if (endmin == current.getStartHour() && endmin <= current.getStartMin()) {
+                    Log.e("adding", "added");
                     hrs.add(new TimeStore(current.getDate(), starthr, startmin, current.getStartHour(), current.getStartMin()));
-                } else {
-                    starthr = current.getEndHour();
-                    startmin = current.getEndMin();
-                    combonationOfMeeting.remove(0);
                 }
+
+                starthr = current.getEndHour();
+                startmin = current.getEndMin();
+                combonationOfMeeting.remove(0);
+
 
             }
         }
@@ -145,7 +158,7 @@ public class DakotaUltimatum extends AppCompatActivity {
             temp.setEventInfo("You can meet from"+(1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp)/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp+1);
 
             hrs.add(temp);
-        }*/
+        }*//*
         ArrayList<TimeStore> savehrs = new ArrayList<>();
         for (TimeStore ts : hrs) {
             for (ZhuZhuEvent zzh : combonationOfMeeting) {
@@ -155,20 +168,23 @@ public class DakotaUltimatum extends AppCompatActivity {
                     savehrs.add(ts);
                 }
             }
-        }
+        }*/
 
-        for (TimeStore shrs : savehrs) {
+        /*for (TimeStore shrs : savehrs) {
             hrs.remove(shrs);
-        }
+        }*/
         ArrayList<String> strings = new ArrayList<String>();
         Log.e("combo", "" + combonationOfMeeting.size());
         for (TimeStore tstore : hrs) {
-            String value = "You can meet at: " + tstore.getStartHour();
+
+
+            String value = "You can meet at: " + convertIntToNotMilitary(tstore.getStartHour()) + " to " + convertIntToNotMilitary(tstore.getEndHour());
             strings.add(value);
             Log.e("event:", value);
         }
 
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, strings));
+       /*
         ArrayList<ZhuZhuEvent> masterEvents = new ArrayList<>();
         Integer a = Integer.valueOf(SetUpMeeting.duration.split(" ")[0]);
         Log.e("time duration", "" + a);
@@ -177,8 +193,18 @@ public class DakotaUltimatum extends AppCompatActivity {
         ZhuZhuEvent zhuZhuEvent = new ZhuZhuEvent();
         zhuZhuEvent.setStartTime(begginingHour + "\\:" + begginingMinute + " PM");
         masterEvents.add(zhuZhuEvent);
-
+*/
     }
+public String convertIntToNotMilitary(int i){
+    if(i==0){
+        return "12 am";
+    }
+    if(i>=12){
+        return (i%12+" pm");
+    }
+
+    return (i+" am");
+}
 
     public String getStartDateFromString(String s) {
         Log.i("getStartDateFromString", s.split("\n")[1].substring(18, 28));
@@ -220,35 +246,47 @@ public class DakotaUltimatum extends AppCompatActivity {
         public int getStartHour() {
             int addition;
             String timeStamp = startTime.split(" ")[3];
-            Log.e("time stamp", timeStamp);
-            Log.e("startHour", "" + Integer.valueOf(startTime.split(":")[0].substring(4)));
-            if (timeStamp == "PM") {
+            //  Log.e("time stamp", timeStamp);
+            if (timeStamp.equals("PM")) {
+                //    Log.e("pm","pm");
+
+                //  Log.e("start",""+""+Integer.valueOf(startTime.split(":")[0].substring(4)) + 12);
+                return Integer.valueOf(startTime.split(":")[0].substring(4)) + 12;
+            } else {
                 if (Integer.valueOf(startTime.split(":")[0].substring(4)) == 12) {
+                    //  Log.e("start",""+0);
                     return 0;
                 } else {
-                    return Integer.valueOf(startTime.split(":")[0].substring(4)) + 12;
+                    //        Log.e("start",""+""+Integer.valueOf(startTime.split(":")[0].substring(4)));
+                    return Integer.valueOf(startTime.split(":")[0].substring(4));
                 }
-            } else {
-                return Integer.valueOf(startTime.split(":")[0].substring(4));
             }
         }
 
         public int getStartMin() {
-            Log.e("startMin", "" + Integer.valueOf(startTime.split(":")[1].substring(0, 2)));
-            return Integer.valueOf(startTime.split(":")[0].substring(0, 1));
+            //   Log.e("startMin", "" + Integer.valueOf(startTime.split(":")[1].substring(0, 2)));
+            return Integer.valueOf(startTime.split(":")[0].split(" ")[2]);
         }
 
         public int getEndHour() {
-            int addition;
-            String timeStamp = startTime.split(" ")[3];
-            Log.e("time stamp", timeStamp);
 
-            Log.e("endH", "" + Integer.valueOf(endTime.split(":")[0]));
-            return Integer.valueOf(endTime.split(":")[0]);
+            String timeStamp = endTime.split(" ")[1];
+            // Log.e("time stamp", timeStamp);
+            // Log.e("startHour", "" + Integer.valueOf(startTime.split(":")[0].substring(4)));
+            if (timeStamp.equals("PM")) {
+                return Integer.valueOf(endTime.split(":")[0].split(" ")[0]) + 12;
+            } else {
+                if (Integer.valueOf(endTime.split(":")[0].split(" ")[0]) == 12) {
+                    return 0;
+                } else {
+
+                    return Integer.valueOf(endTime.split(":")[0].split(" ")[0]);
+                }
+            }
         }
 
         public int getEndMin() {
-            Log.e("endMin", "" + Integer.valueOf(endTime.split(":")[1].substring(0, 2)));
+            //Log.e("endMin", "" + Integer.valueOf(endTime.split(":")[1].substring(0, 2)));
             return Integer.valueOf(endTime.split(":")[0].substring(0, 1));
         }
 
@@ -289,7 +327,8 @@ public class DakotaUltimatum extends AppCompatActivity {
         int EndMin;
         String Date;
 
-        String eventInfo="";
+        String eventInfo = "";
+
         public TimeStore(String date, int starth, int startm, int endh, int endm) {
             Date = date;
             StartHour = starth;
@@ -298,17 +337,22 @@ public class DakotaUltimatum extends AppCompatActivity {
             EndMin = endm;
         }
 
-        public String getDate() {return Date;}
+        public String getDate() {
+            return Date;
+        }
 
         public int getEndHour() {
             return EndHour;
         }
+
         public int getEndMin() {
             return EndMin;
         }
+
         public int getStartHour() {
             return StartHour;
         }
+
         public int getStartMin() {
             return StartMin;
         }

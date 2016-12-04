@@ -456,7 +456,7 @@ public class Schedule extends Activity
             // List the next 10 events from the primary calendar.
             eventStrings = new ArrayList<String>();
             Events events = mService.events().list("primary")
-                    .setMaxResults(10)
+                    .setMaxResults(100)
                     .setTimeMin(now)
                     .setOrderBy("startTime")
                     .setSingleEvents(true)
