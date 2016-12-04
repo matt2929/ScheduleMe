@@ -128,7 +128,7 @@ public class Schedule extends Activity
                 if (eventStrings != null) {
                     temp.addAll(eventStrings);
                 }
-                new HttpSendEventDank();
+                new HttpSendEventDank().execute();
                 intentSendBack.putExtra("testUser", theUser);
                 startActivity(intentSendBack);
             }
@@ -489,7 +489,7 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
-            //   new HttpSendEventDank().execute();
+             new HttpSendEventDank().execute();
 
             if(SetUpMeeting.check==1){
 
