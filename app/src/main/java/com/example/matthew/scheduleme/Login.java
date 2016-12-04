@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     static user USERZHU =new user();
-    static int values =8089;
+    static int values =8082;
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
@@ -161,8 +161,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         @Override
         protected void onPostExecute(Greeting greeting) {
             ObjectMapper objectMapper = new ObjectMapper();
-
-            Log.e("greet","value"+stringThis);
             try {
                 USERZHU = objectMapper.readValue(stringThis, user.class);
             } catch (IOException e) {
