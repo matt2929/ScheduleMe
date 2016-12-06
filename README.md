@@ -39,4 +39,5 @@ For a client who wishes to run this code in the early stages of our app, an andr
 Through this server we make restful calls with spring on an android device (or simulator).
 * Update (October 30, 2016)
 A client who requires has an Android simulator may run our app to sign and sign out successfully to access their personal calendar.  The API requirement has not changed from previous versions.  
-* Future Updates Incoming
+* Update (December 6, 2016)
+A user's calendar data has been successfully retrieved from our server and the user can create or view an event with the ability to invite anyone with the output of possible free times for everyone to meet up.  The app is currently complete and will be deployed as an APK meaning using any android phone that has an API greater than 21 (Android 5.0 or later) a client can download the APK and immediately install the app to their phone.  Our code has been released as an open source entity meaning anyone has the ability to work with our code in order to addon/improve their product.
