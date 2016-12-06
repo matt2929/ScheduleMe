@@ -128,7 +128,7 @@ public class Schedule extends Activity
                 if (eventStrings != null) {
                     temp.addAll(eventStrings);
                 }
-                new HttpSendEventDank();
+                new HttpSendEventDank().execute();
                 intentSendBack.putExtra("testUser", theUser);
                 startActivity(intentSendBack);
             }
@@ -456,7 +456,7 @@ public class Schedule extends Activity
             // List the next 10 events from the primary calendar.
             eventStrings = new ArrayList<String>();
             Events events = mService.events().list("primary")
-                    .setMaxResults(10)
+                    .setMaxResults(100)
                     .setTimeMin(now)
                     .setOrderBy("startTime")
                     .setSingleEvents(true)
@@ -489,7 +489,7 @@ public class Schedule extends Activity
             1. Event Name 2. Start time with year/day/month in military time
             3. End time with year/day/month in military time
              */
-            //   new HttpSendEventDank().execute();
+             new HttpSendEventDank().execute();
 
             if(SetUpMeeting.check==1){
 
