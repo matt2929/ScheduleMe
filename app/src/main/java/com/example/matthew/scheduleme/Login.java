@@ -50,19 +50,20 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         SignInButton signInButton=(SignInButton) findViewById(R.id.signin_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setScopes(gso.getScopeArray());
-        button = (Button) findViewById(R.id.sendFakeData);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HttpSendDatum().execute();
-            }
-        });
+    //    button = (Button) findViewById(R.id.sendFakeData);
+    //    button.setOnClickListener(new View.OnClickListener() {
+    //        @Override
+    //        public void onClick(View v) {
+    //            new HttpSendDatum().execute();
+    //        }
+    //    });
     }
 
     public void onClick(View v){
         switch (v.getId()){
             case R.id.signin_button:
                 signIn();
+                new HttpSendDatum().execute();
                 break;
         }
     }
