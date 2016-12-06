@@ -107,12 +107,12 @@
         <Button
             android:text="SAVE"
             android:clickable="true"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/buttonsaveEE"
             android:textColor="#ffffff"
             android:background="#0078ff"
             android:textSize="20dp"
-            android:layout_weight="6.63" />
+            android:layout_weight="6.77" />
 
 </LinearLayout>

@@ -117,32 +117,6 @@
             android:fontFamily="sans-serif-smallcaps"
             android:typeface="normal" />
 
-        <Button
-            android:text="Pull Data From Server"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/testrest"
-            android:textSize="20dp"
-            android:layout_below="@+id/userhomeconnections"
-            android:layout_gravity="center_horizontal"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="#0f71c6"
-            android:fontFamily="sans-serif-smallcaps"
-            android:typeface="normal"/>
-
-        <Button
-            android:text="Send Data to Server"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/takethenamebelowandpost"
-            android:textSize="20dp"
-            android:layout_below="@+id/testrest"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="#0f71c6"
-            android:fontFamily="sans-serif-smallcaps"
-            android:typeface="normal"/>
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
