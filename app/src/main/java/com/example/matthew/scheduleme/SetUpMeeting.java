@@ -89,11 +89,11 @@ public class SetUpMeeting extends AppCompatActivity {
                 Log.e("Duration", "Duration: " + duration);
                 Log.e("Picked Friends", "" + friendTemp);
                 check=1;
-                Intent intentBack = new Intent(getApplicationContext(), Schedule.class);
+                Intent intentBack = new Intent(getApplicationContext(), DakotaUltimatum.class);
                 startActivity(intentBack);
-                /* for(String s:friendTemp){
-                    new HttpRequestTask2(s).execute();
-                }*/
+                 for(String s:friendTemp){
+                //    new HttpRequestTask2(s).execute();
+                }
             }
         });
         ArrayList<String> names = new ArrayList<String>();

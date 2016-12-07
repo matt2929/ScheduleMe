@@ -22,7 +22,7 @@
         android:columnCount="1">
 
         <TextView
-            android:text="Schedule"
+            android:text="Schedule App"
             android:layout_gravity="center"
             android:id="@+id/textView2"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -33,7 +33,7 @@
             android:textColor="#36949b" />
 
         <TextView
-            android:text="Schedule"
+            android:text="Schedule App"
             android:layout_gravity="center_horizontal"
             android:id="@+id/textView"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -51,7 +51,7 @@
             android:layout_gravity="center" />
 
         <Button
-            android:text="Need Help?"
+            android:text="About Us"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -59,15 +59,14 @@
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:textColor="#ffffff"
             android:fontFamily="sans-serif-smallcaps"
-            android:typeface="normal"
-            android:textSize="8pt" />
+            android:typeface="normal" />
 
         <Button
             android:text="Send Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:id="@+id/sendFakeData" />
+            android:id="@+id/sendFakeData"
+            android:visibility="invisible" />
 
     </GridLayout>
 
