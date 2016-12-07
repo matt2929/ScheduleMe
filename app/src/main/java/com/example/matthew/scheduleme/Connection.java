@@ -1,19 +1,14 @@
 package com.example.matthew.scheduleme;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Window;
 import android.widget.EditText;
 import android.app.Dialog;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +26,7 @@ public class Connection extends AppCompatActivity {
     int friendsCount;
     EditText friendsList, friendEmail;
     String text;
-    Button addFriend, save, cancil;
+    Button addFriend, save, cancel;
     Dialog friendInfo;
 
     @Override
@@ -99,8 +94,8 @@ public class Connection extends AppCompatActivity {
                     }
                 });
 
-                cancil = (Button) friendInfo.findViewById(R.id.cancil);
-                cancil.setOnClickListener(new View.OnClickListener() {
+                cancel = (Button) friendInfo.findViewById(R.id.cancil);
+                cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         friendEmail.setText("");

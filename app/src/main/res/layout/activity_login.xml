@@ -60,7 +60,7 @@
             android:textColor="#ffffff"
             android:fontFamily="sans-serif-smallcaps"
             android:typeface="normal"
-            android:textSize="11pt" />
+            android:textSize="8pt" />
 
         <!--
         <Button

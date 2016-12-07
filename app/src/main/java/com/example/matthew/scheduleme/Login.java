@@ -1,12 +1,16 @@
 package com.example.matthew.scheduleme;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +41,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
     String stringThis;
-    Button button;
+    Button button, backHelp;
+    Dialog faq;
     ArrayList<user> users = new ArrayList<user>();
     user TheUser = new user();
     @Override
@@ -57,20 +62,36 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     //            new HttpSendDatum().execute();
     //        }
     //    });
+        faq = new Dialog(this);
+        faq.setTitle("Schedule App Instruction");
+        faq.setContentView(R.layout.faq_popup);
+        backHelp = (Button) faq.findViewById(R.id.exitHelp);
+        button = (Button) findViewById(R.id.About_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                faq.show();
+                backHelp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        faq.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     public void onClick(View v){
         switch (v.getId()){
             case R.id.signin_button:
                 signIn();
-                new HttpSendDatum().execute();
                 break;
         }
     }
     private void signIn(){
         Intent signInIntent=Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
+        new HttpSendDatum().execute();
     }
 
     @Override
