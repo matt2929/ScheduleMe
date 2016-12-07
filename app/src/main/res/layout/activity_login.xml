@@ -51,13 +51,14 @@
             android:layout_gravity="center" />
 
         <Button
-            android:text="About Us"
+            android:text="Need Help?"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/About_button"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:textColor="#ffffff"
+            android:textSize="15dp"
             android:fontFamily="sans-serif-smallcaps"
             android:typeface="normal" />
 

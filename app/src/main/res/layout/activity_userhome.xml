@@ -24,6 +24,7 @@
                     android:textSize="20dp"
                     android:layout_below="@+id/takethenamebelowandpost"
                     android:textColor="#ffffff"
+                    android:text="User Home"
                     android:id="@+id/postname" />
 
             </android.support.v7.widget.Toolbar>

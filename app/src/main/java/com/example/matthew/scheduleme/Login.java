@@ -1,5 +1,6 @@
 package com.example.matthew.scheduleme;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,12 +33,13 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     static user USERZHU =new user();
-    static int values =8081;
+    static int values =8088;
     private TextView mStatusTextView;
     private boolean mReturningWithResult=false;
     static GoogleSignInAccount acct;
     String stringThis;
-    Button button;
+    Button button, backHelp, help;
+    Dialog faq;
     ArrayList<user> users = new ArrayList<user>();
     user TheUser = new user();
     @Override
@@ -55,6 +57,24 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             @Override
             public void onClick(View v) {
                 new HttpSendDatum().execute();
+            }
+        });
+
+        faq = new Dialog(this);
+        faq.setTitle("Schedule App Instruction");
+        faq.setContentView(R.layout.faq_popup);
+        backHelp = (Button) faq.findViewById(R.id.exitHelp);
+        help = (Button) findViewById(R.id.About_button);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                faq.show();
+                backHelp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        faq.dismiss();
+                    }
+                });
             }
         });
     }

@@ -9,13 +9,18 @@
 
 
         <TextView
-            android:text="Create a quick event!"
-            android:fontFamily="cursive"
-            android:textSize="30sp"
-            android:textColor="#ff0000"
+            android:text="Create a quick event"
+            android:fontFamily="sans-serif-smallcaps"
+            android:typeface="normal"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:background="#ff4a02"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6.63" />
+            android:layout_gravity="top" />
 
         <EditText
             android:layout_width="match_parent"
@@ -23,11 +28,11 @@
             android:inputType="textPersonName"
             android:hint="Enter event's name"
             android:fontFamily="sans-serif-smallcaps"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
+            android:paddingTop="25dp"
             android:textSize="20dp"
             android:ems="10"
             android:id="@+id/texteventname"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <EditText
@@ -36,11 +41,11 @@
             android:inputType="textPersonName"
             android:hint="Enter Location"
             android:ems="10"
+            android:paddingTop="25dp"
             android:fontFamily="sans-serif-smallcaps"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
             android:textSize="20dp"
             android:id="@+id/editlocation"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <EditText
@@ -49,10 +54,10 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:hint="Enter Start Date as YYYY-MM-DD"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
+            android:paddingTop="25dp"
             android:textSize="20dp"
             android:id="@+id/editstartdate"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <EditText
@@ -61,10 +66,10 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:hint="Enter Start Time as HH:MM"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
             android:textSize="20dp"
+            android:paddingTop="25dp"
             android:id="@+id/editstarttime"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <EditText
@@ -73,10 +78,10 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:hint="Enter End Date as YYYY-MM-DD"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
             android:textSize="20dp"
+            android:paddingTop="25dp"
             android:id="@+id/editenddate"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <EditText
@@ -85,10 +90,10 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:hint="Enter End Time as HH:MM"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
             android:textSize="20dp"
+            android:paddingTop="25dp"
             android:id="@+id/editendtime"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <EditText
@@ -96,23 +101,26 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:hint="Enter attendes email"
+            android:hint="Enter attendee emails"
             android:fontFamily="sans-serif-smallcaps"
             android:textSize="20dp"
-            android:textColorHint="#0000ff"
+            android:textColorHint="#073966"
+            android:paddingTop="25dp"
             android:id="@+id/editTime"
-            android:layout_weight="6.63"
             android:textIsSelectable="false" />
 
         <Button
             android:text="SAVE"
             android:clickable="true"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonsaveEE"
             android:textColor="#ffffff"
-            android:background="#0078ff"
-            android:textSize="20dp"
-            android:layout_weight="6.77" />
+            android:background="#ff4a02"
+            android:textSize="15dp"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="120dp"
+            android:paddingRight="120dp"
+            android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

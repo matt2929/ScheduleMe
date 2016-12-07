@@ -1,6 +1,7 @@
 package com.example.matthew.scheduleme;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,13 +77,14 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
     String result = "";
     EditText textView;
     ArrayList<user> users;
-    Button signOut;
+    Button signOut, backHelp, help;
     Button viewFriends;
     Button manageEvents;
     Button quickEvents;
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
     user thisUser;
+    Dialog faq;
     Button testPost;
     TextView put;
 
@@ -133,6 +135,25 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        faq = new Dialog(this);
+        faq.setTitle("Schedule App Instruction");
+        faq.setContentView(R.layout.faq_popup);
+        backHelp = (Button) faq.findViewById(R.id.exitHelp);
+        help = (Button) findViewById(R.id.help_btn);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                faq.show();
+                backHelp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        faq.dismiss();
+                    }
+                });
+            }
+        });
+
+
         quickEvents = (Button) findViewById(R.id.updateCalendar);
         quickEvents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,8 +184,8 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         });
 
 
-        put = (TextView) findViewById(R.id.postname);
-        put.setText(Login.USERZHU.getName());
+     //   put = (TextView) findViewById(R.id.postname);
+     //   put.setText(Login.USERZHU.getName());
     }
 
     private void signOut(){
