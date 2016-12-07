@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:text="Back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/exitHelp"
+        android:clickable="true"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:textColor="#ff4a02"
+        android:fontFamily="sans-serif-smallcaps"
+        android:layout_gravity="center_horizontal"
+        android:typeface="normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="
+1. About Sign In and Out \n
+You can only sign in with your Gmail Account.
+If you want to sign out, please click the sign out button located on the User Home Page. \n \n
+2. How to schedule a meeting \n
+If you already decided a time for meeting: \n
+Simply click the 'Quick Event' button located on the User Home Page and fill in the information.
+After finishing type in all the info, our app will lead you to the google calendar web page.
+All information you need to type in on the web page are already filled in for you. \n \n
+If you are not sure about the meeting time: \n
+Click the 'Manage Event' Button ---> Click the 'Create An New Event' Button ---> Fill in information --->
+Let our app to find the available time for you to meet.
+Select a free time on the screen.
+Finally, you can go and create a meeting with your selected free time. \n \n
+3. How to view my existing contacts \n
+Click the 'Friends' button on the User Home page. \n \n
+4. How to add an new contact: \n
+After clicking the 'Friends' button in User Home, click the 'Add Friend' Button. \n \n
+5. How to view my existing schedule: \n
+Click the 'View Schedule' button on the User Home page. "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:id="@+id/instructions" />
+    </ScrollView>
+</LinearLayout>
