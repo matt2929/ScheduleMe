@@ -72,7 +72,6 @@ import java.util.Collection;
 import java.util.Iterator;
 public class UserHome extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button goToCalender;
-    Button testRest;
     //String valueString="username";
     String result = "";
     EditText textView;
@@ -163,29 +162,9 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
-        testRest = (Button) findViewById(R.id.testrest);
-        testRest.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("butt1", "press");
-                    //    new UserHome.HttpRequestTask().execute();
-                    }
-                });
 
         put = (TextView) findViewById(R.id.postname);
         put.setText(Login.USERZHU.getName());
-        testPost = (Button) findViewById(R.id.takethenamebelowandpost);
-        testPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //   valueString = put.getText().toString();
-            }
-
-            protected void onStart() {
-                UserHome.super.onStart();
-            }
-        });
     }
 
     private void signOut(){

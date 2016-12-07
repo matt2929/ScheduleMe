@@ -769,7 +769,7 @@ public class Schedule extends Activity
                     .setTimeZone("America/New_York");
             eve.setEnd(startEnd);
 
-            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=1"};
             eve.setRecurrence(Arrays.asList(recurrence));
 
             EventAttendee[] attendees = new EventAttendee[qen.friendsList.size()];
