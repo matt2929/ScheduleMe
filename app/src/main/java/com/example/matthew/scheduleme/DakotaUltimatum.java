@@ -51,7 +51,7 @@ public class DakotaUltimatum extends AppCompatActivity {
         int q = 0;
         listView = (ListView) findViewById(R.id.returnedValues);
         ArrayList<ZhuZhuEvent> combonationOfMeeting = new ArrayList<ZhuZhuEvent>();
-        if (Login.USERZHU.getSchedule().size() > 0) {
+        if (Login.USERZHU.getSchedule()!=null&&Login.USERZHU.getSchedule().size() > 0) {
             for (int j = 1; j < Login.USERZHU.getSchedule().size(); j++) {
                 ZhuZhuEvent tempE = new ZhuZhuEvent();
                 tempE.setDate(getStartDateFromString(Login.USERZHU.getSchedule().get(j)));
