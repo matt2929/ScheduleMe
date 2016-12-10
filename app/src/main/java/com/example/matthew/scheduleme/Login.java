@@ -60,6 +60,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             }
         });
 
+        // for the 'need help?' button
+        // showing a pop up window for instructions about the app after clicking the button
         faq = new Dialog(this);
         faq.setTitle("Schedule App Instruction");
         faq.setContentView(R.layout.faq_popup);
@@ -89,7 +91,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void signIn(){
         Intent signInIntent=Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
     }
 
     @Override

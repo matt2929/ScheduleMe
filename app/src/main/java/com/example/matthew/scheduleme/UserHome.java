@@ -98,19 +98,10 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         Intent intent = getIntent();
         thisUser = Login.USERZHU;
         //thisUser.setFriends(new ArrayList<String>());
-        ArrayList<String> testFriends = new ArrayList<String>();
-        String one = "Jimmy Johns";
-        String two = "OMG MEH";
-        String three = "Monkey D Luffy";
-        String four = "Steve Jobs";
-        String five = "Bill Gate";
-        testFriends.add(one);
-        testFriends.add(two);
-        testFriends.add(three);
-        testFriends.add(four);
-        testFriends.add(five);
-       // thisUser.setFriends(testFriends);
+        // thisUser.setFriends(testFriends);
 
+        // for the 'View Schedule' button
+        // go the schedule page and call the google calendar api
         goToCalender = (Button) findViewById(R.id.userhomeviewschedule);
         goToCalender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +126,8 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        // for the 'Help' button
+        // showing a pop up window for instructions about the app after clicking the button
         faq = new Dialog(this);
         faq.setTitle("Schedule App Instruction");
         faq.setContentView(R.layout.faq_popup);
@@ -154,6 +147,8 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
         });
 
 
+        // for the 'Quick Events' button
+        // go to the quick events page after clicking the button
         quickEvents = (Button) findViewById(R.id.updateCalendar);
         quickEvents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +158,8 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        // for the 'Friends' button
+        // go to friends page after clicking the button
         viewFriends = (Button) findViewById(R.id.userhomeconnections);
         viewFriends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +170,8 @@ public class UserHome extends AppCompatActivity implements GoogleApiClient.OnCon
             }
         });
 
+        // for 'Manage Event' button
+        // go to manage event page
         manageEvents = (Button) findViewById(R.id.userhomemonoageevent);
         manageEvents.setOnClickListener(new View.OnClickListener() {
             @Override

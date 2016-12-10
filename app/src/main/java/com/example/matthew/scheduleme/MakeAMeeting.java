@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import static android.os.Build.VERSION_CODES.M;
 
+// including a button jump to the set up meeting activity
 public class MakeAMeeting extends AppCompatActivity {
     user thisU;
     Dialog setupMeeting;
