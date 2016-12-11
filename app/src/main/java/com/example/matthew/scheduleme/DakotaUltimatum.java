@@ -28,21 +28,33 @@ import java.util.Calendar;
 
 public class DakotaUltimatum extends AppCompatActivity {
     TextView text;
+    // Length of an event
     static String duration;
+    // Date format for the input within the app
     public static int year, month, day;
+    // String format of the date for the app
     public static String dateee = "";
 
-    ArrayList<ArrayList<String>> temp = SetUpMeeting.friendsEvents;//array list where index 0 is name and everything else is the event data.
+    //array list where index 0 is name and everything else is the event data.
+    ArrayList<ArrayList<String>> temp = SetUpMeeting.friendsEvents;
+    // List of available events from a users calendar for time conflicts
     ArrayList<ZhuZhuEvent> eventArray = new ArrayList<>();
+    // List of events for display
     ListView listView;
 
     @Override
+    /*
+    * When the class is created the following shall be done
+    * The server is read to assign to variables year, month, day, duration
+     * in order to assign the possible list of free times between users
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         year = SetUpMeeting.year;
         month = SetUpMeeting.month;
         day = SetUpMeeting.day;
         duration = SetUpMeeting.duration;
+        // If an event is all-day we will use 30-min time slots
         if(duration==null){
             duration="30";
         }
@@ -50,8 +62,12 @@ public class DakotaUltimatum extends AppCompatActivity {
         text = (TextView) findViewById(R.id.dakotasSolution);
         int q = 0;
         listView = (ListView) findViewById(R.id.returnedValues);
+        // List of all possible meetings to relate to finding free time based on duration
         ArrayList<ZhuZhuEvent> combonationOfMeeting = new ArrayList<ZhuZhuEvent>();
+        // If the a user has events on their calendar then check for available free time
         if (Login.USERZHU.getSchedule()!=null&&Login.USERZHU.getSchedule().size() > 0) {
+            // Reads each event of the schedule in order to determine the date, start and
+            // end times of the events
             for (int j = 1; j < Login.USERZHU.getSchedule().size(); j++) {
                 ZhuZhuEvent tempE = new ZhuZhuEvent();
                 tempE.setDate(getStartDateFromString(Login.USERZHU.getSchedule().get(j)));
@@ -69,6 +85,8 @@ public class DakotaUltimatum extends AppCompatActivity {
                 }
             }
         }
+        // Organize the hours by typical time standard in military where 12 would be less than 13
+        // and continue to organize until complete
         Collections.sort(eventArray, new Comparator<ZhuZhuEvent>() {
             @Override
             public int compare(ZhuZhuEvent o1, ZhuZhuEvent o2) {
@@ -106,16 +124,24 @@ public class DakotaUltimatum extends AppCompatActivity {
 
 
         int duration = Integer.valueOf(SetUpMeeting.duration.split(" ")[0]);
+        // Purely for output can be removed
         for(ZhuZhuEvent combonationOfMeeting1: combonationOfMeeting){
             Log.e("start","size:" +combonationOfMeeting.size()
                     +" starthr: "+ combonationOfMeeting1.getStartHour()
                     +" finishhr: "+ combonationOfMeeting1.getEndHour());
         }
+        // End of output loop
+        // Used for the converted time of object TimeStore where a
+        // users time is in military time to perform basic comparator
+        // operations in order to determine the free time
         ArrayList<TimeStore> hrs = new ArrayList<TimeStore>();
-
+        /*
+        * While loop to evaluate the free time and used for duration
+        * calculates the start and end hour/min for each individual
+        * event in order for basic arithmetic operations to be used
+        * to evaluate the duration and calculate free time
+         */
         while (starthr + duration / 60 <= deadlinehr) {
-
-
             if (combonationOfMeeting.size() == 0) {
                 hrs.add(new TimeStore("need a way to find date", starthr, startmin, deadlinehr, deadlinemin));
                 break;
@@ -133,8 +159,11 @@ public class DakotaUltimatum extends AppCompatActivity {
                     endhr = endhr + 1;
                     endmin = endmin - 60;
                 }
+                // Output can be removed
                 Log.e("whats breaking", "starthr: " + starthr + " duration: " + duration + " endhr: " + endhr + " size: " + combonationOfMeeting.size());
                 Log.e("this might break", "Zhu: " + current.getStartHour() + " endhr " + endhr);
+                // Compare if the endhour of event i is less than the start time of the current event
+                // if this is the case the time is add for further comparison
                 if (endhr < current.getStartHour()) {
                     Log.e("adding", "added");
                     hrs.add(new TimeStore(current.getDate(), starthr, startmin, current.getStartHour(), current.getStartMin()));
@@ -150,29 +179,6 @@ public class DakotaUltimatum extends AppCompatActivity {
 
             }
         }
-
-        ;
-        /*
-        for(int comp =0; comp < (1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0]));comp++){
-            TimeStore temp = new TimeStore(comp, comp + 1);
-            temp.setEventInfo("You can meet from"+(1440/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp)/ Integer.valueOf(SetUpMeeting.duration.split(" ")[0])*comp+1);
-
-            hrs.add(temp);
-        }*//*
-        ArrayList<TimeStore> savehrs = new ArrayList<>();
-        for (TimeStore ts : hrs) {
-            for (ZhuZhuEvent zzh : combonationOfMeeting) {
-                ZhuZhuEvent first = zzh;
-                TimeStore second = ts;
-                if (first.getStartHour() == ts.getStartHour()) {
-                    savehrs.add(ts);
-                }
-            }
-        }*/
-
-        /*for (TimeStore shrs : savehrs) {
-            hrs.remove(shrs);
-        }*/
         ArrayList<String> strings = new ArrayList<String>();
         Log.e("combo", "" + combonationOfMeeting.size());
         for (TimeStore tstore : hrs) {
@@ -184,16 +190,6 @@ public class DakotaUltimatum extends AppCompatActivity {
         }
 
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, strings));
-       /*
-        ArrayList<ZhuZhuEvent> masterEvents = new ArrayList<>();
-        Integer a = Integer.valueOf(SetUpMeeting.duration.split(" ")[0]);
-        Log.e("time duration", "" + a);
-        int begginingHour = 0;
-        int begginingMinute = 0;
-        ZhuZhuEvent zhuZhuEvent = new ZhuZhuEvent();
-        zhuZhuEvent.setStartTime(begginingHour + "\\:" + begginingMinute + " PM");
-        masterEvents.add(zhuZhuEvent);
-*/
     }
 public String convertIntToNotMilitary(int i){
     if(i==0){
@@ -226,11 +222,19 @@ public String convertIntToNotMilitary(int i){
         Log.i("getEndTimeFromString", s.split("\n")[2]);
         return s.split("\n")[2].substring(30);
     }
-
+    /*
+    * Purpose of this class: used in order to determine the start time, end time,
+    *   date, month, and year of a particular event
+    *   Each getter and setter method is used in order to be retrieved earlier in the
+    *   code to find the available free time and convert to an integer to be used
+    *   for free time and duration
+     */
     public class ZhuZhuEvent {
         String date;
         String startTime, endTime;
-
+        // getMonth, getDay, and getYear purpose is to convert the
+        // listed month, day, and year to an integer for easier manipulation
+        // of possible free time
         public int getMonth() {
             return Integer.valueOf(date.split("-")[1]);
         }
@@ -243,6 +247,12 @@ public String convertIntToNotMilitary(int i){
             return Integer.valueOf(date.split("-")[0]);
         }
 
+        /*
+        * getStartHour
+        * Used for string manipulation by splitting an available spaces and colons to
+         * convert the value into an integer then use later for duration and longevity
+         * of an event
+         */
         public int getStartHour() {
             int addition;
             String timeStamp = startTime.split(" ")[3];
@@ -262,12 +272,13 @@ public String convertIntToNotMilitary(int i){
                 }
             }
         }
-
+        // Integer interpretation of start time
         public int getStartMin() {
             //   Log.e("startMin", "" + Integer.valueOf(startTime.split(":")[1].substring(0, 2)));
             return Integer.valueOf(startTime.split(":")[0].split(" ")[2]);
         }
 
+        // Same process as getStartHour except for the end time of an event
         public int getEndHour() {
 
             String timeStamp = endTime.split(" ")[1];
@@ -285,11 +296,16 @@ public String convertIntToNotMilitary(int i){
             }
         }
 
+        // Integer interpretation of end time
         public int getEndMin() {
             //Log.e("endMin", "" + Integer.valueOf(endTime.split(":")[1].substring(0, 2)));
             return Integer.valueOf(endTime.split(":")[0].substring(0, 1));
         }
 
+        /*
+        * Available getters and setters in order to return the
+        * date, endtime and starttime and manipulate as you please
+         */
         public String getDate() {
             return date;
         }
@@ -319,7 +335,10 @@ public String convertIntToNotMilitary(int i){
     public ArrayList<ArrayList<String>> getTemp() {
         return temp;
     }
-
+    /*
+    * Class for integer interpretation of an event's time
+    * used as military time rather than an AM/PM standard
+     */
     public class TimeStore {
         int StartHour;
         int EndHour;

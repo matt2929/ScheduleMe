@@ -1,6 +1,5 @@
 package com.example.matthew.scheduleme;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -31,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.matthew.scheduleme.Login.USERZHU;
-import static com.example.matthew.scheduleme.R.id.durations;
 
 // let users enter the information about the meeting they want to have
 // information is including: date, duration, and meeting members

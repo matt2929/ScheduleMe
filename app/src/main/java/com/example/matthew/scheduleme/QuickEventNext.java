@@ -1,35 +1,25 @@
 package com.example.matthew.scheduleme;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-import android.net.Uri;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by adityasinghrathore on 19/11/16.
  */
 
+/*
+* This class works almost like the schedule and setup meeting class
+* where instead the user has an options to setup a quick event meaning
+* the user of our app can fill out all the required information and the
+* invitations are sent out with the user creating the event at a specified
+* date, time, location, and name
+ */
 public class QuickEventNext extends AppCompatActivity{
     EditText eventname, entertime, locationname, startdate, enddate, starttime, endtime;
     Button saveN;
@@ -61,6 +51,7 @@ public class QuickEventNext extends AppCompatActivity{
                 enddateN = enddate.getText().toString();
                 endtimeN = endtime.getText().toString();
                 friendsNames = entertime.getText().toString();
+                // Purely for output may be removed
                 System.out.println(eventN);
                 System.out.println(locationN);
                 System.out.println(startdateN);
@@ -68,6 +59,7 @@ public class QuickEventNext extends AppCompatActivity{
                 System.out.println(enddateN);
                 System.out.println(endtimeN);
                 System.out.println(friendsNames);
+                // Output end
                 int count=0;
 
                 for(int i=0; i<friendsNames.length();i++){

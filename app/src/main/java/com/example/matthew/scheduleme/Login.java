@@ -27,7 +27,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+/*
+* This class is meant for the login process once the google API has successfully
+* logged a user into our app then the server backend takes over and evaluates the
+* user's schedule and possible time conflicts/free time that is handled in other classes
+ */
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -190,10 +194,18 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             }catch (Exception e){
 
             }
-            //    Log.e("sys", USERZHU.getSentInvites().get(0).getFriendsAccepted().get(0).get(0));
         }
     }
-
+    /*
+    * Handled for server backend in order to read the user schedule then
+    * send/recieve invites from friends
+    * Within our app while the server is going a users would enter their
+    * friends email addresses and notifications would be sent via email
+    * to a friends good calendar and as a result lead to an invitation for
+    * collaboration for an event.  This also would work for another user who
+    * is using our app to invite another person and that person be able to check their
+    * pending invitations and collaborations for events
+     */
     public class HttpSendDatum extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {

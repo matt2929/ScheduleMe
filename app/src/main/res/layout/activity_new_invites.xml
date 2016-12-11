@@ -57,6 +57,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/newinvitedecline"
         android:layout_alignBottom="@+id/newinvitesadd"
-        android:layout_toStartOf="@+id/newinvitehelp"
-        android:layout_below="@+id/listView" />
+        android:layout_toStartOf="@+id/newinvitehelp" />
 </RelativeLayout>
