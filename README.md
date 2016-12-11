@@ -33,6 +33,12 @@ When running Android Studio, follow all prompts for installations and you should
 For a client who wishes to run this code in the early stages of our app, an android simulator is required of API 21 or higher and an event is present, as running on older versions will cause our app to not work properly and crash.  Also in order for a client to retrieve information from our server please use the following information; 
   - We are running a node.js server that is running on port 8081 
 Through this server we make restful calls with spring on an android device (or simulator).
+* Update (September 19, 2016)
+The theoretical layout of our app has been drawn out for our objective at the end of this project.  The introductory GUI has
+been created and as a result Google API has not been implemented in, our login is a basic login page.
+* Update (October 10, 2016)
+A shell of our GUI although the essential layout of our objective is shown without any server backend that will be implemented
+in later sprints.
 * Update (October 30, 2016)
 A client who requires has an Android simulator may run our app to sign and sign out successfully to access their personal calendar.  The API requirement has not changed from previous versions.
 * Update (November, 20, 2016)
