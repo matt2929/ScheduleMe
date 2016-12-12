@@ -1,6 +1,5 @@
 package com.example.matthew.scheduleme;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -31,18 +30,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.matthew.scheduleme.Login.USERZHU;
-import static com.example.matthew.scheduleme.R.id.durations;
 
+// let users enter the information about the meeting they want to have
+// information is including: date, duration, and meeting members
 public class SetUpMeeting extends AppCompatActivity {
     Button save;
     DatePicker dp;
     user user = new user();
     public static int check =0;
-    List<String> durations;
+    List<String> durations; // store the selectable duration choices
     Spinner spinner;
-    static String duration;
+    static String duration; // store the picked meeting duration
     public static String freetime = "";
-    static int year, month, day;
+    static int year, month, day; // store the year, month, and day infos picked by the user
     public static String comparing="";
     ListView listView;
     int numReq = 0;
@@ -57,6 +57,7 @@ public class SetUpMeeting extends AppCompatActivity {
         save = (Button) findViewById(R.id.saveMeeting);
         dp = (DatePicker) findViewById(R.id.datePicker);
         spinner = (Spinner) findViewById(R.id.durations);
+        // for the duration choices
         durations = new ArrayList<String>();
         durations.add("How long is the meeting?");
         durations.add("30 minutes");
@@ -77,6 +78,7 @@ public class SetUpMeeting extends AppCompatActivity {
 
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, friendTemp));
 
+        // save the info picked by the user into variables
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +94,7 @@ public class SetUpMeeting extends AppCompatActivity {
                 Intent intentBack = new Intent(getApplicationContext(), DakotaUltimatum.class);
                 startActivity(intentBack);
                  for(String s:friendTemp){
-                //    new HttpRequestTask2(s).execute();
+                // new HttpRequestTask2(s).execute();
                 }
             }
         });

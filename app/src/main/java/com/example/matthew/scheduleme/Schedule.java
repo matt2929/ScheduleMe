@@ -60,6 +60,10 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+// The current code is not manipulated much from the code provided
+// from the google API as our code has been moved to different classes
+// minimal comments will be provided as all other comments are provided from
+// the java documentation
 public class Schedule extends Activity
         implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
@@ -407,46 +411,6 @@ public class Schedule extends Activity
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(eve.getHtmlLink()));
                 startActivity(browserIntent);
             }
-//            Event evenT = new Event()
-//                    .setSummary("Testing")
-//                    .setLocation("In lab")
-//                    .setDescription("Create event in calendar");
-//
-//            DateTime startDateTime = new DateTime("2016-11-09T22:00:00-04:00");
-//            EventDateTime starT = new EventDateTime()
-//                    .setDateTime(startDateTime)
-//                    .setTimeZone("America/New_York");
-//            evenT.setStart(starT);
-//
-//            DateTime endDateTime = new DateTime("2016-11-09T23:00:00-04:00");
-//            EventDateTime enD = new EventDateTime()
-//                    .setDateTime(endDateTime)
-//                    .setTimeZone("America/New_York");
-//            evenT.setEnd(enD);
-//
-//            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
-//            evenT.setRecurrence(Arrays.asList(recurrence));
-
-//            EventAttendee[] attendees = new EventAttendee[] {
-//                    new EventAttendee().setEmail("lpage@example.com"),
-//                    new EventAttendee().setEmail("sbrin@example.com"),
-//            }
-//            event.setAttendees(Arrays.asList(attendees));
-//
-//            EventReminder[] reminderOverrides = new EventReminder[] {
-//                    new EventReminder().setMethod("email").setMinutes(24 * 60),
-//                    new EventReminder().setMethod("popup").setMinutes(10),
-//            };
-//            Event.Reminders reminders = new Event.Reminders()
-//                    .setUseDefault(false)
-//                    .setOverrides(Arrays.asList(reminderOverrides));
-//            event.setReminders(reminders);
-
-//            String calendarId = "primary";
-//            evenT = mService.events().insert(calendarId, evenT).execute();
-//            System.out.printf("Event created: %s\n", evenT.getHtmlLink());
-//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(evenT.getHtmlLink()));
-//            startActivity(browserIntent);
             // Link with database to grab user calendar
             // Instance of json class (Step 1)
             DateTime now = new DateTime(System.currentTimeMillis());
@@ -472,8 +436,6 @@ public class Schedule extends Activity
                 }
                 String startFinalValue=parseStartTime(start);
                 String endFinalValue=parseStartTime(end);
-                //compareEvent();
-                //ComparStarEndTimes(start, end);
                 eventStrings.add(
                         String.format("%s\nEvent starting on %s\nEvent ending on %s", event.getSummary(), startFinalValue, endFinalValue));
             }
@@ -625,43 +587,11 @@ public class Schedule extends Activity
                     twehr[k]="T";
                 }
             }
-//            int p=0;
-//            for(int k=0; k<24;k++){
-//                if(resultDate.get(p)==twentyfour[k] && p<=resultDate.size()){
-//                    twehr[k]="F";
-//                    System.out.println("C");
-//                    p=p+2;
-//                }else{
-//                    twehr[k]="T";
-//                    System.out.println("D");
-//                }
-//
             for(int z=0; z<twehr.length;z++) {
                 freetime=freetime+twehr[z];
 
             }
             System.out.println("Freetime"+freetime);
-//            String[] finalfreetime=new String[24];
-//            for(int y=0;y<24;y++){
-//                if(freetime.charAt(y)=='T'){
-//                    if(y==0){
-//                        finalfreetime[y] = "12 AM";
-//                    }
-//                    else if(y>12){
-//                        y=y-12;
-//                        finalfreetime[y] = y + " PM";
-//                    }
-//                    else if(y==12){
-//                        finalfreetime[y] = "12 PM";
-//                    }
-//                    else {
-//                        finalfreetime[y] = y + "AM";
-//                    }
-//                }
-//            }
-//            for (int x =0;x<24;x++){
-//                System.out.println(finalfreetime[x]);
-//            }
         }
         /*
         * Written by Dakota Lester
@@ -679,27 +609,6 @@ public class Schedule extends Activity
             return endtime;
         }
 
-        //        public void createFreeTime(){
-//            int[] twentyfour = new int[24];
-//            int a = 0;
-//            for(int i = 0; i<24; i++){
-//                twentyfour[i]=a;
-//                a++;
-//            }
-//            String freetimestring="";
-//            int j=0;
-//            for(int i=0; i<24; i++) {
-////                for (int j=0; j<resultDate.size();j++) {
-//                    if (twentyfour[i] == resultDate.get(j)){
-//                        j++;
-//                        freetimestring= freetimestring+"F";
-//                    }else{
-//                        freetimestring = freetimestring+"T";
-//                    }
-//                //}
-//            }
-//            System.out.print(freetimestring);
-//        }
         /*
         * Written by: Dakota Lester
         * Create the time to calculate to find

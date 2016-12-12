@@ -1,19 +1,14 @@
 package com.example.matthew.scheduleme;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Window;
 import android.widget.EditText;
 import android.app.Dialog;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,12 +21,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
+// for the friends page
+// showing all the friend contacts for the user
 public class Connection extends AppCompatActivity {
     user thisU;
     int friendsCount;
     EditText friendsList, friendEmail;
     String text;
-    Button addFriend, save, cancil;
+    Button addFriend, save, cancel;
     Dialog friendInfo;
 
     @Override
@@ -39,6 +36,7 @@ public class Connection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection);
 
+        //check contacts of the user and display
         friendsCount = 0;
         Intent intent = getIntent();
         thisU = Login.USERZHU;
@@ -58,6 +56,8 @@ public class Connection extends AppCompatActivity {
             friendsList.setText("No friends found.");
         }
 
+        // allow users to add an new friend contact
+        // pop up window for entering new contact's name and gmail address
         friendInfo = new Dialog(this);
         friendInfo.setTitle("Please Enter the Info for Your New Friend");
         friendInfo.setContentView(R.layout.addfriends_popup);
@@ -99,8 +99,9 @@ public class Connection extends AppCompatActivity {
                     }
                 });
 
-                cancil = (Button) friendInfo.findViewById(R.id.cancil);
-                cancil.setOnClickListener(new View.OnClickListener() {
+                // cancel adding an new friend
+                cancel = (Button) friendInfo.findViewById(R.id.cancil);
+                cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         friendEmail.setText("");
@@ -111,6 +112,7 @@ public class Connection extends AppCompatActivity {
             }
         });
     }
+
     public class HttpSendDatumDank extends AsyncTask<Void, Void, Greeting> {
         @Override
         protected Greeting doInBackground(Void... params) {

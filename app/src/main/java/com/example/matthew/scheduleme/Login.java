@@ -27,7 +27,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+/*
+* This class is meant for the login process once the google API has successfully
+* logged a user into our app then the server backend takes over and evaluates the
+* user's schedule and possible time conflicts/free time that is handled in other classes
+ */
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -56,10 +60,12 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        //        new HttpSendDatum().execute();
+                new HttpSendDatum().execute();
             }
         });
 
+        // for the 'need help?' button
+        // showing a pop up window for instructions about the app after clicking the button
         faq = new Dialog(this);
         faq.setTitle("Schedule App Instruction");
         faq.setContentView(R.layout.faq_popup);
@@ -89,7 +95,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void signIn(){
         Intent signInIntent=Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
     }
 
     @Override
@@ -189,9 +194,67 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             }catch (Exception e){
 
             }
-            //    Log.e("sys", USERZHU.getSentInvites().get(0).getFriendsAccepted().get(0).get(0));
         }
     }
+    /*
+    * Handled for server backend in order to read the user schedule then
+    * send/recieve invites from friends
+    * Within our app while the server is going a users would enter their
+    * friends email addresses and notifications would be sent via email
+    * to a friends good calendar and as a result lead to an invitation for
+    * collaboration for an event.  This also would work for another user who
+    * is using our app to invite another person and that person be able to check their
+    * pending invitations and collaborations for events
+     */
+    public class HttpSendDatum extends AsyncTask<Void, Void, Greeting> {
+        @Override
+        protected Greeting doInBackground(Void... params) {
+            ObjectMapper mapper = new ObjectMapper();
+            String url = "http://warmachine.cse.buffalo.edu:"+values+"/user_post";
+            user tempUser = new user();
+            tempUser.setName("matthewstafford29@gmail.com");
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+            String jsonInString = "";
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new ResourceHttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+            user.recievedInvite recievedInvite=new user.recievedInvite();
+            user.sentInvite sentInvite=new user.sentInvite();
+            recievedInvite.setName("grandma's bday");
+            recievedInvite.setDate("8/19/2883");
+            recievedInvite.setDuration("45");
+            recievedInvite.setWhoInvitedMe("grandma");
+            sentInvite.setDuration("69");
+            sentInvite.setDate("4/3/2323");
+            sentInvite.setName("grandma ;)");
+            ArrayList<ArrayList<String>> names= new ArrayList<ArrayList<String>>();
+            names.add(new ArrayList<String>());
+            names.get(0).add("R.L.Taint");
+            names.get(0).add("Y");
+            sentInvite.setFriendsAndAccepted(names);
+            ArrayList<user.sentInvite> sentInvites=new ArrayList<>();
+            sentInvites.add(sentInvite);
+            ArrayList<user.recievedInvite> recievedInvites=new ArrayList<>();
+            recievedInvites.add(recievedInvite);
+            sentInvite.setFriendsAndAccepted(names);
+            tempUser.setSentInvites(sentInvites);
+            tempUser.setRecievedInvites(recievedInvites);
+            stringThis= restTemplate.postForObject(url, tempUser, String.class);
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Greeting greeting) {
+            Log.e("I ran","I ran");
+        }
+    }
 
 }
