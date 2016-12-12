@@ -13,8 +13,6 @@
             android:text="Create a Meeting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
             android:clickable="true"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:textSize="15dp"
@@ -22,7 +20,9 @@
             android:background="#073966"
             android:fontFamily="sans-serif-smallcaps"
             android:typeface="normal"
-            android:id="@+id/setup_meeting" />
+            android:id="@+id/setup_meeting"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 </RelativeLayout>

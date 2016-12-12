@@ -253,8 +253,19 @@ app.post('/update_post', function (req, res) {
 
 //---------------------------------------------------
 
-var server = app.listen(8087, function () {
+var server = app.listen(8089, function () {
    var host = server.address().address
    var port = server.address().port
-   console.log("Example app listening at http://%s:%s", host, port)
+	var animal="adsadfa";
+	var printText="";
+
+var array = fs.readFileSync('christ.txt').toString().split("\n");
+for(i in array) {
+    console.log(array[i]);
+}
+
+//  for(var i=0;i<20;i++){
+//	printText+=printText+"\n";
+//}
+console.log("Example app listening at http://%s:%s"+printText, host, port)
 }) 

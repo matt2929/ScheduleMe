@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HttpSendDatum().execute();
+        //        new HttpSendDatum().execute();
             }
         });
 
@@ -193,55 +193,5 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
     }
 
-    public class HttpSendDatum extends AsyncTask<Void, Void, Greeting> {
-        @Override
-        protected Greeting doInBackground(Void... params) {
-            ObjectMapper mapper = new ObjectMapper();
-            String url = "http://warmachine.cse.buffalo.edu:"+values+"/user_post";
-            user tempUser = new user();
-            tempUser.setName("matthewstafford29@gmail.com");
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-            }
-            String jsonInString = "";
-            RestTemplate restTemplate = new RestTemplate();
-            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
-            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            restTemplate.getMessageConverters().add(new ResourceHttpMessageConverter());
-            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-            user.recievedInvite recievedInvite=new user.recievedInvite();
-            user.sentInvite sentInvite=new user.sentInvite();
-            recievedInvite.setName("grandma's bday");
-            recievedInvite.setDate("8/19/2883");
-            recievedInvite.setDuration("45");
-            recievedInvite.setWhoInvitedMe("grandma");
-            sentInvite.setDuration("69");
-            sentInvite.setDate("4/3/2323");
-            sentInvite.setName("grandma ;)");
-            ArrayList<ArrayList<String>> names= new ArrayList<ArrayList<String>>();
-            names.add(new ArrayList<String>());
-            names.get(0).add("R.L.Taint");
-            names.get(0).add("Y");
-            sentInvite.setFriendsAndAccepted(names);
-            ArrayList<user.sentInvite> sentInvites=new ArrayList<>();
-            sentInvites.add(sentInvite);
-            ArrayList<user.recievedInvite> recievedInvites=new ArrayList<>();
-            recievedInvites.add(recievedInvite);
-            sentInvite.setFriendsAndAccepted(names);
-            tempUser.setSentInvites(sentInvites);
-            tempUser.setRecievedInvites(recievedInvites);
-            stringThis= restTemplate.postForObject(url, tempUser, String.class);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Greeting greeting) {
-            Log.e("I ran","I ran");
-        }
-    }
 
 }
