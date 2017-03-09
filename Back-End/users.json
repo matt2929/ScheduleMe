@@ -1,0 +1,15 @@
+{
+   "user1" : {
+      "name" : "eewalker", 
+           "password" : "password1",
+           "profession" : "dankcoder",
+           "id": 1
+   },
+   
+   "user2" : {
+      "name" : "prjones",
+           "password" : "password2",
+           "profession" : "qualitymemer",
+           "id": 2
+   },
+}
