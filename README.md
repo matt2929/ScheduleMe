@@ -24,7 +24,7 @@ Future Updates Incoming
 Steps for setting up this project on your computer
 
 
-Downloads
+downloads:
 Node.js
 mongoDB
 Mongoose
